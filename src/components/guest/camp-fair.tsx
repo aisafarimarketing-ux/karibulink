@@ -24,11 +24,11 @@ import {
   AccordionAutoOpenScript,
   AccordionSection,
 } from "./accordion-section";
+import { saveFairLead } from "@/lib/fair-leads";
 import { MobileFrame } from "./mobile-frame";
 import type { FairMode, Property } from "@/data/types";
 
 const SHORTLIST_KEY = "kl-shortlist";
-const leadsKey = (slug: string) => `kl-fair-leads-${slug}`;
 
 const ACCORDION_GROUP = "fair";
 const FALLBACK_FAIR: FairMode = {
@@ -560,23 +560,20 @@ function LeadCapture({ property }: { property: Property }) {
     (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
       setForm((f) => ({ ...f, [key]: e.target.value }));
 
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    try {
-      const key = leadsKey(property.slug);
-      const existing: unknown = JSON.parse(
-        window.localStorage.getItem(key) ?? "[]",
-      );
-      const lead = {
-        ...form,
-        property: property.slug,
-        timestamp: new Date().toISOString(),
-      };
-      const list = Array.isArray(existing) ? existing : [];
-      window.localStorage.setItem(key, JSON.stringify([...list, lead]));
-    } catch {
-      /* ignore */
-    }
+    // Always show the success state — local fallback inside saveFairLead
+    // means the lead is never lost even if Supabase is offline.
+    void saveFairLead({
+      campSlug: property.slug,
+      campName: property.name,
+      name: form.name,
+      company: form.company,
+      email: form.email,
+      phone: form.phone,
+      message: form.message,
+      source: "fair-mode",
+    });
     setSubmitted(true);
   };
 

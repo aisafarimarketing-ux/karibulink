@@ -13,84 +13,75 @@ import {
   StarIcon,
   UserIcon,
 } from "@/components/icons";
-import { getProperty, listProperties } from "@/data/mock";
-
-interface Lead {
-  property: string;
-  name: string;
-  company: string;
-  email: string;
-  phone: string;
-  message: string;
-  timestamp: string;
-}
+import {
+  clearLocalFairLeads,
+  downloadLeadsCSV,
+  fetchFairLeads,
+  type FairLead,
+  type FairLeadSource,
+} from "@/lib/fair-leads";
+import { listProperties } from "@/data/mock";
 
 const SHORTLIST_KEY = "kl-shortlist";
 const WA_CLICKS_KEY = "kl-wa-clicks";
-const LEADS_PREFIX = "kl-fair-leads-";
 
 export function FairLeadsBoard() {
   const [hydrated, setHydrated] = useState(false);
-  const [leads, setLeads] = useState<Lead[]>([]);
+  const [leads, setLeads] = useState<FairLead[]>([]);
+  const [source, setSource] = useState<FairLeadSource>("empty");
   const [shortlistCount, setShortlistCount] = useState(0);
   const [waClicks, setWaClicks] = useState(0);
 
-  const reload = () => {
-    if (typeof window === "undefined") return;
-    const collected: Lead[] = [];
-    try {
-      for (let i = 0; i < window.localStorage.length; i++) {
-        const key = window.localStorage.key(i);
-        if (!key || !key.startsWith(LEADS_PREFIX)) continue;
-        try {
-          const list = JSON.parse(window.localStorage.getItem(key) ?? "[]");
-          if (Array.isArray(list)) {
-            for (const raw of list) {
-              if (raw && typeof raw === "object") {
-                collected.push(raw as Lead);
-              }
-            }
-          }
-        } catch {
-          /* ignore one bad key */
-        }
-      }
-    } catch {
-      /* ignore */
-    }
-    collected.sort((a, b) => (b.timestamp ?? "").localeCompare(a.timestamp ?? ""));
-    setLeads(collected);
+  const reload = async () => {
+    const result = await fetchFairLeads();
+    setLeads(result.leads);
+    setSource(result.source);
 
-    try {
-      const sl = JSON.parse(window.localStorage.getItem(SHORTLIST_KEY) ?? "[]");
-      setShortlistCount(Array.isArray(sl) ? sl.length : 0);
-    } catch {
-      /* ignore */
-    }
-    try {
-      const raw = window.localStorage.getItem(WA_CLICKS_KEY) ?? "0";
-      const n = parseInt(raw, 10);
-      setWaClicks(Number.isFinite(n) ? n : 0);
-    } catch {
-      /* ignore */
+    if (typeof window !== "undefined") {
+      try {
+        const sl = JSON.parse(
+          window.localStorage.getItem(SHORTLIST_KEY) ?? "[]",
+        );
+        setShortlistCount(Array.isArray(sl) ? sl.length : 0);
+      } catch {
+        /* ignore */
+      }
+      try {
+        const raw = window.localStorage.getItem(WA_CLICKS_KEY) ?? "0";
+        const n = parseInt(raw, 10);
+        setWaClicks(Number.isFinite(n) ? n : 0);
+      } catch {
+        /* ignore */
+      }
     }
   };
 
   useEffect(() => {
-    reload();
-    setHydrated(true);
+    let cancelled = false;
+    (async () => {
+      await reload();
+      if (!cancelled) setHydrated(true);
+    })();
+
     const onStorage = (e: StorageEvent) => {
       if (
         e.key === null ||
-        e.key.startsWith(LEADS_PREFIX) ||
+        e.key.startsWith("kl-fair-leads-") ||
         e.key === SHORTLIST_KEY ||
         e.key === WA_CLICKS_KEY
       ) {
-        reload();
+        void reload();
       }
     };
-    window.addEventListener("storage", onStorage);
-    return () => window.removeEventListener("storage", onStorage);
+    if (typeof window !== "undefined") {
+      window.addEventListener("storage", onStorage);
+    }
+    return () => {
+      cancelled = true;
+      if (typeof window !== "undefined") {
+        window.removeEventListener("storage", onStorage);
+      }
+    };
   }, []);
 
   const leadsToday = useMemo(() => {
@@ -100,7 +91,8 @@ export function FairLeadsBoard() {
     const m = today.getMonth();
     const d = today.getDate();
     return leads.filter((l) => {
-      const dt = new Date(l.timestamp);
+      if (!l.createdAt) return false;
+      const dt = new Date(l.createdAt);
       return (
         dt.getFullYear() === y &&
         dt.getMonth() === m &&
@@ -109,33 +101,28 @@ export function FairLeadsBoard() {
     }).length;
   }, [hydrated, leads]);
 
-  const clearAll = () => {
+  const clearLocal = () => {
     if (typeof window === "undefined") return;
     if (
       !window.confirm(
-        "Clear all fair leads, shortlist, and WhatsApp click counts on this device?",
+        "Clear local lead copies, the shortlist, and WhatsApp tap count on this device?\n\nCloud rows in Supabase are not affected.",
       )
     ) {
       return;
     }
+    clearLocalFairLeads();
     try {
-      const keysToRemove: string[] = [];
-      for (let i = 0; i < window.localStorage.length; i++) {
-        const key = window.localStorage.key(i);
-        if (!key) continue;
-        if (
-          key.startsWith(LEADS_PREFIX) ||
-          key === SHORTLIST_KEY ||
-          key === WA_CLICKS_KEY
-        ) {
-          keysToRemove.push(key);
-        }
-      }
-      keysToRemove.forEach((k) => window.localStorage.removeItem(k));
+      window.localStorage.removeItem(SHORTLIST_KEY);
+      window.localStorage.removeItem(WA_CLICKS_KEY);
     } catch {
       /* ignore */
     }
-    reload();
+    void reload();
+  };
+
+  const exportCSV = () => {
+    if (leads.length === 0) return;
+    downloadLeadsCSV(leads);
   };
 
   const sampleSlug = listProperties()[0]?.slug;
@@ -156,12 +143,14 @@ export function FairLeadsBoard() {
         )
       }
     >
+      <SourceBanner source={source} hydrated={hydrated} />
+
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
         <StatCard
           icon={UserIcon}
           label="Total leads"
           value={hydrated ? leads.length : 0}
-          hint="All time, this device"
+          hint={source === "cloud" ? "Cloud (Supabase)" : "This device"}
         />
         <StatCard
           icon={BinocularsIcon}
@@ -183,19 +172,33 @@ export function FairLeadsBoard() {
         />
       </div>
 
-      <div className="mt-10 flex items-end justify-between gap-3">
+      <div className="mt-10 flex flex-wrap items-end justify-between gap-3">
         <h2 className="font-serif text-2xl font-medium tracking-tight text-foreground">
-          {leads.length === 0 ? "Recent activity" : `${leads.length} ${leads.length === 1 ? "lead" : "leads"}`}
+          {leads.length === 0
+            ? "Recent activity"
+            : `${leads.length} ${leads.length === 1 ? "lead" : "leads"}`}
         </h2>
-        {hydrated && leads.length > 0 && (
-          <button
-            type="button"
-            onClick={clearAll}
-            className="inline-flex h-9 items-center gap-2 rounded-full border border-border bg-background px-3 text-xs font-medium text-muted hover:border-danger/40 hover:text-danger"
-          >
-            Clear local data
-          </button>
-        )}
+        <div className="flex flex-wrap gap-2">
+          {hydrated && leads.length > 0 && (
+            <button
+              type="button"
+              onClick={exportCSV}
+              className="inline-flex h-9 items-center gap-2 rounded-full bg-primary px-4 text-xs font-semibold text-primary-foreground shadow-sm transition-colors hover:bg-primary-hover active:scale-[0.98]"
+            >
+              <ArrowRightIcon className="h-3.5 w-3.5 -rotate-90" />
+              Download CSV
+            </button>
+          )}
+          {hydrated && leads.length > 0 && (
+            <button
+              type="button"
+              onClick={clearLocal}
+              className="inline-flex h-9 items-center gap-2 rounded-full border border-border bg-background px-3 text-xs font-medium text-muted hover:border-danger/40 hover:text-danger"
+            >
+              Clear local data
+            </button>
+          )}
+        </div>
       </div>
 
       <div className="mt-4">
@@ -208,7 +211,7 @@ export function FairLeadsBoard() {
         ) : (
           <ul className="grid gap-3">
             {leads.map((lead, i) => (
-              <li key={`${lead.timestamp}-${lead.email}-${i}`}>
+              <li key={lead.id ?? `${lead.createdAt}-${lead.email}-${i}`}>
                 <LeadCard lead={lead} />
               </li>
             ))}
@@ -221,14 +224,38 @@ export function FairLeadsBoard() {
 
 /* --------------------------------------------------------------- */
 
-function LeadCard({ lead }: { lead: Lead }) {
-  const property = getProperty(lead.property);
-  const campName = property?.name ?? lead.property;
+function SourceBanner({
+  source,
+  hydrated,
+}: {
+  source: FairLeadSource;
+  hydrated: boolean;
+}) {
+  if (!hydrated) return null;
+  if (source === "cloud") {
+    return (
+      <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-primary/25 bg-primary/5 px-3 py-1 text-[11px] font-medium uppercase tracking-[0.18em] text-primary">
+        <span className="h-1.5 w-1.5 rounded-full bg-primary" />
+        Live · Supabase
+      </div>
+    );
+  }
+  if (source === "local") {
+    return (
+      <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-border bg-surface px-3 py-1 text-[11px] font-medium uppercase tracking-[0.18em] text-muted">
+        <span className="h-1.5 w-1.5 rounded-full bg-accent" />
+        Local fallback · this device
+      </div>
+    );
+  }
+  return null;
+}
 
-  const phoneClean = (lead.phone ?? "").replace(/[^0-9+]/g, "");
+function LeadCard({ lead }: { lead: FairLead }) {
+  const phoneClean = lead.phone.replace(/[^0-9+]/g, "");
   const wa = phoneClean.replace(/^\+/, "");
   const messageBody = [
-    `New Fair Lead — ${campName}`,
+    `New Fair Lead — ${lead.campName}`,
     `Name: ${lead.name}`,
     `Company: ${lead.company}`,
     `Email: ${lead.email}`,
@@ -252,8 +279,10 @@ function LeadCard({ lead }: { lead: Lead }) {
           )}
         </div>
         <div className="text-[10px] uppercase tracking-[0.22em] text-muted">
-          <p>{campName}</p>
-          <p className="mt-0.5 text-muted/80">{formatTimestamp(lead.timestamp)}</p>
+          <p>{lead.campName || lead.campSlug}</p>
+          <p className="mt-0.5 text-muted/80">
+            {formatTimestamp(lead.createdAt)}
+          </p>
         </div>
       </header>
 
