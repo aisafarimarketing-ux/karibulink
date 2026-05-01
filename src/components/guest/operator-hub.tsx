@@ -18,16 +18,16 @@ import {
 } from "./accordion-section";
 import { HeroCard } from "./hero-card";
 import { MobileFrame } from "./mobile-frame";
+import { StickyActionBar, type ActionItem } from "./sticky-action-bar";
 import { StickyBottomBar } from "./sticky-bottom-bar";
 import type { Operator, SafariRoute } from "@/data/types";
 
-const QUICK_ACTIONS = [
-  { href: "#route", label: "Route", icon: RouteIcon },
-  { href: "#expect", label: "Expect", icon: BinocularsIcon },
-  { href: "#guide", label: "Guide", icon: MessageIcon },
-  { href: "#night", label: "Night", icon: MoonIcon },
-  { href: "#memories", label: "Memories", icon: CameraIcon },
-  { href: "#emergency", label: "Emergency", icon: ShieldIcon },
+const ACTIONS: ActionItem[] = [
+  { id: "route", label: "Today's Route", iconKey: "route" },
+  { id: "expect", label: "What to Expect", iconKey: "binoculars" },
+  { id: "guide", label: "Ask Guide", iconKey: "message" },
+  { id: "memories", label: "Memories", iconKey: "camera" },
+  { id: "emergency", label: "Emergency", iconKey: "shield" },
 ];
 
 const ACCORDION_GROUP = "operator-hub";
@@ -46,7 +46,7 @@ export function OperatorHub({ operator }: { operator: Operator }) {
           description={j.heroSubtitle}
           meta={operator.name}
         />
-        <QuickActions />
+        <StickyActionBar actions={ACTIONS} />
         {todayRoute && <RouteSummary route={todayRoute} />}
         <Sections operator={operator} />
         <Emergency operator={operator} />
@@ -61,34 +61,9 @@ export function OperatorHub({ operator }: { operator: Operator }) {
   );
 }
 
-function QuickActions() {
-  return (
-    <section className="sticky top-2 z-30 px-3 pt-3 sm:px-4">
-      <div className="rounded-2xl border border-border bg-surface/95 p-2 shadow-[0_10px_30px_-15px_rgba(31,58,46,0.25)] backdrop-blur">
-        <div className="grid grid-cols-3 gap-2">
-          {QUICK_ACTIONS.map(({ href, label, icon: Icon }) => (
-            <a
-              key={label}
-              href={href}
-              className="group flex aspect-[5/4] flex-col items-center justify-center gap-1.5 rounded-xl bg-background transition-all duration-150 active:scale-[0.97]"
-            >
-              <span className="grid h-10 w-10 place-items-center rounded-xl bg-primary text-primary-foreground transition-colors group-hover:bg-primary-hover">
-                <Icon className="h-4 w-4" />
-              </span>
-              <span className="text-[11px] font-medium tracking-tight text-foreground">
-                {label}
-              </span>
-            </a>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
 function RouteSummary({ route }: { route: SafariRoute }) {
   return (
-    <section id="route" className="px-3 pt-4 sm:px-4">
+    <section id="route" className="scroll-mt-20 px-3 pt-4 sm:px-4">
       <div className="rounded-2xl border border-border bg-surface p-4">
         <div className="flex items-center justify-between">
           <span className="inline-flex items-center gap-1.5 rounded-full border border-border bg-background px-2.5 py-1 text-[10px] font-medium uppercase tracking-[0.22em] text-muted">
@@ -321,7 +296,7 @@ function Sections({ operator }: { operator: Operator }) {
 
 function Emergency({ operator }: { operator: Operator }) {
   return (
-    <section id="emergency" className="px-3 pt-4 sm:px-4">
+    <section id="emergency" className="scroll-mt-20 px-3 pt-4 sm:px-4">
       <div className="flex flex-col gap-3 rounded-2xl border border-danger/40 bg-danger/5 p-4 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-center gap-3">
           <span className="grid h-10 w-10 place-items-center rounded-xl bg-danger text-white">

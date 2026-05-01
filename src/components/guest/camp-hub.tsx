@@ -15,16 +15,17 @@ import {
 } from "./accordion-section";
 import { HeroCard } from "./hero-card";
 import { MobileFrame } from "./mobile-frame";
+import { StickyActionBar, type ActionItem } from "./sticky-action-bar";
 import { StickyBottomBar } from "./sticky-bottom-bar";
 import type { Property } from "@/data/types";
 
-const QUICK_ACTIONS = [
-  { href: "#register", label: "Register", icon: UserIcon },
-  { href: "#camp-info", label: "Camp Info", icon: InfoIcon },
-  { href: "#safety", label: "Safety", icon: ShieldIcon },
-  { href: "#services", label: "Services", icon: CoffeeIcon },
-  { href: "#sightings", label: "Sightings", icon: BinocularsIcon },
-  { href: "#contact", label: "Contact", icon: PhoneIcon },
+const ACTIONS: ActionItem[] = [
+  { id: "register", label: "Register", iconKey: "user" },
+  { id: "camp-info", label: "Camp Info", iconKey: "info" },
+  { id: "safety", label: "Safety", iconKey: "shield" },
+  { id: "services", label: "Services", iconKey: "coffee" },
+  { id: "sightings", label: "Sightings", iconKey: "binoculars" },
+  { id: "contact", label: "Contact", iconKey: "phone" },
 ];
 
 const ACCORDION_GROUP = "camp-hub";
@@ -40,7 +41,7 @@ export function CampHub({ property }: { property: Property }) {
           description={property.welcomeMessage}
           meta={property.location}
         />
-        <QuickActions />
+        <StickyActionBar actions={ACTIONS} />
         <Registration />
         <Sections property={property} />
         <Contact property={property} />
@@ -55,36 +56,9 @@ export function CampHub({ property }: { property: Property }) {
   );
 }
 
-function QuickActions() {
-  return (
-    <section className="sticky top-2 z-30 px-3 pt-3 sm:px-4">
-      <div
-        className="rounded-2xl border border-border bg-surface/95 p-2 shadow-[0_10px_30px_-15px_rgba(31,58,46,0.25)] backdrop-blur"
-      >
-        <div className="grid grid-cols-3 gap-2">
-          {QUICK_ACTIONS.map(({ href, label, icon: Icon }) => (
-            <a
-              key={label}
-              href={href}
-              className="group flex aspect-[5/4] flex-col items-center justify-center gap-1.5 rounded-xl bg-background transition-all duration-150 hover:border-primary/30 active:scale-[0.97]"
-            >
-              <span className="grid h-10 w-10 place-items-center rounded-xl bg-primary text-primary-foreground transition-colors group-hover:bg-primary-hover">
-                <Icon className="h-4 w-4" />
-              </span>
-              <span className="text-[11px] font-medium tracking-tight text-foreground">
-                {label}
-              </span>
-            </a>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
 function Registration() {
   return (
-    <section id="register" className="px-3 pt-4 sm:px-4">
+    <section id="register" className="scroll-mt-20 px-3 pt-4 sm:px-4">
       <div className="rounded-2xl border border-border bg-surface p-4 shadow-sm">
         <div className="flex items-center justify-between">
           <span className="inline-flex items-center gap-1.5 rounded-full border border-border bg-background px-2.5 py-1 text-[10px] font-medium uppercase tracking-[0.22em] text-muted">
@@ -382,7 +356,7 @@ function ServiceList({
 
 function Contact({ property }: { property: Property }) {
   return (
-    <section id="contact" className="px-3 pt-4 sm:px-4">
+    <section id="contact" className="scroll-mt-20 px-3 pt-4 sm:px-4">
       <div className="rounded-2xl border border-border bg-surface p-4">
         <div className="flex items-center justify-between">
           <span className="inline-flex items-center gap-1.5 rounded-full border border-border bg-background px-2.5 py-1 text-[10px] font-medium uppercase tracking-[0.22em] text-muted">
