@@ -3,11 +3,9 @@
 import Link from "next/link";
 import {
   BinocularsIcon,
-  CoffeeIcon,
-  InfoIcon,
-  LeafIcon,
+  CompassIcon,
   PhoneIcon,
-  ShieldIcon,
+  TentIcon,
   UserIcon,
 } from "@/components/icons";
 import { iconFor } from "@/lib/icon-map";
@@ -24,12 +22,10 @@ import { StickyBottomBar } from "./sticky-bottom-bar";
 import type { Property } from "@/data/types";
 
 const ACTIONS: ActionItem[] = [
-  { id: "register", labelKey: "register", iconKey: "user" },
-  { id: "camp-info", labelKey: "campInfo", iconKey: "info" },
-  { id: "safety", labelKey: "safety", iconKey: "shield" },
-  { id: "services", labelKey: "services", iconKey: "coffee" },
-  { id: "sightings", labelKey: "sightings", iconKey: "binoculars" },
-  { id: "contact", labelKey: "contact", iconKey: "phone" },
+  { id: "check-in", labelKey: "checkIn", iconKey: "user" },
+  { id: "your-stay", labelKey: "yourStay", iconKey: "tent" },
+  { id: "experiences", labelKey: "experiences", iconKey: "compass" },
+  { id: "help", labelKey: "help", iconKey: "phone" },
 ];
 
 const ACCORDION_GROUP = "camp-hub";
@@ -47,9 +43,16 @@ export function CampHub({
         <MobileFrame inPreview={inPreview}>
           <CampHero property={property} />
           <StickyActionBar actions={ACTIONS} />
-          <Registration />
-          <Sections property={property} />
-          <Contact property={property} />
+
+          <section className="px-3 pt-4 sm:px-4">
+            <div className="grid gap-2">
+              <CheckIn />
+              <YourStay property={property} />
+              <Experiences property={property} />
+              <Help property={property} />
+            </div>
+          </section>
+
           <StickyBottomBar
             phone={property.emergencyContact.phone}
             directionsQuery={`${property.name} ${property.location}`}
@@ -61,54 +64,89 @@ export function CampHub({
   );
 }
 
+/* --------------------------------------------------------------- */
+/*  Hero                                                             */
+/* --------------------------------------------------------------- */
+
 function CampHero({ property }: { property: Property }) {
   const t = useT();
   return (
     <HeroCard
-      eyebrow={property.heroSubtitle}
-      status={`${t("statusOpen")} · 24°C`}
-      title={property.heroTitle}
-      description={property.welcomeMessage}
-      meta={property.location}
+      label={property.name}
+      message={t("welcome")}
       imageUrl={property.heroImageUrl}
       toolbar={<LanguageSelector />}
     />
   );
 }
 
+/* --------------------------------------------------------------- */
+/*  Accordion 1: Check In                                            */
+/* --------------------------------------------------------------- */
+
+function CheckIn() {
+  const t = useT();
+  return (
+    <AccordionSection
+      id="check-in"
+      group={ACCORDION_GROUP}
+      icon={UserIcon}
+      title={t("checkIn")}
+      subtitle={`${t("waiverTitle")} · ${t("registerYourStay")}`}
+    >
+      <Waiver />
+      <div className="mt-3" />
+      <Registration />
+    </AccordionSection>
+  );
+}
+
+function Waiver() {
+  const t = useT();
+  return (
+    <div className="rounded-xl border border-border bg-background p-3">
+      <p className="text-sm font-medium text-foreground">{t("waiverTitle")}</p>
+      <p className="mt-0.5 text-xs text-muted leading-snug">
+        {t("waiverHelp")}
+      </p>
+      <div className="mt-3 flex flex-wrap items-center gap-3">
+        <button
+          type="button"
+          className="rounded-full bg-primary px-3 py-1.5 text-[11px] font-medium text-primary-foreground transition-all duration-150 hover:bg-primary-hover active:scale-[0.97]"
+        >
+          {t("readWaiver")}
+        </button>
+        <label className="inline-flex items-center gap-2 text-xs text-muted">
+          <input
+            type="checkbox"
+            className="h-3.5 w-3.5 rounded border-border accent-primary"
+          />
+          {t("iAgree")}
+        </label>
+      </div>
+    </div>
+  );
+}
+
 function Registration() {
   const t = useT();
   return (
-    <section id="register" className="scroll-mt-20 px-3 pt-4 sm:px-4">
-      <div className="rounded-2xl border border-border bg-surface p-4 shadow-sm">
-        <div className="flex items-center justify-between">
-          <span className="inline-flex items-center gap-1.5 rounded-full border border-border bg-background px-2.5 py-1 text-[10px] font-medium uppercase tracking-[0.22em] text-muted">
-            <span className="h-1 w-1 rounded-full bg-primary" />
-            {t("checkIn")}
-          </span>
-          <span className="text-[10px] text-muted">~10 sec</span>
-        </div>
-        <h2 className="font-serif mt-2 text-xl font-medium leading-tight tracking-tight text-foreground">
-          {t("registerYourStay")}
-        </h2>
-        <p className="mt-1 text-xs text-muted leading-snug">
-          {t("registerHelp")}
-        </p>
-        <form className="mt-3 grid gap-2">
-          <SlimField label={t("fullName")} />
-          <SlimField label={t("email")} type="email" placeholder="you@example.com" />
-          <SlimField label={t("country")} />
-          <SlimField label={t("tourOperator")} optional />
-          <button
-            type="button"
-            className="mt-2 inline-flex h-12 items-center justify-center gap-2 rounded-xl bg-primary text-sm font-semibold text-primary-foreground shadow-sm transition-all duration-150 hover:bg-primary-hover active:scale-[0.98]"
-          >
-            {t("submitRegister")}
-          </button>
-          <p className="text-[10px] text-muted">{t("demoOnly")}</p>
-        </form>
-      </div>
-    </section>
+    <div className="rounded-xl border border-border bg-background p-3">
+      <p className="text-xs leading-snug text-muted">{t("registerHelp")}</p>
+      <form className="mt-3 grid gap-2">
+        <SlimField label={t("fullName")} />
+        <SlimField label={t("email")} type="email" placeholder="you@example.com" />
+        <SlimField label={t("country")} />
+        <SlimField label={t("tourOperator")} optional />
+        <button
+          type="button"
+          className="mt-1 inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-primary text-sm font-semibold text-primary-foreground shadow-sm transition-all duration-150 hover:bg-primary-hover active:scale-[0.98]"
+        >
+          {t("submitRegister")}
+        </button>
+        <p className="text-[10px] text-muted">{t("demoOnly")}</p>
+      </form>
+    </div>
   );
 }
 
@@ -135,186 +173,253 @@ function SlimField({
       <input
         type={type}
         placeholder={placeholder}
-        className="mt-1 h-11 w-full rounded-xl border border-border bg-background px-3 text-sm text-foreground placeholder:text-muted/70 focus:border-primary/50 focus:outline-none focus:ring-2 focus:ring-primary/15"
+        className="mt-1 h-11 w-full rounded-xl border border-border bg-surface px-3 text-sm text-foreground placeholder:text-muted/70 focus:border-primary/50 focus:outline-none focus:ring-2 focus:ring-primary/15"
       />
     </label>
   );
 }
 
-function Sections({ property }: { property: Property }) {
+/* --------------------------------------------------------------- */
+/*  Accordion 2: Your Stay                                           */
+/* --------------------------------------------------------------- */
+
+function YourStay({ property }: { property: Property }) {
   const t = useT();
-  const summarize = (
-    items: { label: string }[] | { animal: string }[],
-    field: "label" | "animal" = "label",
-    take = 3,
-  ) => {
-    const labels = items
-      .slice(0, take)
-      .map((it) =>
-        field === "label"
-          ? (it as { label: string }).label
-          : (it as { animal: string }).animal,
-      );
-    const more = items.length - take;
-    return more > 0 ? `${labels.join(" · ")} +${more} more` : labels.join(" · ");
-  };
+  const subtitleParts = [
+    property.amenities.length > 0 ? t("aboutTheCamp") : null,
+    property.rules.length > 0 ? t("houseRules") : null,
+    property.staff.length > 0 ? t("meetTheTeam") : null,
+  ]
+    .filter(Boolean)
+    .slice(0, 3)
+    .join(" · ");
 
   return (
-    <section className="px-3 pt-4 sm:px-4">
-      <div className="grid gap-2">
-        {property.amenities.length > 0 && (
-          <AccordionSection
-            id="camp-info"
-            group={ACCORDION_GROUP}
-            icon={InfoIcon}
-            title={t("aboutTheCamp")}
-            subtitle={summarize(property.amenities)}
-          >
-            <ItemList items={property.amenities} accent={false} />
-          </AccordionSection>
-        )}
-
-        {property.safetyNotes.length > 0 && (
-          <AccordionSection
-            id="safety"
-            group={ACCORDION_GROUP}
-            icon={ShieldIcon}
-            title={t("safety")}
-            subtitle={summarize(property.safetyNotes)}
-          >
-            <ItemList items={property.safetyNotes} accent />
-            <div className="mt-3 flex flex-col gap-2 rounded-xl border border-danger/40 bg-danger/5 p-3 sm:flex-row sm:items-center sm:justify-between">
-              <p className="text-xs text-foreground">
-                <span className="font-medium">{t("emergency")}: </span>
-                {property.emergencyContact.label}
-              </p>
-              <a
-                href={`tel:${property.emergencyContact.phone.replace(/\s+/g, "")}`}
-                className="inline-flex h-9 items-center justify-center gap-2 rounded-full bg-danger px-3 text-xs font-medium text-white transition-transform duration-150 hover:opacity-90 active:scale-[0.97]"
+    <AccordionSection
+      id="your-stay"
+      group={ACCORDION_GROUP}
+      icon={TentIcon}
+      title={t("yourStay")}
+      subtitle={subtitleParts}
+    >
+      {property.amenities.length > 0 && (
+        <SubBlock label={t("aboutTheCamp")}>
+          <ItemList items={property.amenities} />
+        </SubBlock>
+      )}
+      {property.rules.length > 0 && (
+        <SubBlock label={t("houseRules")}>
+          <ul className="grid gap-2">
+            {property.rules.map((rule) => (
+              <li
+                key={rule}
+                className="flex gap-2 rounded-xl border border-border bg-background p-3"
               >
-                <PhoneIcon className="h-3.5 w-3.5" />
-                {property.emergencyContact.phone}
-              </a>
-            </div>
-          </AccordionSection>
-        )}
+                <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-primary" />
+                <span className="text-sm leading-snug text-foreground/90">
+                  {rule}
+                </span>
+              </li>
+            ))}
+          </ul>
+        </SubBlock>
+      )}
+      {property.staff.length > 0 && (
+        <SubBlock label={t("meetTheTeam")}>
+          <div className="grid grid-cols-2 gap-2">
+            {property.staff.map((m) => (
+              <div
+                key={m.name}
+                className="rounded-xl border border-border bg-background p-3"
+              >
+                <div className="grid h-9 w-9 place-items-center rounded-full bg-primary/10 text-primary font-serif text-xs font-semibold">
+                  {m.name
+                    .split(" ")
+                    .map((n) => n[0])
+                    .slice(0, 2)
+                    .join("")}
+                </div>
+                <p className="mt-2 font-serif text-sm font-medium leading-tight tracking-tight">
+                  {m.name}
+                </p>
+                <p className="text-[11px] text-primary">{m.role}</p>
+                <p className="mt-1 text-[11px] text-muted leading-snug">
+                  {m.bio}
+                </p>
+              </div>
+            ))}
+          </div>
+        </SubBlock>
+      )}
+    </AccordionSection>
+  );
+}
 
-        {property.services.length > 0 && (
-          <AccordionSection
-            id="services"
-            group={ACCORDION_GROUP}
-            icon={CoffeeIcon}
-            title={t("services")}
-            subtitle={summarize(property.services)}
-          >
-            <ServiceList items={property.services} />
-          </AccordionSection>
-        )}
+/* --------------------------------------------------------------- */
+/*  Accordion 3: Experiences                                         */
+/* --------------------------------------------------------------- */
 
-        {property.sightings.length > 0 && (
-          <AccordionSection
-            id="sightings"
-            group={ACCORDION_GROUP}
-            icon={BinocularsIcon}
-            title={t("recentSightings")}
-            subtitle={summarize(property.sightings, "animal")}
-          >
-            <ul className="grid gap-2">
-              {property.sightings.map((s) => (
-                <li
-                  key={`${s.day}-${s.animal}`}
-                  className="flex items-center gap-3 rounded-xl border border-border bg-background p-2.5"
-                >
-                  <span className="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-primary/10 text-primary">
-                    <BinocularsIcon className="h-4 w-4" />
-                  </span>
-                  <div className="flex-1 leading-tight">
-                    <p className="text-sm font-medium text-foreground">
-                      {s.animal}
-                    </p>
-                    <p className="text-xs text-muted">
-                      {s.area} · {s.spotter}
-                    </p>
-                  </div>
-                  <span className="shrink-0 text-[10px] uppercase tracking-[0.18em] text-muted">
-                    {s.day}
-                  </span>
-                </li>
-              ))}
-            </ul>
-          </AccordionSection>
-        )}
+function Experiences({ property }: { property: Property }) {
+  const t = useT();
+  const subtitleParts = [
+    property.services.length > 0 ? t("services") : null,
+    property.sightings.length > 0 ? t("recentSightings") : null,
+  ]
+    .filter(Boolean)
+    .join(" · ");
 
-        {property.staff.length > 0 && (
-          <AccordionSection
-            id="team"
-            group={ACCORDION_GROUP}
-            icon={UserIcon}
-            title={t("meetTheTeam")}
-            subtitle={`${property.staff.length} ${
-              property.staff.length === 1 ? "host" : "hosts"
-            }`}
-          >
-            <div className="grid grid-cols-2 gap-2">
-              {property.staff.map((m) => (
-                <div
-                  key={m.name}
-                  className="rounded-xl border border-border bg-background p-3"
-                >
-                  <div className="grid h-9 w-9 place-items-center rounded-full bg-primary/10 text-primary font-serif text-xs font-semibold">
-                    {m.name
-                      .split(" ")
-                      .map((n) => n[0])
-                      .slice(0, 2)
-                      .join("")}
-                  </div>
-                  <p className="mt-2 font-serif text-sm font-medium leading-tight tracking-tight">
-                    {m.name}
+  return (
+    <AccordionSection
+      id="experiences"
+      group={ACCORDION_GROUP}
+      icon={CompassIcon}
+      title={t("experiences")}
+      subtitle={subtitleParts || undefined}
+    >
+      {property.services.length > 0 && (
+        <SubBlock label={t("services")}>
+          <ServiceList items={property.services} />
+        </SubBlock>
+      )}
+      {property.sightings.length > 0 && (
+        <SubBlock label={t("recentSightings")}>
+          <ul className="grid gap-2">
+            {property.sightings.map((s) => (
+              <li
+                key={`${s.day}-${s.animal}`}
+                className="flex items-center gap-3 rounded-xl border border-border bg-background p-2.5"
+              >
+                <span className="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-primary/10 text-primary">
+                  <BinocularsIcon className="h-4 w-4" />
+                </span>
+                <div className="flex-1 leading-tight">
+                  <p className="text-sm font-medium text-foreground">
+                    {s.animal}
                   </p>
-                  <p className="text-[11px] text-primary">{m.role}</p>
-                  <p className="mt-1 text-[11px] text-muted leading-snug">
-                    {m.bio}
+                  <p className="text-xs text-muted">
+                    {s.area} · {s.spotter}
                   </p>
                 </div>
-              ))}
-            </div>
-          </AccordionSection>
-        )}
+                <span className="shrink-0 text-[10px] uppercase tracking-[0.18em] text-muted">
+                  {s.day}
+                </span>
+              </li>
+            ))}
+          </ul>
+        </SubBlock>
+      )}
+    </AccordionSection>
+  );
+}
 
-        {property.rules.length > 0 && (
-          <AccordionSection
-            id="rules"
-            group={ACCORDION_GROUP}
-            icon={LeafIcon}
-            title={t("houseRules")}
-            subtitle={`${property.rules.length}`}
+/* --------------------------------------------------------------- */
+/*  Accordion 4: Help                                                */
+/* --------------------------------------------------------------- */
+
+function Help({ property }: { property: Property }) {
+  const t = useT();
+  const subtitleParts = [
+    t("emergency"),
+    property.safetyNotes.length > 0 ? t("safety") : null,
+    t("contact"),
+  ]
+    .filter(Boolean)
+    .join(" · ");
+
+  return (
+    <AccordionSection
+      id="help"
+      group={ACCORDION_GROUP}
+      icon={PhoneIcon}
+      title={t("help")}
+      subtitle={subtitleParts}
+    >
+      <SubBlock label={t("inEmergency")}>
+        <a
+          href={`tel:${property.emergencyContact.phone.replace(/\s+/g, "")}`}
+          className="flex items-center justify-between gap-3 rounded-xl border border-danger/40 bg-danger/5 p-3 transition-colors hover:bg-danger/10"
+        >
+          <div className="flex items-center gap-3">
+            <span className="grid h-9 w-9 place-items-center rounded-lg bg-danger text-white">
+              <PhoneIcon className="h-4 w-4" />
+            </span>
+            <div className="leading-tight">
+              <p className="text-sm font-medium text-foreground">
+                {property.emergencyContact.label}
+              </p>
+              <p className="text-[11px] text-muted">
+                {property.emergencyContact.phone}
+              </p>
+            </div>
+          </div>
+          <span className="text-xs font-medium uppercase tracking-wider text-danger">
+            24/7
+          </span>
+        </a>
+      </SubBlock>
+
+      {property.safetyNotes.length > 0 && (
+        <SubBlock label={t("safety")}>
+          <ItemList items={property.safetyNotes} accent />
+        </SubBlock>
+      )}
+
+      <SubBlock label={t("contact")}>
+        <div className="grid gap-2">
+          <a
+            href={`tel:${property.emergencyContact.phone.replace(/\s+/g, "")}`}
+            className="inline-flex h-11 items-center justify-between gap-3 rounded-xl border border-border bg-background px-3 transition-colors hover:border-primary/40"
           >
-            <ul className="grid gap-2">
-              {property.rules.map((rule) => (
-                <li
-                  key={rule}
-                  className="flex gap-2 rounded-xl border border-border bg-background p-3"
-                >
-                  <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-primary" />
-                  <span className="text-sm leading-snug text-foreground/90">
-                    {rule}
-                  </span>
-                </li>
-              ))}
-            </ul>
-          </AccordionSection>
-        )}
-      </div>
-    </section>
+            <span className="flex items-center gap-2">
+              <PhoneIcon className="h-4 w-4 text-primary" />
+              <span className="text-sm font-medium">
+                {property.emergencyContact.label}
+              </span>
+            </span>
+            <span className="text-xs text-muted">
+              {property.emergencyContact.phone}
+            </span>
+          </a>
+          <Link
+            href="/"
+            className="inline-flex h-11 items-center justify-between gap-3 rounded-xl border border-border bg-background px-3 transition-colors hover:border-primary/40"
+          >
+            <span className="text-sm font-medium">{t("backToKaribuLink")}</span>
+            <span className="text-xs text-muted">karibulink.com</span>
+          </Link>
+        </div>
+      </SubBlock>
+    </AccordionSection>
+  );
+}
+
+/* --------------------------------------------------------------- */
+/*  Building blocks                                                  */
+/* --------------------------------------------------------------- */
+
+function SubBlock({
+  label,
+  children,
+}: {
+  label: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div className="mt-4 first:mt-0">
+      <p className="mb-2 text-[10px] font-semibold uppercase tracking-[0.2em] text-muted">
+        {label}
+      </p>
+      {children}
+    </div>
   );
 }
 
 function ItemList({
   items,
-  accent,
+  accent = false,
 }: {
   items: { iconKey: string; label: string; detail: string }[];
-  accent: boolean;
+  accent?: boolean;
 }) {
   return (
     <ul className="grid gap-2">
@@ -379,48 +484,5 @@ function ServiceList({
         );
       })}
     </ul>
-  );
-}
-
-function Contact({ property }: { property: Property }) {
-  const t = useT();
-  return (
-    <section id="contact" className="scroll-mt-20 px-3 pt-4 sm:px-4">
-      <div className="rounded-2xl border border-border bg-surface p-4">
-        <div className="flex items-center justify-between">
-          <span className="inline-flex items-center gap-1.5 rounded-full border border-border bg-background px-2.5 py-1 text-[10px] font-medium uppercase tracking-[0.22em] text-muted">
-            <span className="h-1 w-1 rounded-full bg-primary" />
-            {t("contact")}
-          </span>
-          <span className="text-[10px] text-muted">{property.location}</span>
-        </div>
-        <h2 className="font-serif mt-2 text-lg font-medium leading-tight tracking-tight text-foreground">
-          {t("weAreATapAway")}
-        </h2>
-        <div className="mt-3 grid gap-2">
-          <a
-            href={`tel:${property.emergencyContact.phone.replace(/\s+/g, "")}`}
-            className="inline-flex h-12 items-center justify-between gap-3 rounded-xl border border-border bg-background px-3 transition-colors hover:border-primary/40"
-          >
-            <span className="flex items-center gap-2">
-              <PhoneIcon className="h-4 w-4 text-primary" />
-              <span className="text-sm font-medium">
-                {property.emergencyContact.label}
-              </span>
-            </span>
-            <span className="text-xs text-muted">
-              {property.emergencyContact.phone}
-            </span>
-          </a>
-          <Link
-            href="/"
-            className="inline-flex h-12 items-center justify-between gap-3 rounded-xl border border-border bg-background px-3 transition-colors hover:border-primary/40"
-          >
-            <span className="text-sm font-medium">{t("backToKaribuLink")}</span>
-            <span className="text-xs text-muted">karibulink.com</span>
-          </Link>
-        </div>
-      </div>
-    </section>
   );
 }

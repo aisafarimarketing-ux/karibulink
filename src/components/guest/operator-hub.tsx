@@ -61,14 +61,10 @@ export function OperatorHub({ operator }: { operator: Operator }) {
 
 function OpHero({ operator }: { operator: Operator }) {
   const t = useT();
-  const j = operator.journeyNotes;
   return (
     <HeroCard
-      eyebrow={j.heroEyebrow}
-      status={`${t("statusOnSafari")} · 24°C`}
-      title={j.heroTitle}
-      description={j.heroSubtitle}
-      meta={operator.name}
+      label={operator.name}
+      message={t("welcome")}
       toolbar={<LanguageSelector />}
     />
   );
