@@ -1,4 +1,7 @@
+"use client";
+
 import { CompassIcon, MessageIcon, PhoneIcon } from "@/components/icons";
+import { useT } from "./language-context";
 
 const cleanPhone = (phone: string) => phone.replace(/[^0-9+]/g, "");
 
@@ -6,41 +9,54 @@ export function StickyBottomBar({
   phone,
   whatsappPhone,
   directionsQuery,
+  inPreview = false,
 }: {
   phone: string;
   whatsappPhone?: string;
   directionsQuery: string;
+  inPreview?: boolean;
 }) {
+  const t = useT();
   const wa = cleanPhone(whatsappPhone ?? phone).replace(/^\+/, "");
   const directions = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
     directionsQuery,
   )}`;
 
+  // In preview: sticks to the bottom of the surrounding scroll container.
+  // In production: pinned to viewport bottom.
+  const positionClass = inPreview
+    ? "sticky inset-x-0 bottom-0 z-30"
+    : "pointer-events-none fixed inset-x-0 bottom-0 z-50";
+
+  const innerClass = inPreview
+    ? "mx-auto w-full"
+    : "pointer-events-auto mx-auto w-full sm:max-w-[460px]";
+
   return (
     <div
-      className="pointer-events-none fixed inset-x-0 bottom-0 z-50"
+      className={positionClass}
       style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
     >
-      <div className="pointer-events-auto mx-auto w-full sm:max-w-[460px]">
+      <div className={innerClass}>
         <div className="border-t border-border/60 bg-surface/95 backdrop-blur sm:m-3 sm:rounded-2xl sm:border sm:shadow-[0_18px_40px_-18px_rgba(31,58,46,0.35)]">
           <div className="grid grid-cols-3 gap-2 px-3 py-2 sm:gap-2.5 sm:px-3 sm:py-2.5">
             <BarAction
               href={`tel:${cleanPhone(phone)}`}
               icon={PhoneIcon}
-              label="Call"
+              label={t("callLabel")}
               variant="primary"
             />
             <BarAction
               href={`https://wa.me/${wa}`}
               icon={MessageIcon}
-              label="WhatsApp"
+              label={t("whatsappLabel")}
               variant="whatsapp"
               external
             />
             <BarAction
               href={directions}
               icon={CompassIcon}
-              label="Directions"
+              label={t("directionsLabel")}
               variant="secondary"
               external
             />

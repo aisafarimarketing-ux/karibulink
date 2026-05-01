@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import {
   BinocularsIcon,
@@ -14,77 +16,98 @@ import {
   AccordionSection,
 } from "./accordion-section";
 import { HeroCard } from "./hero-card";
+import { LanguageProvider, useT } from "./language-context";
+import { LanguageSelector } from "./language-selector";
 import { MobileFrame } from "./mobile-frame";
 import { StickyActionBar, type ActionItem } from "./sticky-action-bar";
 import { StickyBottomBar } from "./sticky-bottom-bar";
 import type { Property } from "@/data/types";
 
 const ACTIONS: ActionItem[] = [
-  { id: "register", label: "Register", iconKey: "user" },
-  { id: "camp-info", label: "Camp Info", iconKey: "info" },
-  { id: "safety", label: "Safety", iconKey: "shield" },
-  { id: "services", label: "Services", iconKey: "coffee" },
-  { id: "sightings", label: "Sightings", iconKey: "binoculars" },
-  { id: "contact", label: "Contact", iconKey: "phone" },
+  { id: "register", labelKey: "register", iconKey: "user" },
+  { id: "camp-info", labelKey: "campInfo", iconKey: "info" },
+  { id: "safety", labelKey: "safety", iconKey: "shield" },
+  { id: "services", labelKey: "services", iconKey: "coffee" },
+  { id: "sightings", labelKey: "sightings", iconKey: "binoculars" },
+  { id: "contact", labelKey: "contact", iconKey: "phone" },
 ];
 
 const ACCORDION_GROUP = "camp-hub";
 
-export function CampHub({ property }: { property: Property }) {
+export function CampHub({
+  property,
+  inPreview = false,
+}: {
+  property: Property;
+  inPreview?: boolean;
+}) {
   return (
-    <main className="flex-1 pb-28">
-      <MobileFrame>
-        <HeroCard
-          eyebrow={property.heroSubtitle}
-          status="Camp is open · 24°C"
-          title={property.heroTitle}
-          description={property.welcomeMessage}
-          meta={property.location}
-        />
-        <StickyActionBar actions={ACTIONS} />
-        <Registration />
-        <Sections property={property} />
-        <Contact property={property} />
-      </MobileFrame>
+    <LanguageProvider>
+      <main className={`flex-1 ${inPreview ? "" : "pb-28"}`}>
+        <MobileFrame>
+          <CampHero property={property} />
+          <StickyActionBar actions={ACTIONS} />
+          <Registration />
+          <Sections property={property} />
+          <Contact property={property} />
+        </MobileFrame>
 
-      <StickyBottomBar
-        phone={property.emergencyContact.phone}
-        directionsQuery={`${property.name} ${property.location}`}
-      />
-      <AccordionAutoOpenScript />
-    </main>
+        <StickyBottomBar
+          phone={property.emergencyContact.phone}
+          directionsQuery={`${property.name} ${property.location}`}
+          inPreview={inPreview}
+        />
+        <AccordionAutoOpenScript />
+      </main>
+    </LanguageProvider>
+  );
+}
+
+function CampHero({ property }: { property: Property }) {
+  const t = useT();
+  return (
+    <HeroCard
+      eyebrow={property.heroSubtitle}
+      status={`${t("statusOpen")} · 24°C`}
+      title={property.heroTitle}
+      description={property.welcomeMessage}
+      meta={property.location}
+      imageUrl={property.heroImageUrl}
+      toolbar={<LanguageSelector />}
+    />
   );
 }
 
 function Registration() {
+  const t = useT();
   return (
     <section id="register" className="scroll-mt-20 px-3 pt-4 sm:px-4">
       <div className="rounded-2xl border border-border bg-surface p-4 shadow-sm">
         <div className="flex items-center justify-between">
           <span className="inline-flex items-center gap-1.5 rounded-full border border-border bg-background px-2.5 py-1 text-[10px] font-medium uppercase tracking-[0.22em] text-muted">
             <span className="h-1 w-1 rounded-full bg-primary" />
-            Check-in
+            {t("checkIn")}
           </span>
           <span className="text-[10px] text-muted">~10 sec</span>
         </div>
         <h2 className="font-serif mt-2 text-xl font-medium leading-tight tracking-tight text-foreground">
-          Register your stay
+          {t("registerYourStay")}
         </h2>
         <p className="mt-1 text-xs text-muted leading-snug">
-          A quick check-in. Your details stay with the camp.
+          {t("registerHelp")}
         </p>
         <form className="mt-3 grid gap-2">
-          <SlimField label="Full name" />
-          <SlimField label="Email" type="email" placeholder="you@example.com" />
-          <SlimField label="Country" />
-          <SlimField label="Tour operator" optional />
+          <SlimField label={t("fullName")} />
+          <SlimField label={t("email")} type="email" placeholder="you@example.com" />
+          <SlimField label={t("country")} />
+          <SlimField label={t("tourOperator")} optional />
           <button
             type="button"
             className="mt-2 inline-flex h-12 items-center justify-center gap-2 rounded-xl bg-primary text-sm font-semibold text-primary-foreground shadow-sm transition-all duration-150 hover:bg-primary-hover active:scale-[0.98]"
           >
-            Register
+            {t("submitRegister")}
           </button>
-          <p className="text-[10px] text-muted">Demo — nothing is saved.</p>
+          <p className="text-[10px] text-muted">{t("demoOnly")}</p>
         </form>
       </div>
     </section>
@@ -102,12 +125,13 @@ function SlimField({
   placeholder?: string;
   optional?: boolean;
 }) {
+  const t = useT();
   return (
     <label className="block">
       <span className="flex items-baseline justify-between">
         <span className="text-xs font-medium text-foreground">{label}</span>
         {optional && (
-          <span className="text-[10px] text-muted">optional</span>
+          <span className="text-[10px] text-muted">{t("optional")}</span>
         )}
       </span>
       <input
@@ -120,6 +144,7 @@ function SlimField({
 }
 
 function Sections({ property }: { property: Property }) {
+  const t = useT();
   const summarize = (
     items: { label: string }[] | { animal: string }[],
     field: "label" | "animal" = "label",
@@ -127,7 +152,11 @@ function Sections({ property }: { property: Property }) {
   ) => {
     const labels = items
       .slice(0, take)
-      .map((it) => (field === "label" ? (it as { label: string }).label : (it as { animal: string }).animal));
+      .map((it) =>
+        field === "label"
+          ? (it as { label: string }).label
+          : (it as { animal: string }).animal,
+      );
     const more = items.length - take;
     return more > 0 ? `${labels.join(" · ")} +${more} more` : labels.join(" · ");
   };
@@ -140,7 +169,7 @@ function Sections({ property }: { property: Property }) {
             id="camp-info"
             group={ACCORDION_GROUP}
             icon={InfoIcon}
-            title="About the camp"
+            title={t("aboutTheCamp")}
             subtitle={summarize(property.amenities)}
           >
             <ItemList items={property.amenities} accent={false} />
@@ -152,13 +181,13 @@ function Sections({ property }: { property: Property }) {
             id="safety"
             group={ACCORDION_GROUP}
             icon={ShieldIcon}
-            title="Safety"
+            title={t("safety")}
             subtitle={summarize(property.safetyNotes)}
           >
             <ItemList items={property.safetyNotes} accent />
             <div className="mt-3 flex flex-col gap-2 rounded-xl border border-danger/40 bg-danger/5 p-3 sm:flex-row sm:items-center sm:justify-between">
               <p className="text-xs text-foreground">
-                <span className="font-medium">Emergency: </span>
+                <span className="font-medium">{t("emergency")}: </span>
                 {property.emergencyContact.label}
               </p>
               <a
@@ -177,7 +206,7 @@ function Sections({ property }: { property: Property }) {
             id="services"
             group={ACCORDION_GROUP}
             icon={CoffeeIcon}
-            title="Services"
+            title={t("services")}
             subtitle={summarize(property.services)}
           >
             <ServiceList items={property.services} />
@@ -189,7 +218,7 @@ function Sections({ property }: { property: Property }) {
             id="sightings"
             group={ACCORDION_GROUP}
             icon={BinocularsIcon}
-            title="Recent sightings"
+            title={t("recentSightings")}
             subtitle={summarize(property.sightings, "animal")}
           >
             <ul className="grid gap-2">
@@ -223,10 +252,10 @@ function Sections({ property }: { property: Property }) {
             id="team"
             group={ACCORDION_GROUP}
             icon={UserIcon}
-            title="Meet the team"
+            title={t("meetTheTeam")}
             subtitle={`${property.staff.length} ${
               property.staff.length === 1 ? "host" : "hosts"
-            } on site`}
+            }`}
           >
             <div className="grid grid-cols-2 gap-2">
               {property.staff.map((m) => (
@@ -259,8 +288,8 @@ function Sections({ property }: { property: Property }) {
             id="rules"
             group={ACCORDION_GROUP}
             icon={LeafIcon}
-            title="House rules"
-            subtitle={`${property.rules.length} small things`}
+            title={t("houseRules")}
+            subtitle={`${property.rules.length}`}
           >
             <ul className="grid gap-2">
               {property.rules.map((rule) => (
@@ -291,11 +320,11 @@ function ItemList({
 }) {
   return (
     <ul className="grid gap-2">
-      {items.map((item) => {
+      {items.map((item, i) => {
         const Icon = iconFor(item.iconKey as never);
         return (
           <li
-            key={item.label}
+            key={`${item.label}-${i}`}
             className="flex gap-3 rounded-xl border border-border bg-background p-3"
           >
             <span
@@ -325,13 +354,14 @@ function ServiceList({
 }: {
   items: { iconKey: string; label: string; detail: string }[];
 }) {
+  const t = useT();
   return (
     <ul className="grid gap-2">
-      {items.map((item) => {
+      {items.map((item, i) => {
         const Icon = iconFor(item.iconKey as never);
         return (
           <li
-            key={item.label}
+            key={`${item.label}-${i}`}
             className="flex items-center gap-3 rounded-xl border border-border bg-background p-3"
           >
             <span className="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-accent/20 text-primary">
@@ -345,7 +375,7 @@ function ServiceList({
               type="button"
               className="shrink-0 rounded-full bg-primary px-3 py-1 text-[11px] font-medium text-primary-foreground transition-all duration-150 hover:bg-primary-hover active:scale-[0.95]"
             >
-              Request
+              {t("request")}
             </button>
           </li>
         );
@@ -355,18 +385,19 @@ function ServiceList({
 }
 
 function Contact({ property }: { property: Property }) {
+  const t = useT();
   return (
     <section id="contact" className="scroll-mt-20 px-3 pt-4 sm:px-4">
       <div className="rounded-2xl border border-border bg-surface p-4">
         <div className="flex items-center justify-between">
           <span className="inline-flex items-center gap-1.5 rounded-full border border-border bg-background px-2.5 py-1 text-[10px] font-medium uppercase tracking-[0.22em] text-muted">
             <span className="h-1 w-1 rounded-full bg-primary" />
-            Contact
+            {t("contact")}
           </span>
           <span className="text-[10px] text-muted">{property.location}</span>
         </div>
         <h2 className="font-serif mt-2 text-lg font-medium leading-tight tracking-tight text-foreground">
-          We're a tap away.
+          {t("weAreATapAway")}
         </h2>
         <div className="mt-3 grid gap-2">
           <a
@@ -387,7 +418,7 @@ function Contact({ property }: { property: Property }) {
             href="/"
             className="inline-flex h-12 items-center justify-between gap-3 rounded-xl border border-border bg-background px-3 transition-colors hover:border-primary/40"
           >
-            <span className="text-sm font-medium">Back to KaribuLink</span>
+            <span className="text-sm font-medium">{t("backToKaribuLink")}</span>
             <span className="text-xs text-muted">karibulink.com</span>
           </Link>
         </div>

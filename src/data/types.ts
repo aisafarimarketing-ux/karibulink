@@ -61,6 +61,7 @@ export interface Property {
   welcomeMessage: string;
   heroTitle: string;
   heroSubtitle: string;
+  heroImageUrl?: string;
   location: string;
   rules: string[];
   amenities: IconItem[];

@@ -36,6 +36,8 @@ export function HeroCard({
   description,
   meta,
   homeHref = "/",
+  imageUrl,
+  toolbar,
 }: {
   eyebrow: string;
   status: string;
@@ -43,47 +45,68 @@ export function HeroCard({
   description?: ReactNode;
   meta?: string;
   homeHref?: string;
+  imageUrl?: string | null;
+  toolbar?: ReactNode;
 }) {
+  const showImage = Boolean(imageUrl);
   return (
     <div className="px-3 pt-3 sm:px-4 sm:pt-4">
       <div className="relative aspect-[5/4] w-full overflow-hidden rounded-[2rem] shadow-[0_20px_60px_-25px_rgba(31,58,46,0.45)] sm:aspect-[16/11]">
-        {/* Sky gradient */}
-        <div
-          className="absolute inset-0 dark:hidden"
-          style={{ background: SKY }}
-        />
-        <div
-          className="absolute inset-0 hidden dark:block"
-          style={{ background: SKY_DARK }}
-        />
+        {showImage ? (
+          <>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={imageUrl ?? undefined}
+              alt=""
+              className="absolute inset-0 h-full w-full object-cover"
+            />
+            {/* Darken for text legibility */}
+            <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/35 via-black/15 to-black/65" />
+          </>
+        ) : (
+          <>
+            {/* Sky gradient */}
+            <div
+              className="absolute inset-0 dark:hidden"
+              style={{ background: SKY }}
+            />
+            <div
+              className="absolute inset-0 hidden dark:block"
+              style={{ background: SKY_DARK }}
+            />
 
-        {/* Stars in the upper portion */}
-        <div
-          className="pointer-events-none absolute inset-x-0 top-0 h-1/2 opacity-70"
-          style={{
-            backgroundImage: STAR_DOTS,
-            backgroundSize: "260px 200px",
-            backgroundRepeat: "repeat",
-          }}
-        />
+            {/* Stars in the upper portion */}
+            <div
+              className="pointer-events-none absolute inset-x-0 top-0 h-1/2 opacity-70"
+              style={{
+                backgroundImage: STAR_DOTS,
+                backgroundSize: "260px 200px",
+                backgroundRepeat: "repeat",
+              }}
+            />
 
-        {/* Sun glow */}
-        <div className="pointer-events-none absolute right-[12%] top-[52%] h-32 w-32 -translate-y-1/2 rounded-full bg-[#f5b86e] opacity-60 blur-3xl" />
-        <div className="pointer-events-none absolute right-[14%] top-[55%] h-12 w-12 -translate-y-1/2 rounded-full bg-[#fce0a0]" />
+            {/* Sun glow */}
+            <div className="pointer-events-none absolute right-[12%] top-[52%] h-32 w-32 -translate-y-1/2 rounded-full bg-[#f5b86e] opacity-60 blur-3xl" />
+            <div className="pointer-events-none absolute right-[14%] top-[55%] h-12 w-12 -translate-y-1/2 rounded-full bg-[#fce0a0]" />
 
-        {/* Horizon haze */}
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[34%] bg-gradient-to-t from-black/60 via-black/15 to-transparent" />
+            {/* Horizon haze */}
+            <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[34%] bg-gradient-to-t from-black/60 via-black/15 to-transparent" />
+          </>
+        )}
 
         {/* Content */}
         <div className="relative flex h-full flex-col p-5 text-white">
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between gap-2">
             <Link
               href={homeHref}
               className="text-[10px] uppercase tracking-[0.22em] text-white/75 hover:text-white"
             >
               ← KaribuLink
             </Link>
-            <ThemeToggle />
+            <div className="flex items-center gap-2">
+              {toolbar}
+              <ThemeToggle />
+            </div>
           </div>
 
           <div className="mt-auto">

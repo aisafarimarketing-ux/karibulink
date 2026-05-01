@@ -3,10 +3,13 @@
 import { useEffect, useRef, useState, type MouseEvent } from "react";
 import { iconFor } from "@/lib/icon-map";
 import type { IconKey } from "@/data/types";
+import { useT, type TranslationKey } from "./language-context";
 
 export interface ActionItem {
   id: string;
-  label: string;
+  /** Either an i18n key or a literal string. */
+  labelKey?: TranslationKey;
+  label?: string;
   iconKey: IconKey;
 }
 
@@ -15,6 +18,7 @@ export function StickyActionBar({ actions }: { actions: ActionItem[] }) {
   const listRef = useRef<HTMLUListElement>(null);
   const itemRefs = useRef(new Map<string, HTMLAnchorElement>());
   const ignoreUntil = useRef(0);
+  const t = useT();
 
   // Track which target section is in view; ignore observer briefly
   // after a click so we don't fight the smooth-scroll animation.
@@ -94,6 +98,7 @@ export function StickyActionBar({ actions }: { actions: ActionItem[] }) {
           {actions.map((a) => {
             const Icon = iconFor(a.iconKey);
             const isActive = active === a.id;
+            const label = a.labelKey ? t(a.labelKey) : (a.label ?? "");
             return (
               <li key={a.id} className="snap-start shrink-0">
                 <a
@@ -103,7 +108,7 @@ export function StickyActionBar({ actions }: { actions: ActionItem[] }) {
                   }}
                   href={`#${a.id}`}
                   onClick={(e) => handleClick(e, a.id)}
-                  aria-label={a.label}
+                  aria-label={label}
                   aria-current={isActive ? "true" : undefined}
                   className={[
                     "inline-flex h-11 min-w-[92px] items-center justify-center gap-2 whitespace-nowrap rounded-full border px-3 text-xs font-semibold tracking-tight",
@@ -120,7 +125,7 @@ export function StickyActionBar({ actions }: { actions: ActionItem[] }) {
                       isActive ? "" : "text-[#b06a3b] dark:text-[#c9a84c]"
                     }`}
                   />
-                  <span>{a.label}</span>
+                  <span>{label}</span>
                 </a>
               </li>
             );
