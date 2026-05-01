@@ -63,7 +63,7 @@ function LeftContent() {
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: easeOut, delay: 1.05 }}
-          className="mt-7 max-w-md text-base leading-relaxed text-muted sm:text-[17px]"
+          className="mt-9 max-w-md text-base leading-[1.7] text-muted sm:mt-10 sm:text-[17px]"
         >
           From fairs to camp check-ins, KaribuLink turns every interaction
           into structured data you can use.
@@ -72,18 +72,18 @@ function LeftContent() {
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, ease: easeOut, delay: 1.25 }}
-          className="mt-9 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center"
+          className="mt-12 flex flex-col gap-3 sm:mt-14 sm:flex-row sm:flex-wrap sm:items-center sm:gap-4"
         >
           <Link
             href="/demo-camp"
-            className="group inline-flex h-12 items-center justify-center gap-2 rounded-full bg-primary px-7 text-sm font-semibold tracking-tight text-primary-foreground shadow-[0_18px_36px_-18px_rgba(183,107,62,0.55)] transition-all hover:bg-primary-hover active:scale-[0.98]"
+            className="group inline-flex h-[52px] items-center justify-center gap-2 rounded-full bg-primary px-9 text-[15px] font-semibold tracking-tight text-primary-foreground shadow-[0_22px_44px_-20px_rgba(183,107,62,0.65)] transition-transform duration-200 hover:scale-[1.02] hover:bg-primary-hover active:scale-[0.98]"
           >
             View Demo
             <ArrowRightIcon className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5" />
           </Link>
           <Link
             href="#how-it-works"
-            className="group inline-flex h-12 items-center justify-center gap-1.5 px-1 text-sm font-semibold tracking-tight text-foreground hover:text-primary"
+            className="group inline-flex h-[52px] items-center justify-center gap-1.5 px-2 text-sm font-semibold tracking-tight text-foreground hover:text-primary"
           >
             See how it works
             <ArrowRightIcon className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5" />
@@ -117,6 +117,12 @@ function Line({ children }: { children: ReactNode }) {
   );
 }
 
+// Hero photo. Replace this URL with your own asset (e.g. /hero-savanna.jpg)
+// or a different Unsplash photo. The CSS scene below renders as a fallback
+// if the image fails to load.
+const HERO_IMAGE_SRC =
+  "https://images.unsplash.com/photo-1535941339077-2dd1c7963098?auto=format&fit=crop&w=2000&q=80";
+
 function RightImage() {
   return (
     <motion.div
@@ -125,21 +131,32 @@ function RightImage() {
       transition={{ duration: 1.2, ease: easeOut, delay: 0.1 }}
       className="relative h-[68vh] overflow-hidden lg:h-full"
     >
-      <motion.div
+      {/* CSS fallback (sits underneath; visible if the photo fails). */}
+      <div className="absolute inset-0">
+        <SafariScene />
+      </div>
+
+      {/* Real safari photo with subtle slow zoom. */}
+      <motion.img
+        src={HERO_IMAGE_SRC}
+        alt=""
+        loading="eager"
         initial={{ scale: 1 }}
-        animate={{ scale: 1.04 }}
+        animate={{ scale: 1.03 }}
         transition={{
           duration: 8,
           ease: "easeInOut",
           repeat: Infinity,
           repeatType: "reverse",
         }}
-        className="absolute inset-0"
-      >
-        <SafariScene />
-      </motion.div>
+        className="absolute inset-0 h-full w-full object-cover"
+      />
+
+      {/* Calm bottom gradient — keeps it cinematic, no harsh overlay. */}
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black/30 via-black/5 to-transparent" />
+
       {/* Edge wash so the seam between left ivory and right image reads softer. */}
-      <div className="pointer-events-none absolute inset-y-0 left-0 hidden w-12 bg-gradient-to-r from-background/60 to-transparent lg:block" />
+      <div className="pointer-events-none absolute inset-y-0 left-0 hidden w-16 bg-gradient-to-r from-background/70 to-transparent lg:block" />
     </motion.div>
   );
 }
