@@ -206,6 +206,19 @@ function ActionRow({
   const message = `Hi, I saw your camp at Karibu Kili Fair and I'm interested in working with you.`;
   const waUrl = `https://wa.me/${wa}?text=${encodeURIComponent(message)}`;
 
+  const trackWaClick = () => {
+    try {
+      const raw = window.localStorage.getItem("kl-wa-clicks") ?? "0";
+      const current = parseInt(raw, 10);
+      window.localStorage.setItem(
+        "kl-wa-clicks",
+        String(Number.isFinite(current) ? current + 1 : 1),
+      );
+    } catch {
+      /* ignore */
+    }
+  };
+
   return (
     <motion.section
       initial={{ opacity: 0, y: 8 }}
@@ -228,6 +241,7 @@ function ActionRow({
           href={waUrl}
           target="_blank"
           rel="noopener noreferrer"
+          onClick={trackWaClick}
           whileTap={{ scale: 0.97 }}
           className="flex h-12 items-center justify-center gap-2 rounded-2xl bg-[#25d366] text-sm font-semibold text-white transition-colors duration-200 hover:bg-[#1ebe5a]"
         >

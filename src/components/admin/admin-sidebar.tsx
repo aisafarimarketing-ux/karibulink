@@ -6,6 +6,7 @@ import {
   CompassIcon,
   InfoIcon,
   LeafIcon,
+  MessageIcon,
   RouteIcon,
   TentIcon,
 } from "@/components/icons";
@@ -21,6 +22,7 @@ const NAV: NavItem[] = [
   { href: "/admin", label: "Dashboard", icon: InfoIcon },
   { href: "/admin/organizations", label: "Organizations", icon: LeafIcon },
   { href: "/admin/properties", label: "Properties", icon: TentIcon },
+  { href: "/admin/fair-leads", label: "Fair Leads", icon: MessageIcon },
   { href: "/admin/operators", label: "Operators", icon: CompassIcon },
   { href: "/admin/pages", label: "Guest pages", icon: RouteIcon },
 ];
