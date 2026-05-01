@@ -21,7 +21,7 @@ export const LANGUAGE_LABELS: Record<Language, string> = {
 const DICTIONARY = {
   EN: {
     register: "Register",
-    campInfo: "Camp Info",
+    campInfo: "Info",
     safety: "Safety",
     services: "Services",
     sightings: "Sightings",
