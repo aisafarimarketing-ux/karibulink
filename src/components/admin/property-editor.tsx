@@ -3,7 +3,6 @@
 import Link from "next/link";
 import {
   useEffect,
-  useRef,
   useState,
   type ChangeEvent,
   type ReactNode,
@@ -191,6 +190,7 @@ export function PropertyEditor({
                     icon={UserIcon}
                     title="Check In"
                     description="Waiver text. Registration fields are standard."
+                    defaultOpen
                   >
                     <div className="grid gap-3">
                       <TextAreaField
@@ -211,6 +211,7 @@ export function PropertyEditor({
                     icon={TentIcon}
                     title="Your Stay"
                     description="Camp info, house rules, team."
+                    defaultOpen
                   >
                     <div className="grid gap-5">
                       <TextAreaField
@@ -253,6 +254,7 @@ export function PropertyEditor({
                     icon={CompassIcon}
                     title="Experiences"
                     description="Services and recent sightings."
+                    defaultOpen
                   >
                     <div className="grid gap-5">
                       <TextAreaField
@@ -289,6 +291,7 @@ export function PropertyEditor({
                     icon={PhoneIcon}
                     title="Help"
                     description="Safety notes and emergency contact."
+                    defaultOpen
                   >
                     <div className="grid gap-5">
                       <TextAreaField
@@ -494,8 +497,6 @@ function ImageUpload({
   value: string | null;
   onChange: (dataUrl: string | null) => void;
 }) {
-  const inputRef = useRef<HTMLInputElement>(null);
-
   const handle = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     e.target.value = "";
@@ -508,56 +509,53 @@ function ImageUpload({
     reader.readAsDataURL(file);
   };
 
+  if (value) {
+    return (
+      <div className="relative aspect-[16/10] w-full overflow-hidden rounded-2xl border border-border">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={value}
+          alt=""
+          className="absolute inset-0 h-full w-full object-cover"
+        />
+        <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 to-transparent p-3">
+          <div className="flex flex-wrap gap-2">
+            <label className="inline-flex h-9 cursor-pointer items-center justify-center gap-2 rounded-full bg-white/95 px-4 text-xs font-semibold text-foreground hover:bg-white active:scale-[0.97]">
+              Replace photo
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handle}
+                className="sr-only"
+              />
+            </label>
+            <button
+              type="button"
+              onClick={() => onChange(null)}
+              className="inline-flex h-9 items-center justify-center gap-2 rounded-full border border-white/40 bg-white/10 px-4 text-xs font-semibold text-white backdrop-blur hover:bg-white/20 active:scale-[0.97]"
+            >
+              Remove photo
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div>
+    <label className="flex aspect-[16/10] w-full cursor-pointer flex-col items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-border bg-background text-sm font-medium text-muted transition-colors hover:border-primary/50 hover:text-foreground">
+      <span className="grid h-12 w-12 place-items-center rounded-full bg-primary/10 text-primary">
+        <CameraIcon className="h-5 w-5" />
+      </span>
+      <span className="font-semibold text-foreground">Upload photo</span>
+      <span className="text-[11px] text-muted">JPG or PNG · click to choose</span>
       <input
-        ref={inputRef}
         type="file"
         accept="image/*"
         onChange={handle}
-        className="hidden"
+        className="sr-only"
       />
-      {value ? (
-        <div className="relative aspect-[16/10] w-full overflow-hidden rounded-2xl border border-border">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={value}
-            alt=""
-            className="absolute inset-0 h-full w-full object-cover"
-          />
-          <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 to-transparent p-3">
-            <div className="flex flex-wrap gap-2">
-              <button
-                type="button"
-                onClick={() => inputRef.current?.click()}
-                className="inline-flex h-9 items-center justify-center gap-2 rounded-full bg-white/95 px-4 text-xs font-semibold text-foreground hover:bg-white active:scale-[0.97]"
-              >
-                Replace photo
-              </button>
-              <button
-                type="button"
-                onClick={() => onChange(null)}
-                className="inline-flex h-9 items-center justify-center gap-2 rounded-full border border-white/40 bg-white/10 px-4 text-xs font-semibold text-white backdrop-blur hover:bg-white/20 active:scale-[0.97]"
-              >
-                Remove photo
-              </button>
-            </div>
-          </div>
-        </div>
-      ) : (
-        <button
-          type="button"
-          onClick={() => inputRef.current?.click()}
-          className="flex aspect-[16/10] w-full flex-col items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-border bg-background text-sm font-medium text-muted transition-colors hover:border-primary/50 hover:text-foreground"
-        >
-          <span className="grid h-12 w-12 place-items-center rounded-full bg-primary/10 text-primary">
-            <CameraIcon className="h-5 w-5" />
-          </span>
-          <span className="font-semibold text-foreground">Upload photo</span>
-          <span className="text-[11px] text-muted">JPG or PNG</span>
-        </button>
-      )}
-    </div>
+    </label>
   );
 }
 
