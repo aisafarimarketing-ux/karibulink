@@ -25,7 +25,7 @@ export function AccordionSection({
       open={defaultOpen || undefined}
       className="group rounded-2xl border border-border bg-surface transition-colors open:border-primary/40 open:shadow-[0_4px_24px_-12px_rgba(31,58,46,0.18)]"
     >
-      <summary className="flex cursor-pointer items-center gap-3 rounded-2xl px-4 py-3 outline-none [&::-webkit-details-marker]:hidden focus-visible:ring-2 focus-visible:ring-primary/40">
+      <summary className="flex cursor-pointer items-center gap-3 rounded-2xl px-4 py-3 outline-none transition-transform duration-150 active:scale-[0.99] [&::-webkit-details-marker]:hidden focus-visible:ring-2 focus-visible:ring-primary/40">
         <span className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-primary/10 text-primary group-open:bg-primary group-open:text-primary-foreground transition-colors">
           <Icon className="h-4 w-4" />
         </span>

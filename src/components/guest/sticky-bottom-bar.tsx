@@ -75,7 +75,7 @@ function BarAction({
     <a
       href={href}
       {...linkProps}
-      className={`inline-flex h-12 items-center justify-center gap-2 rounded-2xl text-sm font-medium tracking-tight transition-colors ${styles}`}
+      className={`inline-flex h-12 items-center justify-center gap-2 rounded-2xl text-sm font-medium tracking-tight transition-all duration-150 active:scale-[0.97] ${styles}`}
     >
       <Icon className="h-4 w-4" />
       {label}

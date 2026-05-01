@@ -64,7 +64,7 @@ function Hero({ operator }: { operator: Operator }) {
           backgroundSize: "120px 120px, 90px 90px, 140px 140px",
         }}
       />
-      <div className="relative mx-auto w-full max-w-5xl px-5 pt-5 pb-12 text-white sm:px-8 sm:pb-14 lg:px-12">
+      <div className="relative mx-auto w-full max-w-5xl px-5 pt-5 pb-10 text-white sm:px-8 sm:pb-12 lg:px-12">
         <div className="flex items-center justify-between">
           <Link
             href="/"
@@ -74,14 +74,26 @@ function Hero({ operator }: { operator: Operator }) {
           </Link>
           <ThemeToggle />
         </div>
-        <span className="mt-4 inline-flex items-center gap-2 rounded-full border border-white/20 px-2.5 py-1 text-[10px] font-medium uppercase tracking-[0.22em] text-white/85">
-          <span className="h-1 w-1 rounded-full bg-accent" />
-          {j.heroEyebrow}
-        </span>
+        <div className="mt-4 flex flex-wrap items-center gap-2">
+          <span className="inline-flex items-center gap-2 rounded-full border border-white/20 px-2.5 py-1 text-[10px] font-medium uppercase tracking-[0.22em] text-white/85">
+            <span className="h-1 w-1 rounded-full bg-accent" />
+            {j.heroEyebrow}
+          </span>
+          <span className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-2.5 py-1 text-[10px] font-medium uppercase tracking-[0.22em] text-white/85 backdrop-blur">
+            <span className="relative flex h-1.5 w-1.5">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent opacity-75" />
+              <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-accent" />
+            </span>
+            On safari · 24°C
+          </span>
+        </div>
         <h1 className="font-serif mt-3 text-2xl font-medium leading-tight tracking-tight sm:text-3xl lg:text-4xl">
           {j.heroTitle}
         </h1>
-        <p className="mt-1 text-[10px] uppercase tracking-[0.2em] text-white/55">
+        <p className="mt-2 max-w-md text-sm leading-snug text-white/75 line-clamp-2">
+          {j.heroSubtitle}
+        </p>
+        <p className="mt-2 text-[10px] uppercase tracking-[0.2em] text-white/55">
           {operator.name}
         </p>
       </div>
@@ -92,15 +104,15 @@ function Hero({ operator }: { operator: Operator }) {
 function QuickActions() {
   return (
     <section className="relative -mt-7 px-5 sm:px-8 lg:px-12">
-      <div className="mx-auto w-full max-w-5xl">
-        <div className="grid grid-cols-3 gap-2 rounded-2xl border border-border bg-surface p-2 shadow-[0_8px_30px_-12px_rgba(31,58,46,0.18)] sm:grid-cols-6 sm:gap-2 sm:p-3">
+      <div className="mx-auto w-full max-w-md sm:max-w-lg">
+        <div className="grid grid-cols-3 gap-2 rounded-2xl border border-border bg-surface p-2 shadow-[0_8px_30px_-12px_rgba(31,58,46,0.18)] sm:gap-3 sm:p-3">
           {QUICK_ACTIONS.map(({ href, label, icon: Icon }) => (
             <a
               key={label}
               href={href}
-              className="group flex flex-col items-center gap-1.5 rounded-xl px-2 py-3 text-center transition-colors hover:bg-background sm:gap-2"
+              className="group flex min-h-20 flex-col items-center justify-center gap-1.5 rounded-xl px-2 py-3 text-center transition-all duration-150 hover:bg-background active:scale-[0.97] sm:gap-2 sm:min-h-24"
             >
-              <span className="grid h-9 w-9 place-items-center rounded-xl bg-primary text-primary-foreground transition-colors group-hover:bg-primary-hover">
+              <span className="grid h-10 w-10 place-items-center rounded-xl bg-primary text-primary-foreground transition-colors group-hover:bg-primary-hover">
                 <Icon className="h-4 w-4" />
               </span>
               <span className="text-[11px] font-medium tracking-tight text-foreground sm:text-xs">
@@ -332,7 +344,7 @@ function Sections({ operator }: { operator: Operator }) {
           </div>
           <Link
             href="#"
-            className="mt-3 inline-flex h-10 items-center justify-center gap-2 rounded-full bg-primary px-4 text-xs font-medium text-primary-foreground hover:bg-primary-hover"
+            className="mt-3 inline-flex h-10 items-center justify-center gap-2 rounded-full bg-primary px-4 text-xs font-medium text-primary-foreground transition-all duration-150 hover:bg-primary-hover active:scale-[0.97]"
           >
             Start my memory book
             <ArrowRightIcon className="h-3.5 w-3.5" />
