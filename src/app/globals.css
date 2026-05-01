@@ -64,24 +64,28 @@
 }
 
 /*
- * Landing-page-only palette: warm-sand canvas, terracotta CTA, gold
- * accent, deep-green anchor for headings/nav/footer. Scoped to the
- * landing route so guest hubs and admin keep their own theme.
+ * Landing-page-only palette: editorial safari. Same brand values as
+ * Fair Mode so the front door and the brochure read as one. Scoped
+ * to the landing route so guest hubs and admin keep their own
+ * themes.
  */
 .landing-theme {
-  --background: #e0d8c3;
-  --surface: #f5f1e6;
-  --foreground: #1f3d2b;
-  --muted: #5d5238;
-  --border: #cabb98;
+  --background: #e7dfcd;
+  --surface: #f6f1e6;
+  --soft: #f2ebdd;
+  --foreground: #163a2e;
+  --muted: #5a6b63;
+  --border: rgba(22, 58, 46, 0.09);
 
-  --primary: #b06a3b;
-  --primary-hover: #94552c;
-  --primary-foreground: #f5f1e6;
+  --primary: #b76b3e;
+  --primary-hover: #9c5731;
+  --primary-foreground: #f6f1e6;
 
-  --accent: #c9a84c;
-  --accent-foreground: #1f3d2b;
+  --accent: #c8a24b;
+  --accent-foreground: #163a2e;
   --danger: #8a3a2a;
+
+  --font-serif: var(--font-cormorant), ui-serif, Georgia, serif;
 }
 
 @theme inline {
