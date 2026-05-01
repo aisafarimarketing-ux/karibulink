@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import {
+  useEffect,
   useRef,
   useState,
   type ChangeEvent,
@@ -30,12 +31,48 @@ import { AdminSidebar } from "./admin-sidebar";
 
 const ICON_OPTIONS = ICON_KEYS.map((k) => ({ value: k, label: k }));
 
+export const propertyStorageKey = (slug: string) => `kl-property-${slug}`;
+
 export function PropertyEditor({
   initialProperty,
 }: {
   initialProperty: Property;
 }) {
+  const storageKey = propertyStorageKey(initialProperty.slug);
   const [property, setProperty] = useState<Property>(initialProperty);
+  const [hydrated, setHydrated] = useState(false);
+
+  // Hydrate from localStorage on mount (client only — avoid hydration mismatch).
+  useEffect(() => {
+    try {
+      const stored = window.localStorage.getItem(storageKey);
+      if (stored) {
+        setProperty(JSON.parse(stored) as Property);
+      }
+    } catch {
+      /* ignore parse / storage errors */
+    }
+    setHydrated(true);
+  }, [storageKey]);
+
+  // Persist on every change after hydration.
+  useEffect(() => {
+    if (!hydrated) return;
+    try {
+      window.localStorage.setItem(storageKey, JSON.stringify(property));
+    } catch {
+      /* localStorage quota or disabled */
+    }
+  }, [hydrated, property, storageKey]);
+
+  const resetToDefaults = () => {
+    try {
+      window.localStorage.removeItem(storageKey);
+    } catch {
+      /* ignore */
+    }
+    setProperty(initialProperty);
+  };
 
   const update = <K extends keyof Property>(key: K, value: Property[K]) => {
     setProperty((p) => ({ ...p, [key]: value }));
@@ -79,14 +116,27 @@ export function PropertyEditor({
                 Upload a hero photo, change copy, add or remove items. The
                 preview updates live.
               </p>
+              <p className="mt-2 inline-flex items-center gap-1.5 rounded-full border border-border bg-surface px-2.5 py-1 text-[10px] font-medium uppercase tracking-[0.2em] text-muted">
+                <span className="h-1 w-1 rounded-full bg-accent" />
+                Demo edits are saved locally on this device.
+              </p>
             </div>
-            <Link
-              href={`/camp/${property.slug}`}
-              className="inline-flex h-11 items-center justify-center gap-2 rounded-full border border-border bg-surface px-5 text-sm font-medium hover:border-primary/40"
-            >
-              View live page
-              <ArrowRightIcon className="h-4 w-4" />
-            </Link>
+            <div className="flex flex-wrap items-center gap-2">
+              <button
+                type="button"
+                onClick={resetToDefaults}
+                className="inline-flex h-11 items-center justify-center gap-2 rounded-full border border-border bg-background px-4 text-sm font-medium text-muted hover:border-danger/40 hover:text-foreground"
+              >
+                Reset to defaults
+              </button>
+              <Link
+                href={`/camp/${property.slug}`}
+                className="inline-flex h-11 items-center justify-center gap-2 rounded-full border border-border bg-surface px-5 text-sm font-medium hover:border-primary/40"
+              >
+                View live page
+                <ArrowRightIcon className="h-4 w-4" />
+              </Link>
+            </div>
           </div>
         </header>
 
@@ -593,7 +643,7 @@ function SaveBar() {
   return (
     <div className="sticky bottom-4 z-10 flex flex-col items-stretch gap-3 rounded-3xl border border-border bg-surface/95 px-5 py-4 backdrop-blur sm:flex-row sm:items-center sm:justify-between">
       <p className="text-xs text-muted">
-        Mock — changes show in the preview but don't persist yet.
+        Edits auto-save to this device. Real cloud sync coming next.
       </p>
       <button
         type="button"

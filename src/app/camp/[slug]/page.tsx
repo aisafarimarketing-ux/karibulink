@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import { CampHub } from "@/components/guest/camp-hub";
+import { CampHubWithStorage } from "@/components/guest/camp-hub-with-storage";
 import { getProperty, listProperties } from "@/data/mock";
 
 export function generateStaticParams() {
@@ -29,5 +29,5 @@ export default async function CampPage({
   const { slug } = await params;
   const property = getProperty(slug);
   if (!property) notFound();
-  return <CampHub property={property} />;
+  return <CampHubWithStorage initialProperty={property} />;
 }
