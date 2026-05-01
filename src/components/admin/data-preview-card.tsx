@@ -14,9 +14,9 @@ export function StatCard({
   hint?: string;
 }) {
   return (
-    <div className="rounded-3xl border border-border bg-surface p-6">
+    <div className="rounded-3xl bg-surface p-6 shadow-[0_2px_14px_-6px_rgba(31,58,46,0.10)]">
       <div className="flex items-center justify-between">
-        <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted">
+        <p className="text-[11px] font-medium uppercase tracking-[0.22em] text-muted">
           {label}
         </p>
         {Icon && (
@@ -25,10 +25,10 @@ export function StatCard({
           </span>
         )}
       </div>
-      <p className="font-serif mt-4 text-4xl font-medium tracking-tight text-foreground">
+      <p className="font-serif mt-5 text-[40px] font-medium leading-none tracking-tight text-foreground">
         {value}
       </p>
-      {hint && <p className="mt-2 text-sm text-muted">{hint}</p>}
+      {hint && <p className="mt-2 text-sm leading-snug text-muted">{hint}</p>}
     </div>
   );
 }
@@ -83,7 +83,7 @@ export function DataPreviewCard({
   );
 
   const className =
-    "group block rounded-3xl border border-border bg-surface p-6 transition-all hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-[0_20px_40px_-20px_rgba(31,58,46,0.18)]";
+    "group block rounded-3xl bg-surface p-6 shadow-[0_2px_14px_-6px_rgba(31,58,46,0.10)] transition-all hover:-translate-y-0.5 hover:shadow-[0_18px_40px_-18px_rgba(31,58,46,0.20)]";
 
   return href ? (
     <Link href={href} className={className}>

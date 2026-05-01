@@ -172,8 +172,8 @@ export function FairLeadsBoard() {
         />
       </div>
 
-      <div className="mt-10 flex flex-wrap items-end justify-between gap-3">
-        <h2 className="font-serif text-2xl font-medium tracking-tight text-foreground">
+      <div className="mt-12 flex flex-wrap items-end justify-between gap-3">
+        <h2 className="font-serif text-3xl font-medium leading-tight tracking-tight text-foreground sm:text-[34px]">
           {leads.length === 0
             ? "Recent activity"
             : `${leads.length} ${leads.length === 1 ? "lead" : "leads"}`}

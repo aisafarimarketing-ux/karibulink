@@ -60,7 +60,7 @@ export default function AdminDashboard() {
         />
       </div>
 
-      <h2 className="font-serif mt-12 text-2xl font-medium tracking-tight text-foreground">
+      <h2 className="font-serif mt-14 text-3xl font-medium leading-tight tracking-tight text-foreground sm:text-[34px]">
         Quick edits
       </h2>
       <p className="mt-1 text-sm text-muted">
@@ -119,7 +119,7 @@ export default function AdminDashboard() {
         )}
       </div>
 
-      <h2 className="font-serif mt-12 text-2xl font-medium tracking-tight text-foreground">
+      <h2 className="font-serif mt-14 text-3xl font-medium leading-tight tracking-tight text-foreground sm:text-[34px]">
         Workspace
       </h2>
       <div className="mt-6 grid gap-4 lg:grid-cols-3">

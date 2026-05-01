@@ -145,11 +145,11 @@ export function PropertyEditor({
 
         <ViewTabs view={view} setView={setView} />
 
-        <main className="flex-1 px-4 py-6 sm:px-8 sm:py-8 lg:px-10">
+        <main className="flex-1 px-4 py-10 sm:px-8 sm:py-12 lg:px-10 lg:py-14">
           <div className="mx-auto w-full max-w-[1280px]">
-            <div className="lg:grid lg:grid-cols-[minmax(0,1fr)_380px] lg:gap-6">
+            <div className="lg:grid lg:grid-cols-[minmax(0,1fr)_380px] lg:gap-8">
               <div className={`${view === "edit" ? "" : "hidden lg:block"}`}>
-                <div className="space-y-3">
+                <div className="space-y-4">
                   <CollapsibleSection
                     icon={InfoIcon}
                     title="Hero"
@@ -418,25 +418,25 @@ function CollapsibleSection({
   return (
     <details
       open={defaultOpen || undefined}
-      className="group rounded-3xl border border-border bg-surface transition-colors open:border-primary/40 open:shadow-[0_4px_24px_-12px_rgba(31,58,46,0.18)]"
+      className="group rounded-3xl bg-surface shadow-[0_2px_14px_-6px_rgba(31,58,46,0.10)] transition-shadow open:shadow-[0_8px_28px_-12px_rgba(31,58,46,0.16)]"
     >
-      <summary className="flex cursor-pointer items-center gap-3 rounded-3xl p-5 outline-none transition-colors [&::-webkit-details-marker]:hidden focus-visible:ring-2 focus-visible:ring-primary/40">
+      <summary className="flex cursor-pointer items-center gap-4 rounded-3xl p-6 outline-none transition-colors [&::-webkit-details-marker]:hidden focus-visible:ring-2 focus-visible:ring-primary/40">
         <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-primary/10 text-primary transition-colors group-open:bg-primary group-open:text-primary-foreground">
           <Icon className="h-5 w-5" />
         </span>
         <div className="min-w-0 flex-1">
-          <h3 className="font-serif text-lg font-medium tracking-tight text-foreground sm:text-xl">
+          <h3 className="font-serif text-xl font-medium leading-tight tracking-tight text-foreground sm:text-2xl">
             {title}
           </h3>
           {description && (
-            <p className="mt-0.5 text-xs text-muted leading-snug">
+            <p className="mt-1 text-xs leading-snug text-muted">
               {description}
             </p>
           )}
         </div>
         <ChevronDownIcon className="h-5 w-5 shrink-0 text-muted transition-transform duration-200 group-open:rotate-180" />
       </summary>
-      <div className="border-t border-border/60 px-5 py-5 sm:px-6 sm:py-6">
+      <div className="border-t border-border/40 px-6 py-6 sm:px-7 sm:py-7">
         {children}
       </div>
     </details>
@@ -586,7 +586,7 @@ function IconItemList({
       {items.map((item, i) => (
         <div
           key={i}
-          className="grid gap-2 rounded-xl border border-border bg-background p-3 sm:grid-cols-[120px_1fr_2fr_auto]"
+          className="grid gap-2 rounded-2xl bg-background p-4 sm:grid-cols-[120px_1fr_2fr_auto]"
         >
           <SelectField
             label="Icon"
@@ -645,7 +645,7 @@ function SightingsList({
       {sightings.map((s, i) => (
         <div
           key={i}
-          className="grid gap-2 rounded-xl border border-border bg-background p-3 sm:grid-cols-[1fr_1fr_1fr_1fr_auto]"
+          className="grid gap-2 rounded-2xl bg-background p-4 sm:grid-cols-[1fr_1fr_1fr_1fr_auto]"
         >
           <Field
             label="When"
@@ -705,7 +705,7 @@ function StaffList({
       {staff.map((m, i) => (
         <div
           key={i}
-          className="grid gap-2 rounded-xl border border-border bg-background p-3 sm:grid-cols-[1fr_1fr_2fr_auto]"
+          className="grid gap-2 rounded-2xl bg-background p-4 sm:grid-cols-[1fr_1fr_2fr_auto]"
         >
           <Field
             label="Name"
@@ -756,7 +756,7 @@ function RulesList({
       {rules.map((r, i) => (
         <div
           key={i}
-          className="grid gap-2 rounded-xl border border-border bg-background p-3 sm:grid-cols-[1fr_auto]"
+          className="grid gap-2 rounded-2xl bg-background p-4 sm:grid-cols-[1fr_auto]"
         >
           <TextAreaField
             label={`Rule ${i + 1}`}
@@ -836,7 +836,7 @@ function Field({
         type="text"
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className={`mt-1.5 w-full rounded-xl border border-border bg-background px-3 text-sm text-foreground focus:border-primary/50 focus:outline-none focus:ring-2 focus:ring-primary/15 ${
+        className={`mt-1.5 w-full rounded-xl bg-background px-3.5 text-sm text-foreground transition-colors focus:bg-surface focus:outline-none focus:ring-2 focus:ring-primary/20 ${
           compact ? "h-9 text-xs" : "h-11"
         }`}
       />
@@ -877,7 +877,7 @@ function TextAreaField({
         value={value}
         onChange={(e) => onChange(e.target.value)}
         rows={rows}
-        className={`mt-1.5 w-full rounded-xl border border-border bg-background px-3 py-2 text-sm text-foreground focus:border-primary/50 focus:outline-none focus:ring-2 focus:ring-primary/15 ${
+        className={`mt-1.5 w-full rounded-xl bg-background px-3.5 py-2.5 text-sm leading-relaxed text-foreground transition-colors focus:bg-surface focus:outline-none focus:ring-2 focus:ring-primary/20 ${
           compact ? "text-xs" : ""
         }`}
       />
@@ -910,7 +910,7 @@ function SelectField({
       <select
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className={`mt-1.5 w-full cursor-pointer rounded-xl border border-border bg-background px-3 text-sm text-foreground focus:border-primary/50 focus:outline-none focus:ring-2 focus:ring-primary/15 ${
+        className={`mt-1.5 w-full cursor-pointer rounded-xl bg-background px-3.5 text-sm text-foreground transition-colors focus:bg-surface focus:outline-none focus:ring-2 focus:ring-primary/20 ${
           compact ? "h-9 text-xs" : "h-11"
         }`}
       >

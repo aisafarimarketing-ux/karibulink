@@ -6,7 +6,7 @@ import type {
 } from "react";
 
 const inputBase =
-  "block w-full rounded-2xl border border-border bg-background px-4 py-3 text-sm text-foreground placeholder:text-muted/70 focus:border-primary/50 focus:outline-none focus:ring-2 focus:ring-primary/15";
+  "block w-full rounded-2xl bg-background px-4 py-3 text-sm text-foreground placeholder:text-muted/70 transition-colors focus:bg-surface focus:outline-none focus:ring-2 focus:ring-primary/20";
 
 export function FieldLabel({
   label,
