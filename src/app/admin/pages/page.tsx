@@ -33,7 +33,7 @@ export default function GuestPagesPage() {
                   org ? ` · ${org.country}` : ""
                 }`}
                 slug={`/camp/${p.slug}`}
-                editHref="/admin/properties"
+                editHref={`/admin/camps/${p.slug}/edit`}
               />
             </li>
           );

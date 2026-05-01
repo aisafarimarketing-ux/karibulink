@@ -49,8 +49,7 @@ export const PROPERTIES: Property[] = [
     organizationId: "org-serengeti-view",
     name: "Serengeti View Camp",
     slug: "serengeti-view-camp",
-    welcomeMessage:
-      "You're in the right place. Tap any of the cards below to find what you need — register, camp info, safety, sightings, and how to reach us at any hour.",
+    welcomeMessage: "Welcome. Your tent is ready and waiting.",
     heroTitle: "Welcome to Serengeti View Camp",
     heroSubtitle: "Karibu — welcome",
     location: "Central Serengeti, Tanzania",
@@ -186,14 +185,19 @@ export const PROPERTIES: Property[] = [
         spotter: "Guide Sarah",
       },
     ],
+    yourStayIntro:
+      "Everything you need for a calm, comfortable stay in the bush.",
+    experiencesIntro: "What we can make happen for you today.",
+    helpIntro: "We're a tap away, day or night.",
+    waiverText:
+      "By staying with us, you agree to follow camp safety guidance, respect the conservancy, and never leave camp on foot after dark without an escort.",
   },
   {
     id: "prop-mara-north",
     organizationId: "org-mara-north",
     name: "Mara North Lodge",
     slug: "mara-north-lodge",
-    welcomeMessage:
-      "Welcome to Mara North. The conservancy is yours for the next few days — the cards below are your map to it.",
+    welcomeMessage: "Welcome. The conservancy is yours.",
     heroTitle: "Welcome to Mara North Lodge",
     heroSubtitle: "Karibu — welcome to the conservancy",
     location: "Mara North Conservancy, Kenya",
@@ -253,8 +257,7 @@ export const PROPERTIES: Property[] = [
     organizationId: "org-stone-town",
     name: "Stone Town BnB",
     slug: "stone-town-bnb",
-    welcomeMessage:
-      "Karibu Zanzibar. The keys, the Wi-Fi, the breakfast spot, and the best swim in the city — all below.",
+    welcomeMessage: "Karibu Zanzibar. Your room is ready.",
     heroTitle: "Welcome to Stone Town BnB",
     heroSubtitle: "Karibu — welcome to the island",
     location: "Stone Town, Zanzibar",

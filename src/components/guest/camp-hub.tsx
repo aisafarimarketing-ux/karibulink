@@ -46,7 +46,7 @@ export function CampHub({
 
           <section className="px-3 pt-4 sm:px-4">
             <div className="grid gap-2">
-              <CheckIn />
+              <CheckIn property={property} />
               <YourStay property={property} />
               <Experiences property={property} />
               <Help property={property} />
@@ -70,10 +70,11 @@ export function CampHub({
 
 function CampHero({ property }: { property: Property }) {
   const t = useT();
+  const message = property.welcomeMessage?.trim() || t("welcome");
   return (
     <HeroCard
       label={property.name}
-      message={t("welcome")}
+      message={message}
       imageUrl={property.heroImageUrl}
       toolbar={<LanguageSelector />}
     />
@@ -84,7 +85,7 @@ function CampHero({ property }: { property: Property }) {
 /*  Accordion 1: Check In                                            */
 /* --------------------------------------------------------------- */
 
-function CheckIn() {
+function CheckIn({ property }: { property: Property }) {
   const t = useT();
   return (
     <AccordionSection
@@ -94,36 +95,28 @@ function CheckIn() {
       title={t("checkIn")}
       subtitle={`${t("waiverTitle")} · ${t("registerYourStay")}`}
     >
-      <Waiver />
+      <Waiver text={property.waiverText} />
       <div className="mt-3" />
       <Registration />
     </AccordionSection>
   );
 }
 
-function Waiver() {
+function Waiver({ text }: { text?: string }) {
   const t = useT();
   return (
     <div className="rounded-xl border border-border bg-background p-3">
       <p className="text-sm font-medium text-foreground">{t("waiverTitle")}</p>
-      <p className="mt-0.5 text-xs text-muted leading-snug">
-        {t("waiverHelp")}
+      <p className="mt-1.5 text-xs leading-snug text-foreground/80">
+        {text?.trim() ? text : t("waiverHelp")}
       </p>
-      <div className="mt-3 flex flex-wrap items-center gap-3">
-        <button
-          type="button"
-          className="rounded-full bg-primary px-3 py-1.5 text-[11px] font-medium text-primary-foreground transition-all duration-150 hover:bg-primary-hover active:scale-[0.97]"
-        >
-          {t("readWaiver")}
-        </button>
-        <label className="inline-flex items-center gap-2 text-xs text-muted">
-          <input
-            type="checkbox"
-            className="h-3.5 w-3.5 rounded border-border accent-primary"
-          />
-          {t("iAgree")}
-        </label>
-      </div>
+      <label className="mt-3 inline-flex items-center gap-2 text-xs text-muted">
+        <input
+          type="checkbox"
+          className="h-3.5 w-3.5 rounded border-border accent-primary"
+        />
+        {t("iAgree")}
+      </label>
     </div>
   );
 }
@@ -202,6 +195,11 @@ function YourStay({ property }: { property: Property }) {
       title={t("yourStay")}
       subtitle={subtitleParts}
     >
+      {property.yourStayIntro?.trim() && (
+        <p className="mb-3 text-sm leading-snug text-muted">
+          {property.yourStayIntro}
+        </p>
+      )}
       {property.amenities.length > 0 && (
         <SubBlock label={t("aboutTheCamp")}>
           <ItemList items={property.amenities} />
@@ -276,6 +274,11 @@ function Experiences({ property }: { property: Property }) {
       title={t("experiences")}
       subtitle={subtitleParts || undefined}
     >
+      {property.experiencesIntro?.trim() && (
+        <p className="mb-3 text-sm leading-snug text-muted">
+          {property.experiencesIntro}
+        </p>
+      )}
       {property.services.length > 0 && (
         <SubBlock label={t("services")}>
           <ServiceList items={property.services} />
@@ -334,6 +337,11 @@ function Help({ property }: { property: Property }) {
       title={t("help")}
       subtitle={subtitleParts}
     >
+      {property.helpIntro?.trim() && (
+        <p className="mb-3 text-sm leading-snug text-muted">
+          {property.helpIntro}
+        </p>
+      )}
       <SubBlock label={t("inEmergency")}>
         <a
           href={`tel:${property.emergencyContact.phone.replace(/\s+/g, "")}`}

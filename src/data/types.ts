@@ -70,6 +70,10 @@ export interface Property {
   emergencyContact: EmergencyContact;
   staff: Staff[];
   sightings: Sighting[];
+  yourStayIntro?: string;
+  experiencesIntro?: string;
+  helpIntro?: string;
+  waiverText?: string;
 }
 
 export interface RouteStop {

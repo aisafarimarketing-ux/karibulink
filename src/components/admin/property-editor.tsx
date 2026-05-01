@@ -118,7 +118,7 @@ export function PropertyEditor({
               </p>
               <p className="mt-2 inline-flex items-center gap-1.5 rounded-full border border-border bg-surface px-2.5 py-1 text-[10px] font-medium uppercase tracking-[0.2em] text-muted">
                 <span className="h-1 w-1 rounded-full bg-accent" />
-                Demo edits are saved locally on this device.
+                Changes are saved locally on this device (demo mode)
               </p>
             </div>
             <div className="flex flex-wrap items-center gap-2">
@@ -148,6 +148,8 @@ export function PropertyEditor({
                   property={property}
                   update={update}
                 />
+
+                <IntrosEditor property={property} update={update} />
 
                 <ListEditor
                   title="Amenities (Camp info)"
@@ -232,6 +234,49 @@ export function PropertyEditor({
 /* ------------------------------------------------------------------ */
 /*  Section: Hero (image + main fields)                                */
 /* ------------------------------------------------------------------ */
+
+function IntrosEditor({
+  property,
+  update,
+}: {
+  property: Property;
+  update: <K extends keyof Property>(key: K, value: Property[K]) => void;
+}) {
+  return (
+    <SectionCard
+      title="Section copy"
+      description="The short intro shown at the top of each guest section, plus your waiver text."
+      icon={InfoIcon}
+    >
+      <div className="grid gap-3">
+        <TextAreaField
+          label="Your Stay intro"
+          value={property.yourStayIntro ?? ""}
+          onChange={(v) => update("yourStayIntro", v)}
+          rows={2}
+        />
+        <TextAreaField
+          label="Experiences intro"
+          value={property.experiencesIntro ?? ""}
+          onChange={(v) => update("experiencesIntro", v)}
+          rows={2}
+        />
+        <TextAreaField
+          label="Help intro"
+          value={property.helpIntro ?? ""}
+          onChange={(v) => update("helpIntro", v)}
+          rows={2}
+        />
+        <TextAreaField
+          label="Waiver text (Check In)"
+          value={property.waiverText ?? ""}
+          onChange={(v) => update("waiverText", v)}
+          rows={4}
+        />
+      </div>
+    </SectionCard>
+  );
+}
 
 function HeroEditor({
   property,
