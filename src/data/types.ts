@@ -53,6 +53,31 @@ export interface EmergencyContact {
   phone: string;
 }
 
+export interface FairMode {
+  tagline?: string;
+  highlights?: string[];
+  about?: string;
+  accommodation?: {
+    rooms?: number;
+    capacity?: number;
+    features?: string[];
+  };
+  policies?: {
+    childPolicy?: string;
+    occupancy?: string;
+  };
+  rates?: {
+    priceRange?: string;
+    paymentTerms?: string;
+    discounts?: string;
+  };
+  uniqueSellingPoints?: string[];
+  activities?: string[];
+  photos?: string[];
+  whatsappPhone?: string;
+  email?: string;
+}
+
 export interface Property {
   id: string;
   organizationId: string;
@@ -74,6 +99,7 @@ export interface Property {
   experiencesIntro?: string;
   helpIntro?: string;
   waiverText?: string;
+  fairMode?: FairMode;
 }
 
 export interface RouteStop {

@@ -191,6 +191,52 @@ export const PROPERTIES: Property[] = [
     helpIntro: "We're a tap away, day or night.",
     waiverText:
       "By staying with us, you agree to follow camp safety guidance, respect the conservancy, and never leave camp on foot after dark without an escort.",
+    fairMode: {
+      tagline: "Designed for unforgettable safari experiences.",
+      highlights: ["16 luxury tents", "20 mins from airstrip", "Open all year"],
+      about:
+        "Serengeti View Camp blends classic safari hospitality with thoughtful, low-impact design. Each tent opens onto the migration plains; our team — most of them born within the conservancy — is what guests remember most.",
+      accommodation: {
+        rooms: 16,
+        capacity: 32,
+        features: [
+          "King and twin tents",
+          "Private bathroom · hot shower",
+          "Solar power 24/7",
+          "Veranda with plains view",
+          "Daily housekeeping",
+        ],
+      },
+      policies: {
+        childPolicy:
+          "Children 8+ welcome. Family tents (sleeps 4) on request.",
+        occupancy:
+          "Maximum 32 guests at any time. Single supplement applies in low season.",
+      },
+      rates: {
+        priceRange:
+          "$650 – $980 per person, per night, full board",
+        paymentTerms:
+          "30% deposit at booking, balance 60 days before arrival",
+        discounts:
+          "10% rebooking discount · 5% group discount (8+ guests)",
+      },
+      uniqueSellingPoints: [
+        "Front-row seats on the Great Migration, June – October",
+        "Resident leopard family in the kopjes behind camp",
+        "Walking safaris with Maasai trackers",
+        "100% solar — no diesel generators",
+      ],
+      activities: [
+        "Game drives (sunrise & sunset)",
+        "Walking safari with a Maasai guide",
+        "Hot air balloon (premium add-on)",
+        "Cultural visit to a nearby Maasai boma",
+        "Bush sundowner with a private chef",
+      ],
+      whatsappPhone: "+255700000000",
+      email: "operators@serengetiview.example",
+    },
   },
   {
     id: "prop-mara-north",
