@@ -1,12 +1,5 @@
 import Link from "next/link";
 import {
-  Card,
-  Eyebrow,
-  LinkButton,
-  Section,
-  SectionHeading,
-} from "@/components/ui";
-import {
   ArrowRightIcon,
   BinocularsIcon,
   CameraIcon,
@@ -19,28 +12,41 @@ import {
   ShieldIcon,
 } from "@/components/icons";
 import { iconFor } from "@/lib/icon-map";
+import {
+  AccordionAutoOpenScript,
+  AccordionSection,
+} from "./accordion-section";
+import { StickyBottomBar } from "./sticky-bottom-bar";
+import { ThemeToggle } from "./theme-toggle";
 import type { Operator, SafariRoute } from "@/data/types";
 
 const QUICK_ACTIONS = [
-  { href: "#route", label: "Today's Route", icon: RouteIcon },
-  { href: "#expect", label: "What to Expect", icon: BinocularsIcon },
-  { href: "#guide", label: "Ask Your Guide", icon: MessageIcon },
-  { href: "#memories", label: "Save Memories", icon: CameraIcon },
+  { href: "#route", label: "Route", icon: RouteIcon },
+  { href: "#expect", label: "Expect", icon: BinocularsIcon },
+  { href: "#guide", label: "Guide", icon: MessageIcon },
+  { href: "#night", label: "Night", icon: MoonIcon },
+  { href: "#memories", label: "Memories", icon: CameraIcon },
   { href: "#emergency", label: "Emergency", icon: ShieldIcon },
 ];
 
+const ACCORDION_GROUP = "operator-hub";
+
 export function OperatorHub({ operator }: { operator: Operator }) {
   const todayRoute = operator.routes[0];
+
   return (
-    <main className="flex-1">
+    <main className="flex-1 pb-24">
       <Hero operator={operator} />
       <QuickActions />
-      {todayRoute && <RouteSection route={todayRoute} />}
-      <Expect operator={operator} />
-      <Guide operator={operator} />
-      <NightArrival />
-      <Memories />
+      {todayRoute && <RouteSummary route={todayRoute} />}
+      <Sections operator={operator} />
       <Emergency operator={operator} />
+
+      <StickyBottomBar
+        phone={operator.emergencyContact.phone}
+        directionsQuery={`${operator.name} ${todayRoute?.fromTo ?? ""}`}
+      />
+      <AccordionAutoOpenScript />
     </main>
   );
 }
@@ -48,8 +54,8 @@ export function OperatorHub({ operator }: { operator: Operator }) {
 function Hero({ operator }: { operator: Operator }) {
   const j = operator.journeyNotes;
   return (
-    <section className="relative overflow-hidden border-b border-border/60">
-      <div className="absolute inset-0 -z-10 bg-gradient-to-br from-primary via-primary to-[#16291f] text-primary-foreground" />
+    <section className="relative overflow-hidden">
+      <div className="absolute inset-0 -z-10 bg-gradient-to-br from-[#1f3a2e] to-[#0a1610] dark:from-[#0a1610] dark:to-[#04100a]" />
       <div
         className="absolute inset-0 -z-10 opacity-[0.08]"
         style={{
@@ -58,24 +64,24 @@ function Hero({ operator }: { operator: Operator }) {
           backgroundSize: "120px 120px, 90px 90px, 140px 140px",
         }}
       />
-      <div className="mx-auto w-full max-w-6xl px-5 py-14 text-primary-foreground sm:px-8 sm:py-20 lg:px-12 lg:py-24">
-        <Link
-          href="/"
-          className="text-xs uppercase tracking-[0.2em] text-primary-foreground/70 hover:text-primary-foreground"
-        >
-          ← KaribuLink
-        </Link>
-        <span className="mt-6 inline-flex items-center gap-2 rounded-full border border-primary-foreground/20 px-3 py-1 text-xs font-medium uppercase tracking-[0.18em] text-primary-foreground/80">
-          <span className="h-1.5 w-1.5 rounded-full bg-accent" />
+      <div className="relative mx-auto w-full max-w-5xl px-5 pt-5 pb-12 text-white sm:px-8 sm:pb-14 lg:px-12">
+        <div className="flex items-center justify-between">
+          <Link
+            href="/"
+            className="text-[10px] uppercase tracking-[0.22em] text-white/70 hover:text-white"
+          >
+            ← KaribuLink
+          </Link>
+          <ThemeToggle />
+        </div>
+        <span className="mt-4 inline-flex items-center gap-2 rounded-full border border-white/20 px-2.5 py-1 text-[10px] font-medium uppercase tracking-[0.22em] text-white/85">
+          <span className="h-1 w-1 rounded-full bg-accent" />
           {j.heroEyebrow}
         </span>
-        <h1 className="font-serif mt-4 text-4xl sm:text-5xl lg:text-6xl font-semibold leading-[1.05] tracking-tight">
+        <h1 className="font-serif mt-3 text-2xl font-medium leading-tight tracking-tight sm:text-3xl lg:text-4xl">
           {j.heroTitle}
         </h1>
-        <p className="mt-5 max-w-xl text-base sm:text-lg text-primary-foreground/80 leading-relaxed">
-          {j.heroSubtitle}
-        </p>
-        <p className="mt-3 text-xs uppercase tracking-[0.18em] text-primary-foreground/60">
+        <p className="mt-1 text-[10px] uppercase tracking-[0.2em] text-white/55">
           {operator.name}
         </p>
       </div>
@@ -85,22 +91,22 @@ function Hero({ operator }: { operator: Operator }) {
 
 function QuickActions() {
   return (
-    <section className="px-5 sm:px-8 lg:px-12 -mt-10 sm:-mt-14 relative">
-      <div className="mx-auto w-full max-w-6xl">
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
+    <section className="relative -mt-7 px-5 sm:px-8 lg:px-12">
+      <div className="mx-auto w-full max-w-5xl">
+        <div className="grid grid-cols-3 gap-2 rounded-2xl border border-border bg-surface p-2 shadow-[0_8px_30px_-12px_rgba(31,58,46,0.18)] sm:grid-cols-6 sm:gap-2 sm:p-3">
           {QUICK_ACTIONS.map(({ href, label, icon: Icon }) => (
-            <Link
+            <a
               key={label}
               href={href}
-              className="group flex flex-col items-start gap-3 rounded-3xl border border-border bg-surface p-4 sm:p-5 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md hover:border-primary/30"
+              className="group flex flex-col items-center gap-1.5 rounded-xl px-2 py-3 text-center transition-colors hover:bg-background sm:gap-2"
             >
-              <span className="grid h-10 w-10 place-items-center rounded-2xl bg-primary text-primary-foreground transition-colors group-hover:bg-primary-hover">
-                <Icon className="h-5 w-5" />
+              <span className="grid h-9 w-9 place-items-center rounded-xl bg-primary text-primary-foreground transition-colors group-hover:bg-primary-hover">
+                <Icon className="h-4 w-4" />
               </span>
-              <span className="text-sm font-medium tracking-tight text-foreground">
+              <span className="text-[11px] font-medium tracking-tight text-foreground sm:text-xs">
                 {label}
               </span>
-            </Link>
+            </a>
           ))}
         </div>
       </div>
@@ -108,258 +114,265 @@ function QuickActions() {
   );
 }
 
-function RouteSection({ route }: { route: SafariRoute }) {
+function RouteSummary({ route }: { route: SafariRoute }) {
   return (
-    <Section id="route">
-      <SectionHeading
-        eyebrow={`Day ${route.day} · ${route.name}`}
-        title={route.fromTo}
-        description="A drive day with a long, slow afternoon in the park. Bring a water bottle, sunscreen, and a layer — the rooftop is breezy."
-      />
-      <ol className="mt-10 grid gap-3">
-        {route.stops.map((r, i) => (
-          <li key={`${r.time}-${r.title}`}>
-            <Card className="flex gap-4">
-              <div className="flex w-16 shrink-0 flex-col items-center">
-                <span className="font-mono text-xs tracking-wider text-primary">
+    <section
+      id="route"
+      className="px-5 pt-6 sm:px-8 sm:pt-8 lg:px-12"
+    >
+      <div className="mx-auto w-full max-w-5xl">
+        <div className="rounded-2xl border border-border bg-surface p-4 sm:p-5">
+          <div className="flex items-center justify-between">
+            <span className="inline-flex items-center gap-2 rounded-full border border-border bg-background px-2.5 py-1 text-[10px] font-medium uppercase tracking-[0.22em] text-muted">
+              <RouteIcon className="h-3 w-3" />
+              Day {route.day} · {route.fromTo}
+            </span>
+            <span className="text-[10px] text-muted">
+              {route.stops.length} stops
+            </span>
+          </div>
+          <h2 className="font-serif mt-2 text-xl font-medium leading-tight tracking-tight text-foreground sm:text-2xl">
+            {route.name}
+          </h2>
+          <ol className="mt-4 grid gap-1.5">
+            {route.stops.map((r, i) => (
+              <li
+                key={`${r.time}-${r.title}`}
+                className="flex items-start gap-3 rounded-xl border border-border bg-background p-2.5"
+              >
+                <span className="font-mono w-12 shrink-0 pt-0.5 text-[11px] font-medium tracking-wider text-primary">
                   {r.time}
                 </span>
-                <span className="mt-1 grid h-8 w-8 place-items-center rounded-full bg-primary text-primary-foreground font-serif text-sm font-semibold">
+                <span className="grid h-5 w-5 shrink-0 place-items-center rounded-full bg-primary/10 text-[10px] font-medium text-primary font-serif">
                   {i + 1}
                 </span>
-              </div>
-              <div className="flex-1">
-                <h3 className="font-serif text-lg font-semibold tracking-tight">
-                  {r.title}
-                </h3>
-                <p className="mt-1 text-muted leading-relaxed">{r.detail}</p>
-              </div>
-            </Card>
-          </li>
-        ))}
-      </ol>
-    </Section>
-  );
-}
-
-function Expect({ operator }: { operator: Operator }) {
-  const items = operator.journeyNotes.expectations;
-  if (items.length === 0) return null;
-  return (
-    <Section id="expect" className="bg-surface/40">
-      <SectionHeading
-        eyebrow="What to expect"
-        title="The country, the people, and the wildlife."
-      />
-      <div className="mt-10 grid gap-4 sm:grid-cols-2">
-        {items.map((item) => {
-          const Icon = iconFor(item.iconKey);
-          return (
-            <Card key={item.label} className="flex gap-4">
-              <span className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-primary/10 text-primary">
-                <Icon className="h-5 w-5" />
-              </span>
-              <div>
-                <h3 className="font-serif text-lg font-semibold tracking-tight">
-                  {item.label}
-                </h3>
-                <p className="mt-1 text-muted leading-relaxed">{item.detail}</p>
-              </div>
-            </Card>
-          );
-        })}
-      </div>
-    </Section>
-  );
-}
-
-function Guide({ operator }: { operator: Operator }) {
-  const lead = operator.guides[0];
-  const prompts = operator.journeyNotes.prompts;
-  return (
-    <Section id="guide">
-      <SectionHeading
-        eyebrow="Ask your guide"
-        title="Conversation starters, if you'd like them."
-        description="A guide loves a curious guest. Pick any of these in the vehicle, or ignore them and just watch — both are good."
-      />
-      {prompts.length > 0 && (
-        <div className="mt-10 grid gap-3">
-          {prompts.map((p) => (
-            <Card key={p} className="flex items-center gap-4">
-              <span className="grid h-10 w-10 shrink-0 place-items-center rounded-2xl bg-accent/20 text-primary">
-                <MessageIcon className="h-5 w-5" />
-              </span>
-              <p className="text-foreground/90 leading-relaxed">{p}</p>
-            </Card>
-          ))}
-        </div>
-      )}
-      {lead && (
-        <Card className="mt-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-          <div className="flex items-center gap-4">
-            <div className="grid h-12 w-12 place-items-center rounded-full bg-primary text-primary-foreground font-serif text-lg font-semibold">
-              {lead.initials}
-            </div>
-            <div>
-              <p className="font-serif text-lg font-semibold tracking-tight">
-                {lead.name}
-              </p>
-              <p className="text-sm text-muted">{lead.role}</p>
-            </div>
-          </div>
-          <a
-            href={`tel:${lead.phone.replace(/\s+/g, "")}`}
-            className="inline-flex h-11 items-center justify-center gap-2 rounded-full border border-border bg-background px-5 text-sm font-medium hover:border-primary/40"
-          >
-            <PhoneIcon className="h-4 w-4 text-primary" />
-            Call {lead.name.split(" ")[0]}
-          </a>
-        </Card>
-      )}
-    </Section>
-  );
-}
-
-function NightArrival() {
-  return (
-    <section id="night" className="bg-[#0d1a14] text-primary-foreground">
-      <div className="mx-auto w-full max-w-6xl px-5 py-16 sm:px-8 sm:py-20 lg:px-12 lg:py-24">
-        <span className="inline-flex items-center gap-2 rounded-full border border-primary-foreground/20 px-3 py-1 text-xs font-medium uppercase tracking-[0.18em] text-primary-foreground/80">
-          <MoonIcon className="h-3.5 w-3.5" />
-          Night arrival mode
-        </span>
-        <h2 className="font-serif mt-4 text-3xl sm:text-4xl lg:text-5xl font-semibold tracking-tight">
-          Arriving after dark? We've got you.
-        </h2>
-        <p className="mt-5 max-w-2xl text-base sm:text-lg text-primary-foreground/80 leading-relaxed">
-          When the sun is down, this hub switches to low-light mode: bigger
-          buttons, dimmer screen, only the essentials.
-        </p>
-        <div className="mt-8 grid gap-3 sm:grid-cols-3">
-          <NightCard
-            icon={CompassIcon}
-            title="Where am I?"
-            detail="Your driver knows. We'll send the ETA and gate name to your phone the moment you cross into the park."
-          />
-          <NightCard
-            icon={InfoIcon}
-            title="Tent number & path"
-            detail="When you reach camp, the askari walks you to your tent. Your tent number waits for you here."
-          />
-          <NightCard
-            icon={ShieldIcon}
-            title="One-tap reception"
-            detail="One big button. Reach the manager on duty without scrolling, without typing."
-          />
+                <div className="flex-1 leading-tight">
+                  <p className="text-sm font-medium text-foreground">
+                    {r.title}
+                  </p>
+                  <p className="mt-0.5 text-xs text-muted leading-snug">
+                    {r.detail}
+                  </p>
+                </div>
+              </li>
+            ))}
+          </ol>
         </div>
       </div>
     </section>
   );
 }
 
-function NightCard({
-  icon: Icon,
-  title,
-  detail,
-}: {
-  icon: typeof CompassIcon;
-  title: string;
-  detail: string;
-}) {
-  return (
-    <div className="rounded-3xl border border-primary-foreground/10 bg-primary-foreground/5 p-6">
-      <span className="grid h-10 w-10 place-items-center rounded-2xl bg-accent text-accent-foreground">
-        <Icon className="h-5 w-5" />
-      </span>
-      <h3 className="mt-4 font-serif text-lg font-semibold tracking-tight">
-        {title}
-      </h3>
-      <p className="mt-2 text-primary-foreground/80 leading-relaxed">
-        {detail}
-      </p>
-    </div>
-  );
-}
+function Sections({ operator }: { operator: Operator }) {
+  const expectations = operator.journeyNotes.expectations;
+  const prompts = operator.journeyNotes.prompts;
+  const lead = operator.guides[0];
 
-function Memories() {
   return (
-    <Section id="memories">
-      <Card className="grid gap-8 px-6 py-12 sm:grid-cols-[1.2fr_1fr] sm:items-center sm:px-12 sm:py-16">
-        <div>
-          <Eyebrow>Save the memory</Eyebrow>
-          <h2 className="font-serif mt-4 text-3xl sm:text-4xl font-semibold tracking-tight">
-            The trip ends. The story shouldn't.
-          </h2>
-          <p className="mt-4 text-muted leading-relaxed">
-            At the end of your journey, this hub turns into a quiet memory book
-            — guide notes, sightings, a few photos, the names of the people you
-            met. Yours to keep, share, and come back to.
-          </p>
-          <div className="mt-6 flex flex-col gap-3 sm:flex-row">
-            <LinkButton href="#" size="lg">
-              Start my memory book
-              <ArrowRightIcon className="h-4 w-4" />
-            </LinkButton>
-            <LinkButton href="/" variant="secondary" size="lg">
-              About KaribuLink
-            </LinkButton>
-          </div>
-        </div>
-        <div className="grid grid-cols-2 gap-3">
-          {[
-            { day: "Day 1", caption: "Tarangire baobabs" },
-            { day: "Day 2", caption: "Lake Manyara" },
-            { day: "Day 3", caption: "Ngorongoro Crater" },
-            { day: "Day 4", caption: "Serengeti" },
-          ].map((m, i) => (
-            <div
-              key={m.day}
-              className={`rounded-2xl border border-border bg-background p-4 ${
-                i === 0 ? "sm:translate-y-2" : ""
-              } ${i === 1 ? "sm:-translate-y-2" : ""}`}
-            >
-              <div className="aspect-square rounded-xl bg-gradient-to-br from-primary/15 via-accent/20 to-primary/30" />
-              <p className="mt-3 text-xs uppercase tracking-[0.18em] text-muted">
-                {m.day}
-              </p>
-              <p className="font-serif text-sm font-semibold">{m.caption}</p>
+    <section className="px-5 pt-6 sm:px-8 sm:pt-8 lg:px-12">
+      <div className="mx-auto grid w-full max-w-5xl gap-2">
+        {expectations.length > 0 && (
+          <AccordionSection
+            id="expect"
+            group={ACCORDION_GROUP}
+            icon={BinocularsIcon}
+            title="What to expect"
+            count={expectations.length}
+          >
+            <ul className="grid gap-2 sm:grid-cols-2">
+              {expectations.map((item) => {
+                const Icon = iconFor(item.iconKey);
+                return (
+                  <li
+                    key={item.label}
+                    className="flex gap-3 rounded-xl border border-border bg-background p-3"
+                  >
+                    <span className="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-primary/10 text-primary">
+                      <Icon className="h-4 w-4" />
+                    </span>
+                    <div className="leading-tight">
+                      <p className="text-sm font-medium text-foreground">
+                        {item.label}
+                      </p>
+                      <p className="mt-0.5 text-xs text-muted leading-snug">
+                        {item.detail}
+                      </p>
+                    </div>
+                  </li>
+                );
+              })}
+            </ul>
+          </AccordionSection>
+        )}
+
+        <AccordionSection
+          id="guide"
+          group={ACCORDION_GROUP}
+          icon={MessageIcon}
+          title="Ask your guide"
+          count={prompts.length}
+        >
+          {lead && (
+            <div className="mb-3 flex items-center justify-between gap-3 rounded-xl border border-border bg-background p-3">
+              <div className="flex items-center gap-3">
+                <div className="grid h-9 w-9 place-items-center rounded-full bg-primary text-primary-foreground font-serif text-xs font-semibold">
+                  {lead.initials}
+                </div>
+                <div className="leading-tight">
+                  <p className="text-sm font-medium text-foreground">
+                    {lead.name}
+                  </p>
+                  <p className="text-[11px] text-muted">{lead.role}</p>
+                </div>
+              </div>
+              <a
+                href={`tel:${lead.phone.replace(/\s+/g, "")}`}
+                className="inline-flex h-9 items-center justify-center gap-2 rounded-full border border-border bg-surface px-3 text-xs font-medium hover:border-primary/40"
+              >
+                <PhoneIcon className="h-3.5 w-3.5 text-primary" />
+                Call
+              </a>
             </div>
-          ))}
-        </div>
-      </Card>
-    </Section>
+          )}
+          {prompts.length > 0 && (
+            <ul className="grid gap-2">
+              {prompts.map((p) => (
+                <li
+                  key={p}
+                  className="flex items-center gap-3 rounded-xl border border-border bg-background p-3"
+                >
+                  <span className="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-accent/20 text-primary">
+                    <MessageIcon className="h-4 w-4" />
+                  </span>
+                  <p className="text-sm leading-snug text-foreground/90">{p}</p>
+                </li>
+              ))}
+            </ul>
+          )}
+        </AccordionSection>
+
+        <AccordionSection
+          id="night"
+          group={ACCORDION_GROUP}
+          icon={MoonIcon}
+          title="Night arrival mode"
+          count={3}
+        >
+          <p className="mb-3 text-sm leading-snug text-muted">
+            After dark: bigger buttons, dimmer screen, only the essentials.
+          </p>
+          <ul className="grid gap-2 sm:grid-cols-3">
+            {[
+              {
+                icon: CompassIcon,
+                title: "Where am I?",
+                detail: "ETA + gate name as you cross into the park.",
+              },
+              {
+                icon: InfoIcon,
+                title: "Tent number",
+                detail: "Waits here when you reach camp.",
+              },
+              {
+                icon: ShieldIcon,
+                title: "One-tap reception",
+                detail: "Manager on duty, no scrolling.",
+              },
+            ].map(({ icon: Icon, title, detail }) => (
+              <li
+                key={title}
+                className="flex items-start gap-3 rounded-xl border border-border bg-background p-3 sm:flex-col sm:items-start sm:gap-2"
+              >
+                <span className="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-accent/20 text-primary">
+                  <Icon className="h-4 w-4" />
+                </span>
+                <div className="leading-tight">
+                  <p className="font-serif text-sm font-medium text-foreground">
+                    {title}
+                  </p>
+                  <p className="mt-0.5 text-xs text-muted leading-snug">
+                    {detail}
+                  </p>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </AccordionSection>
+
+        <AccordionSection
+          id="memories"
+          group={ACCORDION_GROUP}
+          icon={CameraIcon}
+          title="Save memories"
+        >
+          <p className="text-sm leading-snug text-muted">
+            At trip end, this hub turns into a quiet memory book — guide notes,
+            sightings, photos, names. Yours to keep.
+          </p>
+          <div className="mt-3 grid grid-cols-4 gap-2">
+            {[
+              { day: "Day 1", caption: "Tarangire baobabs" },
+              { day: "Day 2", caption: "Lake Manyara" },
+              { day: "Day 3", caption: "Ngorongoro" },
+              { day: "Day 4", caption: "Serengeti" },
+            ].map((m) => (
+              <div
+                key={m.day}
+                className="rounded-lg border border-border bg-background p-2"
+              >
+                <div className="aspect-square rounded-md bg-gradient-to-br from-primary/15 via-accent/20 to-primary/30" />
+                <p className="mt-1 text-[9px] uppercase tracking-[0.18em] text-muted">
+                  {m.day}
+                </p>
+                <p className="font-serif text-[11px] font-medium leading-tight text-foreground">
+                  {m.caption}
+                </p>
+              </div>
+            ))}
+          </div>
+          <Link
+            href="#"
+            className="mt-3 inline-flex h-10 items-center justify-center gap-2 rounded-full bg-primary px-4 text-xs font-medium text-primary-foreground hover:bg-primary-hover"
+          >
+            Start my memory book
+            <ArrowRightIcon className="h-3.5 w-3.5" />
+          </Link>
+        </AccordionSection>
+      </div>
+    </section>
   );
 }
 
 function Emergency({ operator }: { operator: Operator }) {
   return (
-    <Section id="emergency" className="bg-surface/40">
-      <Card className="border-danger/40 bg-danger/5">
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-          <div className="flex items-start gap-4">
-            <span className="grid h-12 w-12 place-items-center rounded-2xl bg-danger text-white">
-              <ShieldIcon className="h-6 w-6" />
+    <section
+      id="emergency"
+      className="px-5 pt-6 sm:px-8 sm:pt-8 lg:px-12"
+    >
+      <div className="mx-auto w-full max-w-5xl">
+        <div className="flex flex-col gap-3 rounded-2xl border border-danger/40 bg-danger/5 p-4 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex items-center gap-3">
+            <span className="grid h-10 w-10 place-items-center rounded-xl bg-danger text-white">
+              <ShieldIcon className="h-5 w-5" />
             </span>
-            <div>
-              <p className="font-serif text-xl font-semibold tracking-tight">
+            <div className="leading-tight">
+              <p className="font-serif text-base font-medium tracking-tight text-foreground">
                 In an emergency
               </p>
-              <p className="mt-1 text-muted">
-                {operator.emergencyContact.label} — on call across all your
-                travel days. One tap. One person picks up.
+              <p className="text-xs text-muted">
+                {operator.emergencyContact.label} — 24/7
               </p>
             </div>
           </div>
           <a
             href={`tel:${operator.emergencyContact.phone.replace(/\s+/g, "")}`}
-            className="inline-flex h-12 items-center justify-center gap-2 rounded-full bg-danger px-6 text-sm font-medium text-white hover:opacity-90"
+            className="inline-flex h-11 items-center justify-center gap-2 rounded-full bg-danger px-5 text-sm font-medium text-white hover:opacity-90"
           >
             <PhoneIcon className="h-4 w-4" />
             {operator.emergencyContact.phone}
           </a>
         </div>
-      </Card>
-    </Section>
+      </div>
+    </section>
   );
 }

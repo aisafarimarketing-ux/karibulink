@@ -1,0 +1,84 @@
+import { CompassIcon, MessageIcon, PhoneIcon } from "@/components/icons";
+
+const cleanPhone = (phone: string) => phone.replace(/[^0-9+]/g, "");
+
+export function StickyBottomBar({
+  phone,
+  whatsappPhone,
+  directionsQuery,
+}: {
+  phone: string;
+  whatsappPhone?: string;
+  directionsQuery: string;
+}) {
+  const wa = cleanPhone(whatsappPhone ?? phone).replace(/^\+/, "");
+  const directions = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+    directionsQuery,
+  )}`;
+
+  return (
+    <div
+      className="fixed inset-x-0 bottom-0 z-50 border-t border-border/60 bg-surface/95 backdrop-blur"
+      style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
+    >
+      <div className="mx-auto grid w-full max-w-5xl grid-cols-3 gap-2 px-3 py-2 sm:gap-3 sm:px-5 sm:py-3">
+        <BarAction
+          href={`tel:${cleanPhone(phone)}`}
+          icon={PhoneIcon}
+          label="Call"
+          variant="primary"
+        />
+        <BarAction
+          href={`https://wa.me/${wa}`}
+          icon={MessageIcon}
+          label="WhatsApp"
+          variant="whatsapp"
+          external
+        />
+        <BarAction
+          href={directions}
+          icon={CompassIcon}
+          label="Directions"
+          variant="secondary"
+          external
+        />
+      </div>
+    </div>
+  );
+}
+
+function BarAction({
+  href,
+  icon: Icon,
+  label,
+  variant,
+  external = false,
+}: {
+  href: string;
+  icon: typeof PhoneIcon;
+  label: string;
+  variant: "primary" | "secondary" | "whatsapp";
+  external?: boolean;
+}) {
+  const styles =
+    variant === "primary"
+      ? "bg-primary text-primary-foreground hover:bg-primary-hover"
+      : variant === "whatsapp"
+        ? "bg-[#25d366] text-white hover:bg-[#1ebe5a]"
+        : "border border-border bg-background text-foreground hover:border-primary/40";
+
+  const linkProps = external
+    ? { target: "_blank", rel: "noopener noreferrer" }
+    : {};
+
+  return (
+    <a
+      href={href}
+      {...linkProps}
+      className={`inline-flex h-12 items-center justify-center gap-2 rounded-2xl text-sm font-medium tracking-tight transition-colors ${styles}`}
+    >
+      <Icon className="h-4 w-4" />
+      {label}
+    </a>
+  );
+}

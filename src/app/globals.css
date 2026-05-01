@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root {
   /* Warm neutral palette */
   --background: #f7f1e6;
@@ -17,6 +19,23 @@
   --accent: #c8a96a;
   --accent-foreground: #1c2620;
   --danger: #8a3a2a;
+}
+
+.dark {
+  --background: #0c1611;
+  --surface: #14211c;
+  --foreground: #f3ecdb;
+  --muted: #9aa39a;
+  --border: #1f3329;
+
+  /* In dark mode, the primary CTA inverts to ivory for max contrast */
+  --primary: #f3ecdb;
+  --primary-hover: #e6dccd;
+  --primary-foreground: #0c1611;
+
+  --accent: #d4b779;
+  --accent-foreground: #0c1611;
+  --danger: #c46050;
 }
 
 @theme inline {
@@ -55,4 +74,10 @@ body::before {
   background:
     radial-gradient(1200px 600px at 10% -10%, rgba(31, 58, 46, 0.06), transparent 60%),
     radial-gradient(900px 500px at 110% 10%, rgba(200, 169, 106, 0.10), transparent 60%);
+}
+
+.dark body::before {
+  background:
+    radial-gradient(900px 500px at 0% 0%, rgba(200, 169, 106, 0.05), transparent 60%),
+    radial-gradient(800px 500px at 100% 100%, rgba(31, 58, 46, 0.18), transparent 60%);
 }
