@@ -795,7 +795,7 @@ function PreviewPane({ property }: { property: Property }) {
         </span>
       </div>
       <div className="overflow-hidden rounded-[2.5rem] border border-border bg-background shadow-[0_30px_80px_-30px_rgba(31,58,46,0.45)]">
-        <div className="h-[640px] overflow-y-auto bg-background sm:h-[720px]">
+        <div className="h-[640px] overflow-y-auto bg-background sm:h-[720px] [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           <CampHub property={property} inPreview />
         </div>
       </div>

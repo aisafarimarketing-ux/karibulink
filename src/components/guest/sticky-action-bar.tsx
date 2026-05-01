@@ -13,10 +13,15 @@ export interface ActionItem {
   iconKey: IconKey;
 }
 
+/**
+ * Single-row sticky action bar.
+ *
+ * Designed for 4 actions max so they fit a standard phone width
+ * without horizontal scroll. Each chip is `flex-1` with a vertical
+ * icon-over-label layout, so labels stay legible at narrow widths.
+ */
 export function StickyActionBar({ actions }: { actions: ActionItem[] }) {
   const [active, setActive] = useState<string | null>(actions[0]?.id ?? null);
-  const listRef = useRef<HTMLUListElement>(null);
-  const itemRefs = useRef(new Map<string, HTMLAnchorElement>());
   const ignoreUntil = useRef(0);
   const t = useT();
 
@@ -45,30 +50,9 @@ export function StickyActionBar({ actions }: { actions: ActionItem[] }) {
       { rootMargin: "-80px 0px -60% 0px" },
     );
 
-    targets.forEach((t) => observer.observe(t));
+    targets.forEach((tgt) => observer.observe(tgt));
     return () => observer.disconnect();
   }, [actions]);
-
-  // Keep the active chip visible inside the horizontal scroll container.
-  useEffect(() => {
-    if (!active) return;
-    const item = itemRefs.current.get(active);
-    const list = listRef.current;
-    if (!item || !list) return;
-
-    const itemRect = item.getBoundingClientRect();
-    const listRect = list.getBoundingClientRect();
-    if (
-      itemRect.left < listRect.left + 8 ||
-      itemRect.right > listRect.right - 8
-    ) {
-      item.scrollIntoView({
-        behavior: "smooth",
-        inline: "center",
-        block: "nearest",
-      });
-    }
-  }, [active]);
 
   const handleClick = (e: MouseEvent<HTMLAnchorElement>, id: string) => {
     e.preventDefault();
@@ -89,43 +73,37 @@ export function StickyActionBar({ actions }: { actions: ActionItem[] }) {
   };
 
   return (
-    <div className="sticky top-0 z-40 border-b border-[#c9a84c]/20 bg-[rgba(224,216,195,0.92)] backdrop-blur-md dark:border-[#c9a84c]/25 dark:bg-[rgba(8,24,18,0.92)]">
+    <div className="sticky top-0 z-40 bg-[rgba(224,216,195,0.92)] backdrop-blur-md dark:bg-[rgba(8,24,18,0.92)]">
       <nav aria-label="Section navigation">
-        <ul
-          ref={listRef}
-          className="flex gap-2 overflow-x-auto px-3 py-2 scroll-smooth snap-x snap-mandatory [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
-        >
+        <ul className="flex items-stretch gap-1.5 px-2 py-2">
           {actions.map((a) => {
             const Icon = iconFor(a.iconKey);
             const isActive = active === a.id;
             const label = a.labelKey ? t(a.labelKey) : (a.label ?? "");
             return (
-              <li key={a.id} className="snap-start shrink-0">
+              <li key={a.id} className="min-w-0 flex-1">
                 <a
-                  ref={(el) => {
-                    if (el) itemRefs.current.set(a.id, el);
-                    else itemRefs.current.delete(a.id);
-                  }}
                   href={`#${a.id}`}
                   onClick={(e) => handleClick(e, a.id)}
                   aria-label={label}
                   aria-current={isActive ? "true" : undefined}
                   className={[
-                    "inline-flex h-11 min-w-[92px] items-center justify-center gap-2 whitespace-nowrap rounded-full border px-3 text-xs font-semibold tracking-tight",
+                    "flex h-12 w-full flex-col items-center justify-center gap-0.5 rounded-2xl px-1 text-center",
                     "transition-all duration-150 active:scale-[0.97]",
-                    "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c] focus-visible:ring-offset-2 focus-visible:ring-offset-background",
-                    "sm:min-w-[104px]",
+                    "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c] focus-visible:ring-offset-1 focus-visible:ring-offset-background",
                     isActive
-                      ? "border-transparent bg-[#b06a3b] text-white shadow-[0_2px_10px_-2px_rgba(176,106,59,0.45)] dark:bg-[#c9a84c] dark:text-[#1f3d2b]"
-                      : "border-[#c9a84c]/35 bg-[#f5f1e6] text-[#1f3d2b] hover:border-[#c9a84c] dark:border-[#c9a84c]/35 dark:bg-white/[0.08] dark:text-foreground dark:hover:border-[#c9a84c]/55",
+                      ? "bg-[#b06a3b] text-white shadow-[0_2px_10px_-2px_rgba(176,106,59,0.45)] dark:bg-[#c9a84c] dark:text-[#1f3d2b]"
+                      : "bg-[#f5f1e6] text-[#1f3d2b] dark:bg-white/[0.08] dark:text-foreground",
                   ].join(" ")}
                 >
                   <Icon
-                    className={`h-4 w-4 ${
+                    className={`h-3.5 w-3.5 shrink-0 ${
                       isActive ? "" : "text-[#b06a3b] dark:text-[#c9a84c]"
                     }`}
                   />
-                  <span>{label}</span>
+                  <span className="block w-full truncate text-[10px] font-semibold leading-tight tracking-tight">
+                    {label}
+                  </span>
                 </a>
               </li>
             );
