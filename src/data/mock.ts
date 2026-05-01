@@ -192,10 +192,14 @@ export const PROPERTIES: Property[] = [
     waiverText:
       "By staying with us, you agree to follow camp safety guidance, respect the conservancy, and never leave camp on foot after dark without an escort.",
     fairMode: {
-      tagline: "Designed for unforgettable safari experiences.",
-      highlights: ["16 luxury tents", "20 mins from airstrip", "Open all year"],
+      tagline: "Sixteen tents on the Serengeti migration plains.",
+      highlights: ["16 luxury tents", "20 min from airstrip", "Open all year"],
       about:
         "Serengeti View Camp blends classic safari hospitality with thoughtful, low-impact design. Each tent opens onto the migration plains; our team — most of them born within the conservancy — is what guests remember most.",
+      bestFor: "Couples and small groups, May – November",
+      accessNote: "20-min charter from Arusha (HTM)",
+      operatorResponseNote: "Within 24 hours, weekdays",
+      guidingNote: "Maasai-born guides, average 12 years' experience",
       accommodation: {
         rooms: 16,
         capacity: 32,

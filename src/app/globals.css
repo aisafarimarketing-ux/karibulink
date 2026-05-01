@@ -39,6 +39,31 @@
 }
 
 /*
+ * Fair-Mode palette: editorial safari brochure. Cormorant Garamond
+ * for headings, deep-green text on warm cream cards, soft shadows
+ * over harsh borders. Scoped so Concierge Mode and admin are
+ * unaffected.
+ */
+.fair-theme {
+  --background: #e7dfcd;
+  --surface: #f6f1e6;
+  --soft: #f2ebdd;
+  --foreground: #163a2e;
+  --muted: #5a6b63;
+  --border: rgba(22, 58, 46, 0.09);
+
+  --primary: #b76b3e;
+  --primary-hover: #9c5731;
+  --primary-foreground: #f6f1e6;
+
+  --accent: #c8a24b;
+  --accent-foreground: #163a2e;
+  --danger: #8a3a2a;
+
+  --font-serif: var(--font-cormorant), ui-serif, Georgia, serif;
+}
+
+/*
  * Landing-page-only palette: warm-sand canvas, terracotta CTA, gold
  * accent, deep-green anchor for headings/nav/footer. Scoped to the
  * landing route so guest hubs and admin keep their own theme.
@@ -62,6 +87,7 @@
 @theme inline {
   --color-background: var(--background);
   --color-surface: var(--surface);
+  --color-soft: var(--soft, var(--surface));
   --color-foreground: var(--foreground);
   --color-muted: var(--muted);
   --color-border: var(--border);

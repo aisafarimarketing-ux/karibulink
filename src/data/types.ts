@@ -57,6 +57,11 @@ export interface FairMode {
   tagline?: string;
   highlights?: string[];
   about?: string;
+  /** Conversion-trust signals for the "Why work with us" block. */
+  bestFor?: string;
+  accessNote?: string;
+  operatorResponseNote?: string;
+  guidingNote?: string;
   accommodation?: {
     rooms?: number;
     capacity?: number;

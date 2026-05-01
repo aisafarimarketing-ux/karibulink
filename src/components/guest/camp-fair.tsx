@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { AnimatePresence, motion } from "framer-motion";
 import {
   useEffect,
   useState,
@@ -33,24 +34,29 @@ const leadsKey = (slug: string) => `kl-fair-leads-${slug}`;
 
 const ACCORDION_GROUP = "fair";
 const FALLBACK_FAIR: FairMode = {
-  tagline: "Designed for unforgettable safari experiences.",
+  tagline: "An unhurried safari, well looked after.",
   highlights: [],
 };
+
+const easeOut = [0.2, 0.65, 0.3, 0.95] as const;
 
 export function CampFair({ property }: { property: Property }) {
   const fair = property.fairMode ?? FALLBACK_FAIR;
 
   return (
-    <main className="flex-1 pb-12">
-      <MobileFrame>
-        <FairHero property={property} fair={fair} />
-        <Highlights fair={fair} />
-        <ActionRow property={property} fair={fair} />
-        <Sections property={property} fair={fair} />
-        <LeadCapture property={property} />
-      </MobileFrame>
-      <AccordionAutoOpenScript />
-    </main>
+    <div className="fair-theme">
+      <main className="flex-1 pb-12">
+        <MobileFrame>
+          <FairHero property={property} fair={fair} />
+          <Highlights fair={fair} />
+          <ActionRow property={property} fair={fair} />
+          <WhyThisCamp property={property} fair={fair} />
+          <Sections property={property} fair={fair} />
+          <LeadCapture property={property} />
+        </MobileFrame>
+        <AccordionAutoOpenScript />
+      </main>
+    </div>
   );
 }
 
@@ -68,7 +74,12 @@ function FairHero({
   const showImage = Boolean(property.heroImageUrl);
   return (
     <section className="px-3 pt-3 sm:px-4 sm:pt-4">
-      <div className="relative aspect-[4/5] w-full overflow-hidden rounded-[2rem] shadow-[0_20px_60px_-25px_rgba(31,58,46,0.45)] sm:aspect-[16/11]">
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.7, ease: easeOut }}
+        className="relative aspect-[4/5] w-full overflow-hidden rounded-[2rem] shadow-[0_30px_60px_-30px_rgba(22,58,46,0.4)] sm:aspect-[16/11]"
+      >
         {showImage ? (
           <>
             {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -87,19 +98,20 @@ function FairHero({
             }}
           />
         )}
-        <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/30 via-black/15 to-black/80" />
+        {/* Just enough darken for the lower text — keeps the upper image clean. */}
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-black/65 via-black/15 to-transparent" />
 
-        <div className="relative flex h-full flex-col p-5 text-white">
+        <div className="relative flex h-full flex-col p-5 text-white sm:p-6">
           <div className="flex items-center justify-between gap-2">
             <Link
               href={`/camp/${property.slug}`}
-              className="inline-flex items-center gap-1 text-[10px] uppercase tracking-[0.22em] text-white/80 hover:text-white"
+              className="text-[10px] uppercase tracking-[0.22em] text-white/80 hover:text-white"
             >
               ← Guest mode
             </Link>
             <div className="flex items-center gap-2">
-              <span className="inline-flex items-center gap-1.5 rounded-full border border-[#c9a84c]/55 bg-[#0f1f17]/70 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.22em] text-[#f5f1e6] backdrop-blur">
-                <span className="h-1 w-1 rounded-full bg-[#c9a84c]" />
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-[#c8a24b]/55 bg-[#163a2e]/55 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.22em] text-[#f6f1e6] backdrop-blur">
+                <span className="h-1 w-1 rounded-full bg-[#c8a24b]" />
                 Fair Mode
               </span>
               <ThemeToggle />
@@ -107,20 +119,20 @@ function FairHero({
           </div>
 
           <div className="mt-auto">
-            <p className="text-[10px] font-medium uppercase tracking-[0.22em] text-white/85">
+            <p className="text-[10px] font-medium uppercase tracking-[0.28em] text-white/85">
               {property.location}
             </p>
-            <h1 className="font-serif mt-2 text-[34px] font-medium leading-[1.05] tracking-tight sm:text-[42px]">
+            <h1 className="font-serif mt-2 text-[40px] font-medium leading-[1.05] tracking-tight sm:text-[52px]">
               {property.name}
             </h1>
             {fair.tagline && (
-              <p className="mt-3 max-w-md text-sm leading-snug text-white/90 sm:text-base">
+              <p className="mt-3 max-w-md text-[15px] leading-snug text-white/90 sm:text-base">
                 {fair.tagline}
               </p>
             )}
           </div>
         </div>
-      </div>
+      </motion.div>
     </section>
   );
 }
@@ -133,20 +145,26 @@ function Highlights({ fair }: { fair: FairMode }) {
   if (!fair.highlights || fair.highlights.length === 0) return null;
   const items = fair.highlights.slice(0, 3);
   return (
-    <section className="px-3 pt-3 sm:px-4">
+    <motion.section
+      initial={{ opacity: 0, y: 8 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-40px" }}
+      transition={{ duration: 0.5, ease: easeOut, delay: 0.05 }}
+      className="px-3 pt-4 sm:px-4"
+    >
       <ul className="grid grid-cols-3 gap-2">
         {items.map((h) => (
           <li
             key={h}
-            className="rounded-2xl border border-border bg-surface px-2 py-3 text-center shadow-[0_4px_14px_-8px_rgba(31,58,46,0.18)]"
+            className="rounded-2xl bg-soft px-3 py-3.5 text-center shadow-[0_2px_10px_-6px_rgba(22,58,46,0.18)]"
           >
-            <p className="font-serif text-[13px] font-medium leading-tight text-foreground sm:text-sm">
+            <p className="font-serif text-[15px] font-medium leading-tight text-foreground sm:text-base">
               {h}
             </p>
           </li>
         ))}
       </ul>
-    </section>
+    </motion.section>
   );
 }
 
@@ -200,16 +218,23 @@ function ActionRow({
   const waUrl = `https://wa.me/${wa}?text=${encodeURIComponent(message)}`;
 
   return (
-    <section className="px-3 pt-4 sm:px-4">
+    <motion.section
+      initial={{ opacity: 0, y: 8 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-40px" }}
+      transition={{ duration: 0.5, ease: easeOut, delay: 0.1 }}
+      className="px-3 pt-4 sm:px-4"
+    >
       <div className="grid grid-cols-3 gap-2">
-        <button
+        <motion.button
           type="button"
           onClick={toggleShortlist}
+          whileTap={{ scale: 0.97 }}
           aria-pressed={shortlisted}
-          className={`flex h-16 flex-col items-center justify-center gap-1 rounded-2xl border text-center transition-all duration-150 active:scale-[0.97] ${
+          className={`flex h-16 flex-col items-center justify-center gap-1 rounded-2xl text-center transition-colors duration-200 ${
             shortlisted && hydrated
-              ? "border-[#b06a3b] bg-[#b06a3b] text-white shadow-[0_2px_10px_-2px_rgba(176,106,59,0.45)]"
-              : "border-border bg-surface text-foreground hover:border-[#b06a3b]/50"
+              ? "bg-primary text-primary-foreground shadow-[0_8px_22px_-12px_rgba(183,107,62,0.55)]"
+              : "bg-soft text-foreground hover:bg-surface"
           }`}
         >
           <span aria-hidden className="text-base leading-none">
@@ -218,31 +243,102 @@ function ActionRow({
           <span className="text-[11px] font-semibold tracking-tight">
             Shortlist
           </span>
-        </button>
+        </motion.button>
 
-        <a
+        <motion.a
           href={waUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="flex h-16 flex-col items-center justify-center gap-1 rounded-2xl bg-[#25d366] text-center text-white transition-all duration-150 hover:bg-[#1ebe5a] active:scale-[0.97]"
+          whileTap={{ scale: 0.97 }}
+          className="flex h-16 flex-col items-center justify-center gap-1 rounded-2xl bg-[#25d366] text-center text-white transition-colors duration-200 hover:bg-[#1ebe5a]"
         >
           <MessageIcon className="h-4 w-4" />
           <span className="text-[11px] font-semibold tracking-tight">
             WhatsApp
           </span>
-        </a>
+        </motion.a>
 
-        <a
+        <motion.a
           href="#partnership"
-          className="flex h-16 flex-col items-center justify-center gap-1 rounded-2xl bg-primary text-center text-primary-foreground transition-all duration-150 hover:bg-primary-hover active:scale-[0.97]"
+          whileTap={{ scale: 0.97 }}
+          className="flex h-16 flex-col items-center justify-center gap-1 rounded-2xl bg-foreground text-center text-[#f6f1e6] transition-colors duration-200 hover:bg-[#0f2c22]"
         >
           <ArrowRightIcon className="h-4 w-4" />
           <span className="text-[11px] font-semibold tracking-tight">
-            Work with us
+            Partner with us
           </span>
-        </a>
+        </motion.a>
       </div>
-    </section>
+    </motion.section>
+  );
+}
+
+/* --------------------------------------------------------------- */
+/*  Why this camp — conversion-trust signals                          */
+/* --------------------------------------------------------------- */
+
+function WhyThisCamp({
+  property,
+  fair,
+}: {
+  property: Property;
+  fair: FairMode;
+}) {
+  const capacity =
+    fair.accommodation?.rooms !== undefined &&
+    fair.accommodation?.capacity !== undefined
+      ? `${fair.accommodation.rooms} tents · up to ${fair.accommodation.capacity} guests`
+      : fair.accommodation?.rooms !== undefined
+        ? `${fair.accommodation.rooms} tents`
+        : undefined;
+
+  const rows = [
+    fair.bestFor && { label: "Best for", value: fair.bestFor },
+    capacity && { label: "Capacity", value: capacity },
+    fair.accessNote && { label: "Access", value: fair.accessNote },
+    fair.operatorResponseNote && {
+      label: "Operator response",
+      value: fair.operatorResponseNote,
+    },
+    fair.guidingNote && { label: "Guiding", value: fair.guidingNote },
+  ].filter(
+    (r): r is { label: string; value: string } => Boolean(r),
+  );
+
+  if (rows.length === 0) return null;
+
+  return (
+    <motion.section
+      initial={{ opacity: 0, y: 12 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-40px" }}
+      transition={{ duration: 0.55, ease: easeOut }}
+      className="px-3 pt-8 sm:px-4 sm:pt-10"
+    >
+      <header>
+        <p className="text-[10px] font-medium uppercase tracking-[0.28em] text-muted">
+          {property.name}
+        </p>
+        <h2 className="font-serif mt-2 text-[28px] font-medium leading-[1.1] tracking-tight text-foreground sm:text-[32px]">
+          Why work with us
+        </h2>
+      </header>
+      <dl className="mt-5 grid gap-2">
+        {rows.map((row) => (
+          <div
+            key={row.label}
+            className="rounded-2xl bg-soft px-4 py-3.5"
+          >
+            <dt className="text-[10px] font-medium uppercase tracking-[0.22em] text-muted">
+              {row.label}
+            </dt>
+            <dd className="font-serif mt-1.5 text-lg font-medium leading-snug text-foreground sm:text-xl">
+              {row.value}
+            </dd>
+          </div>
+        ))}
+      </dl>
+    </motion.section>
   );
 }
 
@@ -258,7 +354,13 @@ function Sections({
   fair: FairMode;
 }) {
   return (
-    <section className="px-3 pt-4 sm:px-4">
+    <motion.section
+      initial={{ opacity: 0, y: 12 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-40px" }}
+      transition={{ duration: 0.55, ease: easeOut }}
+      className="px-3 pt-8 sm:px-4 sm:pt-10"
+    >
       <div className="grid gap-2">
         {fair.about && (
           <AccordionSection
@@ -269,7 +371,7 @@ function Sections({
             subtitle={property.location}
             defaultOpen
           >
-            <p className="text-sm leading-relaxed text-foreground/85">
+            <p className="text-[15px] leading-relaxed text-foreground/85">
               {fair.about}
             </p>
           </AccordionSection>
@@ -376,9 +478,9 @@ function Sections({
               {fair.activities.map((a) => (
                 <li
                   key={a}
-                  className="flex items-center gap-3 rounded-xl border border-border bg-background p-3"
+                  className="flex items-center gap-3 rounded-xl bg-soft p-3"
                 >
-                  <span className="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-accent/20 text-primary">
+                  <span className="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-accent/25 text-foreground">
                     <BinocularsIcon className="h-4 w-4" />
                   </span>
                   <span className="text-sm leading-snug text-foreground/90">
@@ -410,7 +512,7 @@ function Sections({
           <div className="grid gap-2">
             <a
               href={`tel:${property.emergencyContact.phone.replace(/\s+/g, "")}`}
-              className="flex items-center justify-between gap-3 rounded-xl border border-border bg-background p-3 transition-colors hover:border-primary/40"
+              className="flex items-center justify-between gap-3 rounded-xl bg-soft p-3 transition-colors hover:bg-surface"
             >
               <span className="flex items-center gap-2">
                 <PhoneIcon className="h-4 w-4 text-primary" />
@@ -425,7 +527,7 @@ function Sections({
             {fair.email && (
               <a
                 href={`mailto:${fair.email}`}
-                className="flex items-center justify-between gap-3 rounded-xl border border-border bg-background p-3 transition-colors hover:border-primary/40"
+                className="flex items-center justify-between gap-3 rounded-xl bg-soft p-3 transition-colors hover:bg-surface"
               >
                 <span className="flex items-center gap-2">
                   <MessageIcon className="h-4 w-4 text-primary" />
@@ -436,7 +538,7 @@ function Sections({
                 <span className="text-xs text-muted">{fair.email}</span>
               </a>
             )}
-            <div className="flex items-start justify-between gap-3 rounded-xl border border-border bg-background p-3">
+            <div className="flex items-start justify-between gap-3 rounded-xl bg-soft p-3">
               <span className="flex items-center gap-2">
                 <CompassIcon className="h-4 w-4 text-primary" />
                 <span className="text-sm font-medium text-foreground">
@@ -450,7 +552,7 @@ function Sections({
           </div>
         </AccordionSection>
       </div>
-    </section>
+    </motion.section>
   );
 }
 
@@ -493,112 +595,126 @@ function LeadCapture({ property }: { property: Property }) {
     setSubmitted(true);
   };
 
-  if (submitted) {
-    return (
-      <section
-        id="partnership"
-        className="scroll-mt-20 px-3 pt-6 sm:px-4 sm:pt-8"
-      >
-        <div className="rounded-3xl border border-border bg-surface p-5 text-center sm:p-6">
-          <span className="grid h-12 w-12 mx-auto place-items-center rounded-full bg-primary/10 text-primary">
-            <CheckIcon className="h-5 w-5" />
-          </span>
-          <h2 className="font-serif mt-4 text-2xl font-medium tracking-tight text-foreground">
-            Thank you.
-          </h2>
-          <p className="mt-2 text-sm text-muted">
-            Saved locally for the demo. The camp would normally receive your
-            details by email and WhatsApp.
-          </p>
-          <button
-            type="button"
-            onClick={() => {
-              setSubmitted(false);
-              setForm({
-                name: "",
-                company: "",
-                email: "",
-                phone: "",
-                message: "",
-              });
-            }}
-            className="mt-4 inline-flex h-10 items-center justify-center gap-2 rounded-full border border-border bg-background px-4 text-xs font-semibold text-muted hover:border-primary/40 hover:text-foreground"
-          >
-            Send another
-          </button>
-        </div>
-      </section>
-    );
-  }
-
   return (
-    <section
+    <motion.section
       id="partnership"
-      className="scroll-mt-20 px-3 pt-6 sm:px-4 sm:pt-8"
+      initial={{ opacity: 0, y: 12 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-40px" }}
+      transition={{ duration: 0.55, ease: easeOut }}
+      className="scroll-mt-20 px-3 pt-8 sm:px-4 sm:pt-10"
     >
-      <div className="rounded-3xl border border-border bg-surface p-5 sm:p-6">
-        <span className="inline-flex items-center gap-1.5 rounded-full border border-border bg-background px-2.5 py-1 text-[10px] font-medium uppercase tracking-[0.22em] text-muted">
-          <span className="h-1 w-1 rounded-full bg-accent" />
-          Partnership
-        </span>
-        <h2 className="font-serif mt-3 text-2xl font-medium leading-tight tracking-tight text-foreground sm:text-3xl">
-          Interested in working with this camp?
-        </h2>
-        <p className="mt-2 text-sm text-muted leading-snug">
-          Leave your details — the camp will follow up within 48 hours with
-          their full operator pack.
-        </p>
-        <form onSubmit={handleSubmit} className="mt-5 grid gap-3">
-          <LeadField
-            label="Your name"
-            value={form.name}
-            onChange={onChange("name")}
-            required
-          />
-          <LeadField
-            label="Company"
-            value={form.company}
-            onChange={onChange("company")}
-            required
-          />
-          <LeadField
-            label="Email"
-            type="email"
-            value={form.email}
-            onChange={onChange("email")}
-            placeholder="you@example.com"
-            required
-          />
-          <LeadField
-            label="Phone"
-            type="tel"
-            value={form.phone}
-            onChange={onChange("phone")}
-          />
-          <label className="block">
-            <span className="text-xs font-medium text-foreground">
-              Message
-            </span>
-            <textarea
-              value={form.message}
-              onChange={onChange("message")}
-              rows={3}
-              placeholder="Tell us about your business or which markets you serve."
-              className="mt-1.5 w-full rounded-xl border border-border bg-background px-3 py-2.5 text-sm text-foreground placeholder:text-muted/70 focus:border-primary/50 focus:outline-none focus:ring-2 focus:ring-primary/15"
-            />
-          </label>
-          <button
-            type="submit"
-            className="mt-2 inline-flex h-12 items-center justify-center gap-2 rounded-2xl bg-primary text-sm font-semibold text-primary-foreground shadow-sm transition-all duration-150 hover:bg-primary-hover active:scale-[0.98]"
-          >
-            Request partnership details
-          </button>
-          <p className="text-[10px] text-muted">
-            Demo — saved locally on this device.
-          </p>
-        </form>
+      <div className="rounded-3xl bg-surface p-6 shadow-[0_24px_48px_-32px_rgba(22,58,46,0.28)] sm:p-8">
+        <AnimatePresence mode="wait" initial={false}>
+          {submitted ? (
+            <motion.div
+              key="success"
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              transition={{ duration: 0.35, ease: easeOut }}
+              className="text-center"
+            >
+              <span className="grid h-12 w-12 mx-auto place-items-center rounded-full bg-primary/10 text-primary">
+                <CheckIcon className="h-5 w-5" />
+              </span>
+              <h2 className="font-serif mt-4 text-[28px] font-medium tracking-tight text-foreground sm:text-[32px]">
+                Thank you.
+              </h2>
+              <p className="mt-3 max-w-sm mx-auto text-sm leading-relaxed text-muted">
+                We've noted your details. The camp will follow up within 48
+                hours with their operator pack and rate sheet.
+              </p>
+              <button
+                type="button"
+                onClick={() => {
+                  setSubmitted(false);
+                  setForm({
+                    name: "",
+                    company: "",
+                    email: "",
+                    phone: "",
+                    message: "",
+                  });
+                }}
+                className="mt-5 inline-flex h-10 items-center justify-center gap-2 rounded-full bg-soft px-4 text-xs font-semibold text-foreground hover:bg-background"
+              >
+                Send another
+              </button>
+            </motion.div>
+          ) : (
+            <motion.div
+              key="form"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3, ease: easeOut }}
+            >
+              <p className="text-[10px] font-medium uppercase tracking-[0.28em] text-muted">
+                Partnership
+              </p>
+              <h2 className="font-serif mt-2 text-[32px] font-medium leading-[1.05] tracking-tight text-foreground sm:text-[38px]">
+                Let's work together
+              </h2>
+              <p className="mt-3 max-w-md text-sm leading-relaxed text-muted sm:text-[15px]">
+                Tell us about your company and we'll follow up with your
+                operator pack, rates and next steps.
+              </p>
+              <form onSubmit={handleSubmit} className="mt-6 grid gap-4">
+                <LeadField
+                  label="Your name"
+                  value={form.name}
+                  onChange={onChange("name")}
+                  required
+                />
+                <LeadField
+                  label="Company"
+                  value={form.company}
+                  onChange={onChange("company")}
+                  required
+                />
+                <LeadField
+                  label="Email"
+                  type="email"
+                  value={form.email}
+                  onChange={onChange("email")}
+                  placeholder="you@example.com"
+                  required
+                />
+                <LeadField
+                  label="Phone"
+                  type="tel"
+                  value={form.phone}
+                  onChange={onChange("phone")}
+                />
+                <label className="block">
+                  <span className="text-xs font-medium tracking-wide text-foreground">
+                    Message
+                  </span>
+                  <textarea
+                    value={form.message}
+                    onChange={onChange("message")}
+                    rows={3}
+                    placeholder="Tell us about your business or which markets you serve."
+                    className="mt-2 w-full rounded-xl bg-soft px-4 py-3 text-sm text-foreground placeholder:text-muted/70 focus:outline-none focus:ring-2 focus:ring-primary/25"
+                  />
+                </label>
+                <motion.button
+                  type="submit"
+                  whileTap={{ scale: 0.98 }}
+                  className="mt-1 inline-flex h-12 items-center justify-center gap-2 rounded-2xl bg-primary text-sm font-semibold text-primary-foreground shadow-[0_12px_28px_-14px_rgba(183,107,62,0.6)] transition-colors hover:bg-primary-hover"
+                >
+                  Request partnership details
+                </motion.button>
+                <p className="text-[10px] text-muted">
+                  Demo — saved locally on this device.
+                </p>
+              </form>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
-    </section>
+    </motion.section>
   );
 }
 
@@ -619,7 +735,7 @@ function LeadField({
 }) {
   return (
     <label className="block">
-      <span className="text-xs font-medium text-foreground">
+      <span className="text-xs font-medium tracking-wide text-foreground">
         {label}
         {required && <span className="ml-1 text-primary">*</span>}
       </span>
@@ -629,7 +745,7 @@ function LeadField({
         onChange={onChange}
         placeholder={placeholder}
         required={required}
-        className="mt-1.5 h-11 w-full rounded-xl border border-border bg-background px-3 text-sm text-foreground placeholder:text-muted/70 focus:border-primary/50 focus:outline-none focus:ring-2 focus:ring-primary/15"
+        className="mt-2 h-12 w-full rounded-xl bg-soft px-4 text-sm text-foreground placeholder:text-muted/70 focus:outline-none focus:ring-2 focus:ring-primary/25"
       />
     </label>
   );
@@ -641,11 +757,11 @@ function LeadField({
 
 function Stat({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-xl border border-border bg-background p-3">
+    <div className="rounded-xl bg-soft p-3">
       <p className="text-[10px] font-medium uppercase tracking-[0.22em] text-muted">
         {label}
       </p>
-      <p className="font-serif mt-1 text-base font-medium text-foreground">
+      <p className="font-serif mt-1 text-lg font-medium text-foreground">
         {value}
       </p>
     </div>
@@ -654,7 +770,7 @@ function Stat({ label, value }: { label: string; value: string }) {
 
 function PolicyRow({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-xl border border-border bg-background p-3">
+    <div className="rounded-xl bg-soft p-3">
       <p className="text-[10px] font-medium uppercase tracking-[0.22em] text-muted">
         {label}
       </p>
@@ -675,7 +791,7 @@ function BulletList({
       {items.map((item) => (
         <li
           key={item}
-          className="flex gap-3 rounded-xl border border-border bg-background p-3"
+          className="flex gap-3 rounded-xl bg-soft p-3"
         >
           <span
             className={`mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full ${
@@ -692,12 +808,12 @@ function BulletList({
 }
 
 const PHOTO_TINTS = [
-  "from-[#1f3a2e]/30 via-[#c8a96a]/30 to-[#b06a3b]/30",
-  "from-[#b06a3b]/30 via-[#1f3a2e]/30 to-[#c8a96a]/30",
-  "from-[#c8a96a]/40 via-[#b06a3b]/30 to-[#1f3a2e]/30",
-  "from-[#1f3a2e]/40 via-[#1f3a2e]/30 to-[#c8a96a]/30",
-  "from-[#b06a3b]/30 via-[#c8a96a]/30 to-[#1f3a2e]/30",
-  "from-[#c8a96a]/30 via-[#1f3a2e]/30 to-[#b06a3b]/30",
+  "from-[#163a2e]/30 via-[#c8a24b]/30 to-[#b76b3e]/30",
+  "from-[#b76b3e]/30 via-[#163a2e]/30 to-[#c8a24b]/30",
+  "from-[#c8a24b]/40 via-[#b76b3e]/30 to-[#163a2e]/30",
+  "from-[#163a2e]/40 via-[#163a2e]/30 to-[#c8a24b]/30",
+  "from-[#b76b3e]/30 via-[#c8a24b]/30 to-[#163a2e]/30",
+  "from-[#c8a24b]/30 via-[#163a2e]/30 to-[#b76b3e]/30",
 ];
 
 function PhotoGrid({ heroImageUrl }: { heroImageUrl?: string }) {
@@ -708,7 +824,7 @@ function PhotoGrid({ heroImageUrl }: { heroImageUrl?: string }) {
           key={i}
           className={`aspect-square overflow-hidden rounded-xl ${
             i === 0 && heroImageUrl ? "" : `bg-gradient-to-br ${tint}`
-          } border border-border`}
+          }`}
         >
           {i === 0 && heroImageUrl ? (
             // eslint-disable-next-line @next/next/no-img-element
