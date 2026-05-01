@@ -7,6 +7,7 @@ import {
 } from "@/components/ui";
 import { SiteFooter, SiteNav } from "@/components/site-nav";
 import { Hero } from "@/components/hero";
+import { GuestPreviewSection } from "@/components/guest-preview-section";
 import {
   ArrowRightIcon,
   CheckIcon,
@@ -23,6 +24,7 @@ export default function LandingPage() {
       <SiteNav />
       <main className="flex-1">
         <Hero />
+        <GuestPreviewSection />
         <ProblemSection />
         <SolutionSection />
         <ServesSection />

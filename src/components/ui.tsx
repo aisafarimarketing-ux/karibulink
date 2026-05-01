@@ -86,7 +86,7 @@ export function Section({
   return (
     <section
       id={id}
-      className={`px-5 sm:px-8 lg:px-12 py-16 sm:py-20 lg:py-24 ${className}`}
+      className={`px-5 sm:px-8 lg:px-12 py-20 sm:py-28 lg:py-36 ${className}`}
     >
       <div className="mx-auto w-full max-w-6xl">{children}</div>
     </section>
@@ -121,11 +121,11 @@ export function SectionHeading({
           <Eyebrow>{eyebrow}</Eyebrow>
         </div>
       )}
-      <h2 className="font-serif mt-4 text-3xl sm:text-4xl lg:text-5xl font-semibold tracking-tight text-foreground">
+      <h2 className="font-serif mt-5 text-balance text-4xl sm:text-5xl lg:text-6xl font-medium leading-[1.05] tracking-tight text-foreground">
         {title}
       </h2>
       {description && (
-        <p className="mt-4 text-base sm:text-lg text-muted leading-relaxed">
+        <p className="mt-5 text-pretty text-base sm:text-lg lg:text-xl text-muted leading-relaxed">
           {description}
         </p>
       )}
