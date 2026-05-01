@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import {
   ArrowRightIcon,
@@ -17,47 +19,59 @@ import {
   AccordionSection,
 } from "./accordion-section";
 import { HeroCard } from "./hero-card";
+import { LanguageProvider, useT } from "./language-context";
+import { LanguageSelector } from "./language-selector";
 import { MobileFrame } from "./mobile-frame";
 import { StickyActionBar, type ActionItem } from "./sticky-action-bar";
 import { StickyBottomBar } from "./sticky-bottom-bar";
 import type { Operator, SafariRoute } from "@/data/types";
 
 const ACTIONS: ActionItem[] = [
-  { id: "route", label: "Today's Route", iconKey: "route" },
-  { id: "expect", label: "What to Expect", iconKey: "binoculars" },
-  { id: "guide", label: "Ask Guide", iconKey: "message" },
-  { id: "memories", label: "Memories", iconKey: "camera" },
-  { id: "emergency", label: "Emergency", iconKey: "shield" },
+  { id: "route", labelKey: "todaysRoute", iconKey: "route" },
+  { id: "expect", labelKey: "whatToExpect", iconKey: "binoculars" },
+  { id: "guide", labelKey: "askGuide", iconKey: "message" },
+  { id: "memories", labelKey: "memories", iconKey: "camera" },
+  { id: "emergency", labelKey: "emergency", iconKey: "shield" },
 ];
 
 const ACCORDION_GROUP = "operator-hub";
 
 export function OperatorHub({ operator }: { operator: Operator }) {
   const todayRoute = operator.routes[0];
-  const j = operator.journeyNotes;
 
   return (
-    <main className="flex-1 pb-28">
-      <MobileFrame>
-        <HeroCard
-          eyebrow={j.heroEyebrow}
-          status="On safari · 24°C"
-          title={j.heroTitle}
-          description={j.heroSubtitle}
-          meta={operator.name}
-        />
-        <StickyActionBar actions={ACTIONS} />
-        {todayRoute && <RouteSummary route={todayRoute} />}
-        <Sections operator={operator} />
-        <Emergency operator={operator} />
-      </MobileFrame>
+    <LanguageProvider>
+      <main className="flex-1 pb-28">
+        <MobileFrame>
+          <OpHero operator={operator} />
+          <StickyActionBar actions={ACTIONS} />
+          {todayRoute && <RouteSummary route={todayRoute} />}
+          <Sections operator={operator} />
+          <Emergency operator={operator} />
+        </MobileFrame>
 
-      <StickyBottomBar
-        phone={operator.emergencyContact.phone}
-        directionsQuery={`${operator.name} ${todayRoute?.fromTo ?? ""}`}
-      />
-      <AccordionAutoOpenScript />
-    </main>
+        <StickyBottomBar
+          phone={operator.emergencyContact.phone}
+          directionsQuery={`${operator.name} ${todayRoute?.fromTo ?? ""}`}
+        />
+        <AccordionAutoOpenScript />
+      </main>
+    </LanguageProvider>
+  );
+}
+
+function OpHero({ operator }: { operator: Operator }) {
+  const t = useT();
+  const j = operator.journeyNotes;
+  return (
+    <HeroCard
+      eyebrow={j.heroEyebrow}
+      status={`${t("statusOnSafari")} · 24°C`}
+      title={j.heroTitle}
+      description={j.heroSubtitle}
+      meta={operator.name}
+      toolbar={<LanguageSelector />}
+    />
   );
 }
 
@@ -295,6 +309,7 @@ function Sections({ operator }: { operator: Operator }) {
 }
 
 function Emergency({ operator }: { operator: Operator }) {
+  const t = useT();
   return (
     <section id="emergency" className="scroll-mt-20 px-3 pt-4 sm:px-4">
       <div className="flex flex-col gap-3 rounded-2xl border border-danger/40 bg-danger/5 p-4 sm:flex-row sm:items-center sm:justify-between">
@@ -304,7 +319,7 @@ function Emergency({ operator }: { operator: Operator }) {
           </span>
           <div className="leading-tight">
             <p className="font-serif text-base font-medium tracking-tight text-foreground">
-              In an emergency
+              {t("inEmergency")}
             </p>
             <p className="text-xs text-muted">
               {operator.emergencyContact.label} — 24/7

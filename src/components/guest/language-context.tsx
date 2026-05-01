@@ -50,9 +50,9 @@ const DICTIONARY = {
     directionsLabel: "Directions",
     request: "Request",
     emergency: "Emergency",
-    todaysRoute: "Today's Route",
-    whatToExpect: "What to Expect",
-    askGuide: "Ask Guide",
+    todaysRoute: "Route",
+    whatToExpect: "Expect",
+    askGuide: "Guide",
     memories: "Memories",
   },
   FR: {

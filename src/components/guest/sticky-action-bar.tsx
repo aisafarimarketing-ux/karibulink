@@ -117,7 +117,7 @@ export function StickyActionBar({ actions }: { actions: ActionItem[] }) {
                     "sm:min-w-[104px]",
                     isActive
                       ? "border-transparent bg-[#b06a3b] text-white shadow-[0_2px_10px_-2px_rgba(176,106,59,0.45)] dark:bg-[#c9a84c] dark:text-[#08181c]"
-                      : "border-[#c9a84c]/35 bg-[#f5f1e6] text-[#1f3d2b] hover:border-[#c9a84c] dark:border-[#c9a84c]/35 dark:bg-white/[0.06] dark:text-foreground dark:hover:border-[#c9a84c]/55",
+                      : "border-[#c9a84c]/35 bg-[#f5f1e6] text-[#1f3d2b] hover:border-[#c9a84c] dark:border-[#c9a84c]/35 dark:bg-white/[0.08] dark:text-foreground dark:hover:border-[#c9a84c]/55",
                   ].join(" ")}
                 >
                   <Icon
