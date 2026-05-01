@@ -18,7 +18,6 @@ import {
   MessageIcon,
   PhoneIcon,
   ShieldIcon,
-  StarIcon,
   TentIcon,
 } from "@/components/icons";
 import {
@@ -26,7 +25,6 @@ import {
   AccordionSection,
 } from "./accordion-section";
 import { MobileFrame } from "./mobile-frame";
-import { ThemeToggle } from "./theme-toggle";
 import type { FairMode, Property } from "@/data/types";
 
 const SHORTLIST_KEY = "kl-shortlist";
@@ -101,32 +99,23 @@ function FairHero({
         {/* Just enough darken for the lower text — keeps the upper image clean. */}
         <div className="pointer-events-none absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-black/65 via-black/15 to-transparent" />
 
-        <div className="relative flex h-full flex-col p-5 text-white sm:p-6">
-          <div className="flex items-center justify-between gap-2">
-            <Link
-              href={`/camp/${property.slug}`}
-              className="text-[10px] uppercase tracking-[0.22em] text-white/80 hover:text-white"
-            >
-              ← Guest mode
-            </Link>
-            <div className="flex items-center gap-2">
-              <span className="inline-flex items-center gap-1.5 rounded-full border border-[#c8a24b]/55 bg-[#163a2e]/55 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.22em] text-[#f6f1e6] backdrop-blur">
-                <span className="h-1 w-1 rounded-full bg-[#c8a24b]" />
-                Fair Mode
-              </span>
-              <ThemeToggle />
-            </div>
-          </div>
+        <div className="relative flex h-full flex-col p-5 text-white sm:p-7">
+          <Link
+            href={`/camp/${property.slug}`}
+            className="self-start text-[10px] uppercase tracking-[0.28em] text-white/75 hover:text-white"
+          >
+            KaribuLink
+          </Link>
 
           <div className="mt-auto">
-            <p className="text-[10px] font-medium uppercase tracking-[0.28em] text-white/85">
+            <p className="text-[10px] font-medium uppercase tracking-[0.32em] text-white/80">
               {property.location}
             </p>
-            <h1 className="font-serif mt-2 text-[40px] font-medium leading-[1.05] tracking-tight sm:text-[52px]">
+            <h1 className="font-serif mt-3 text-[44px] font-medium leading-[0.95] tracking-tight sm:text-[64px]">
               {property.name}
             </h1>
             {fair.tagline && (
-              <p className="mt-3 max-w-md text-[15px] leading-snug text-white/90 sm:text-base">
+              <p className="mt-4 max-w-md text-[15px] leading-relaxed text-white/85 sm:text-base">
                 {fair.tagline}
               </p>
             )}
@@ -223,51 +212,45 @@ function ActionRow({
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-40px" }}
       transition={{ duration: 0.5, ease: easeOut, delay: 0.1 }}
-      className="px-3 pt-4 sm:px-4"
+      className="px-3 pt-5 sm:px-4 sm:pt-6"
     >
-      <div className="grid grid-cols-3 gap-2">
+      <motion.a
+        href="#partnership"
+        whileTap={{ scale: 0.985 }}
+        className="flex h-14 w-full items-center justify-center gap-2 rounded-2xl bg-primary text-sm font-semibold tracking-tight text-primary-foreground shadow-[0_18px_36px_-18px_rgba(183,107,62,0.55)] transition-colors duration-200 hover:bg-primary-hover"
+      >
+        Partner with us
+        <ArrowRightIcon className="h-4 w-4" />
+      </motion.a>
+
+      <div className="mt-2 grid grid-cols-2 gap-2">
+        <motion.a
+          href={waUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          whileTap={{ scale: 0.97 }}
+          className="flex h-12 items-center justify-center gap-2 rounded-2xl bg-[#25d366] text-sm font-semibold text-white transition-colors duration-200 hover:bg-[#1ebe5a]"
+        >
+          <MessageIcon className="h-4 w-4" />
+          WhatsApp
+        </motion.a>
+
         <motion.button
           type="button"
           onClick={toggleShortlist}
           whileTap={{ scale: 0.97 }}
           aria-pressed={shortlisted}
-          className={`flex h-16 flex-col items-center justify-center gap-1 rounded-2xl text-center transition-colors duration-200 ${
+          className={`flex h-12 items-center justify-center gap-2 rounded-2xl text-sm font-semibold transition-colors duration-200 ${
             shortlisted && hydrated
-              ? "bg-primary text-primary-foreground shadow-[0_8px_22px_-12px_rgba(183,107,62,0.55)]"
+              ? "bg-accent/40 text-foreground"
               : "bg-soft text-foreground hover:bg-surface"
           }`}
         >
           <span aria-hidden className="text-base leading-none">
             {shortlisted && hydrated ? "❤" : "♡"}
           </span>
-          <span className="text-[11px] font-semibold tracking-tight">
-            Shortlist
-          </span>
+          Shortlist
         </motion.button>
-
-        <motion.a
-          href={waUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          whileTap={{ scale: 0.97 }}
-          className="flex h-16 flex-col items-center justify-center gap-1 rounded-2xl bg-[#25d366] text-center text-white transition-colors duration-200 hover:bg-[#1ebe5a]"
-        >
-          <MessageIcon className="h-4 w-4" />
-          <span className="text-[11px] font-semibold tracking-tight">
-            WhatsApp
-          </span>
-        </motion.a>
-
-        <motion.a
-          href="#partnership"
-          whileTap={{ scale: 0.97 }}
-          className="flex h-16 flex-col items-center justify-center gap-1 rounded-2xl bg-foreground text-center text-[#f6f1e6] transition-colors duration-200 hover:bg-[#0f2c22]"
-        >
-          <ArrowRightIcon className="h-4 w-4" />
-          <span className="text-[11px] font-semibold tracking-tight">
-            Partner with us
-          </span>
-        </motion.a>
       </div>
     </motion.section>
   );
@@ -451,18 +434,6 @@ function Sections({
                 <PolicyRow label="Discounts" value={fair.rates.discounts} />
               )}
             </div>
-          </AccordionSection>
-        )}
-
-        {fair.uniqueSellingPoints && fair.uniqueSellingPoints.length > 0 && (
-          <AccordionSection
-            id="unique"
-            group={ACCORDION_GROUP}
-            icon={StarIcon}
-            title="What Makes Us Unique"
-            subtitle={`${fair.uniqueSellingPoints.length} reasons`}
-          >
-            <BulletList items={fair.uniqueSellingPoints} accent />
           </AccordionSection>
         )}
 
@@ -650,17 +621,14 @@ function LeadCapture({ property }: { property: Property }) {
               exit={{ opacity: 0 }}
               transition={{ duration: 0.3, ease: easeOut }}
             >
-              <p className="text-[10px] font-medium uppercase tracking-[0.28em] text-muted">
-                Partnership
-              </p>
-              <h2 className="font-serif mt-2 text-[32px] font-medium leading-[1.05] tracking-tight text-foreground sm:text-[38px]">
-                Let's work together
+              <h2 className="font-serif text-[36px] font-medium leading-[1] tracking-tight text-foreground sm:text-[44px]">
+                Let&apos;s work together
               </h2>
-              <p className="mt-3 max-w-md text-sm leading-relaxed text-muted sm:text-[15px]">
-                Tell us about your company and we'll follow up with your
-                operator pack, rates and next steps.
+              <p className="mt-4 max-w-md text-[15px] leading-relaxed text-muted sm:text-base">
+                Tell us about your company and we&apos;ll follow up with your
+                operator pack and next steps.
               </p>
-              <form onSubmit={handleSubmit} className="mt-6 grid gap-4">
+              <form onSubmit={handleSubmit} className="mt-7 grid gap-4">
                 <LeadField
                   label="Your name"
                   value={form.name}
@@ -689,25 +657,25 @@ function LeadCapture({ property }: { property: Property }) {
                 />
                 <label className="block">
                   <span className="text-xs font-medium tracking-wide text-foreground">
-                    Message
+                    A note
                   </span>
                   <textarea
                     value={form.message}
                     onChange={onChange("message")}
                     rows={3}
-                    placeholder="Tell us about your business or which markets you serve."
-                    className="mt-2 w-full rounded-xl bg-soft px-4 py-3 text-sm text-foreground placeholder:text-muted/70 focus:outline-none focus:ring-2 focus:ring-primary/25"
+                    placeholder="Markets you serve, group size, anything else."
+                    className="mt-2 w-full rounded-xl bg-soft px-4 py-3 text-sm leading-relaxed text-foreground placeholder:text-muted/70 focus:outline-none focus:ring-2 focus:ring-primary/25"
                   />
                 </label>
                 <motion.button
                   type="submit"
                   whileTap={{ scale: 0.98 }}
-                  className="mt-1 inline-flex h-12 items-center justify-center gap-2 rounded-2xl bg-primary text-sm font-semibold text-primary-foreground shadow-[0_12px_28px_-14px_rgba(183,107,62,0.6)] transition-colors hover:bg-primary-hover"
+                  className="mt-2 inline-flex h-13 items-center justify-center gap-2 rounded-2xl bg-primary py-4 text-sm font-semibold text-primary-foreground shadow-[0_18px_36px_-18px_rgba(183,107,62,0.55)] transition-colors hover:bg-primary-hover"
                 >
-                  Request partnership details
+                  Send invitation
                 </motion.button>
-                <p className="text-[10px] text-muted">
-                  Demo — saved locally on this device.
+                <p className="mt-1 text-center text-[11px] text-muted">
+                  Demo — saved on this device.
                 </p>
               </form>
             </motion.div>
