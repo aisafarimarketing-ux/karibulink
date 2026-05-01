@@ -13,8 +13,9 @@ import {
   AccordionAutoOpenScript,
   AccordionSection,
 } from "./accordion-section";
+import { HeroCard } from "./hero-card";
+import { MobileFrame } from "./mobile-frame";
 import { StickyBottomBar } from "./sticky-bottom-bar";
-import { ThemeToggle } from "./theme-toggle";
 import type { Property } from "@/data/types";
 
 const QUICK_ACTIONS = [
@@ -30,12 +31,20 @@ const ACCORDION_GROUP = "camp-hub";
 
 export function CampHub({ property }: { property: Property }) {
   return (
-    <main className="flex-1 pb-24">
-      <Hero property={property} />
-      <QuickActions />
-      <Registration />
-      <Sections property={property} />
-      <Contact property={property} />
+    <main className="flex-1 pb-28">
+      <MobileFrame>
+        <HeroCard
+          eyebrow={property.heroSubtitle}
+          status="Camp is open · 24°C"
+          title={property.heroTitle}
+          description={property.welcomeMessage}
+          meta={property.location}
+        />
+        <QuickActions />
+        <Registration />
+        <Sections property={property} />
+        <Contact property={property} />
+      </MobileFrame>
 
       <StickyBottomBar
         phone={property.emergencyContact.phone}
@@ -46,70 +55,23 @@ export function CampHub({ property }: { property: Property }) {
   );
 }
 
-function Hero({ property }: { property: Property }) {
-  return (
-    <section className="relative overflow-hidden">
-      <div className="absolute inset-0 -z-10 bg-[#1f3a2e] dark:bg-[#06120a]" />
-      <div
-        className="absolute inset-0 -z-10 opacity-[0.07]"
-        style={{
-          backgroundImage:
-            "radial-gradient(1px 1px at 25% 30%, #fff 1px, transparent 1px), radial-gradient(1px 1px at 70% 60%, #fff 1px, transparent 1px), radial-gradient(1px 1px at 40% 80%, #fff 1px, transparent 1px)",
-          backgroundSize: "80px 80px, 110px 110px, 90px 90px",
-        }}
-      />
-      <div className="relative mx-auto w-full max-w-5xl px-5 pt-5 pb-10 text-white sm:px-8 sm:pb-12 lg:px-12">
-        <div className="flex items-center justify-between">
-          <Link
-            href="/"
-            className="text-[10px] uppercase tracking-[0.22em] text-white/70 hover:text-white"
-          >
-            ← KaribuLink
-          </Link>
-          <ThemeToggle />
-        </div>
-        <div className="mt-4 flex flex-wrap items-center gap-2">
-          <span className="inline-flex items-center gap-2 rounded-full border border-white/20 px-2.5 py-1 text-[10px] font-medium uppercase tracking-[0.22em] text-white/85">
-            <span className="h-1 w-1 rounded-full bg-accent" />
-            {property.heroSubtitle}
-          </span>
-          <span className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-2.5 py-1 text-[10px] font-medium uppercase tracking-[0.22em] text-white/85 backdrop-blur">
-            <span className="relative flex h-1.5 w-1.5">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent opacity-75" />
-              <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-accent" />
-            </span>
-            Camp is open · 24°C
-          </span>
-        </div>
-        <h1 className="font-serif mt-3 text-2xl font-medium leading-tight tracking-tight sm:text-3xl lg:text-4xl">
-          {property.heroTitle}
-        </h1>
-        <p className="mt-2 max-w-md text-sm leading-snug text-white/75 line-clamp-2">
-          {property.welcomeMessage}
-        </p>
-        <p className="mt-2 text-[10px] uppercase tracking-[0.2em] text-white/55">
-          {property.location}
-        </p>
-      </div>
-    </section>
-  );
-}
-
 function QuickActions() {
   return (
-    <section className="relative -mt-7 px-5 sm:px-8 lg:px-12">
-      <div className="mx-auto w-full max-w-md sm:max-w-lg">
-        <div className="grid grid-cols-3 gap-2 rounded-2xl border border-border bg-surface p-2 shadow-[0_8px_30px_-12px_rgba(31,58,46,0.18)] sm:gap-3 sm:p-3">
+    <section className="sticky top-2 z-30 px-3 pt-3 sm:px-4">
+      <div
+        className="rounded-2xl border border-border bg-surface/95 p-2 shadow-[0_10px_30px_-15px_rgba(31,58,46,0.25)] backdrop-blur"
+      >
+        <div className="grid grid-cols-3 gap-2">
           {QUICK_ACTIONS.map(({ href, label, icon: Icon }) => (
             <a
               key={label}
               href={href}
-              className="group flex min-h-20 flex-col items-center justify-center gap-1.5 rounded-xl px-2 py-3 text-center transition-all duration-150 hover:bg-background active:scale-[0.97] sm:gap-2 sm:min-h-24"
+              className="group flex aspect-[5/4] flex-col items-center justify-center gap-1.5 rounded-xl bg-background transition-all duration-150 hover:border-primary/30 active:scale-[0.97]"
             >
               <span className="grid h-10 w-10 place-items-center rounded-xl bg-primary text-primary-foreground transition-colors group-hover:bg-primary-hover">
                 <Icon className="h-4 w-4" />
               </span>
-              <span className="text-[11px] font-medium tracking-tight text-foreground sm:text-xs">
+              <span className="text-[11px] font-medium tracking-tight text-foreground">
                 {label}
               </span>
             </a>
@@ -122,44 +84,34 @@ function QuickActions() {
 
 function Registration() {
   return (
-    <section
-      id="register"
-      className="px-5 pt-6 sm:px-8 sm:pt-8 lg:px-12"
-    >
-      <div className="mx-auto w-full max-w-5xl">
-        <div className="rounded-2xl border border-border bg-surface p-4 sm:p-5">
-          <div className="flex items-start justify-between gap-3">
-            <div>
-              <span className="inline-flex items-center gap-2 rounded-full border border-border bg-background px-2.5 py-1 text-[10px] font-medium uppercase tracking-[0.22em] text-muted">
-                <span className="h-1 w-1 rounded-full bg-primary" />
-                Check-in
-              </span>
-              <h2 className="font-serif mt-2 text-xl font-medium leading-tight tracking-tight text-foreground sm:text-2xl">
-                Register your stay
-              </h2>
-            </div>
-            <span className="text-[10px] text-muted">~10 sec</span>
-          </div>
-          <form className="mt-4 grid gap-2 sm:grid-cols-2">
-            <SlimField label="Full name" placeholder="As on your passport" />
-            <SlimField label="Email" type="email" placeholder="you@example.com" />
-            <SlimField label="Country" placeholder="Country of residence" />
-            <SlimField
-              label="Tour operator"
-              placeholder="Optional"
-              optional
-            />
-            <button
-              type="button"
-              className="mt-1 inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-primary text-sm font-medium text-primary-foreground transition-all duration-150 hover:bg-primary-hover active:scale-[0.98] sm:col-span-2"
-            >
-              Submit registration
-            </button>
-            <p className="text-[10px] text-muted sm:col-span-2">
-              Demo — nothing is saved.
-            </p>
-          </form>
+    <section id="register" className="px-3 pt-4 sm:px-4">
+      <div className="rounded-2xl border border-border bg-surface p-4 shadow-sm">
+        <div className="flex items-center justify-between">
+          <span className="inline-flex items-center gap-1.5 rounded-full border border-border bg-background px-2.5 py-1 text-[10px] font-medium uppercase tracking-[0.22em] text-muted">
+            <span className="h-1 w-1 rounded-full bg-primary" />
+            Check-in
+          </span>
+          <span className="text-[10px] text-muted">~10 sec</span>
         </div>
+        <h2 className="font-serif mt-2 text-xl font-medium leading-tight tracking-tight text-foreground">
+          Register your stay
+        </h2>
+        <p className="mt-1 text-xs text-muted leading-snug">
+          A quick check-in. Your details stay with the camp.
+        </p>
+        <form className="mt-3 grid gap-2">
+          <SlimField label="Full name" />
+          <SlimField label="Email" type="email" placeholder="you@example.com" />
+          <SlimField label="Country" />
+          <SlimField label="Tour operator" optional />
+          <button
+            type="button"
+            className="mt-2 inline-flex h-12 items-center justify-center gap-2 rounded-xl bg-primary text-sm font-semibold text-primary-foreground shadow-sm transition-all duration-150 hover:bg-primary-hover active:scale-[0.98]"
+          >
+            Register
+          </button>
+          <p className="text-[10px] text-muted">Demo — nothing is saved.</p>
+        </form>
       </div>
     </section>
   );
@@ -187,37 +139,37 @@ function SlimField({
       <input
         type={type}
         placeholder={placeholder}
-        className="mt-1 h-11 w-full rounded-xl border border-border bg-background px-3 text-sm text-foreground placeholder:text-muted/70 focus:border-primary/50 focus:outline-none"
+        className="mt-1 h-11 w-full rounded-xl border border-border bg-background px-3 text-sm text-foreground placeholder:text-muted/70 focus:border-primary/50 focus:outline-none focus:ring-2 focus:ring-primary/15"
       />
     </label>
   );
 }
 
 function Sections({ property }: { property: Property }) {
+  const summarize = (
+    items: { label: string }[] | { animal: string }[],
+    field: "label" | "animal" = "label",
+    take = 3,
+  ) => {
+    const labels = items
+      .slice(0, take)
+      .map((it) => (field === "label" ? (it as { label: string }).label : (it as { animal: string }).animal));
+    const more = items.length - take;
+    return more > 0 ? `${labels.join(" · ")} +${more} more` : labels.join(" · ");
+  };
+
   return (
-    <section className="px-5 pt-6 sm:px-8 sm:pt-8 lg:px-12">
-      <div className="mx-auto grid w-full max-w-5xl gap-2">
+    <section className="px-3 pt-4 sm:px-4">
+      <div className="grid gap-2">
         {property.amenities.length > 0 && (
           <AccordionSection
             id="camp-info"
             group={ACCORDION_GROUP}
             icon={InfoIcon}
             title="About the camp"
-            count={property.amenities.length}
+            subtitle={summarize(property.amenities)}
           >
             <ItemList items={property.amenities} accent={false} />
-          </AccordionSection>
-        )}
-
-        {property.services.length > 0 && (
-          <AccordionSection
-            id="services"
-            group={ACCORDION_GROUP}
-            icon={CoffeeIcon}
-            title="Services"
-            count={property.services.length}
-          >
-            <ServiceList items={property.services} />
           </AccordionSection>
         )}
 
@@ -227,7 +179,7 @@ function Sections({ property }: { property: Property }) {
             group={ACCORDION_GROUP}
             icon={ShieldIcon}
             title="Safety"
-            count={property.safetyNotes.length}
+            subtitle={summarize(property.safetyNotes)}
           >
             <ItemList items={property.safetyNotes} accent />
             <div className="mt-3 flex flex-col gap-2 rounded-xl border border-danger/40 bg-danger/5 p-3 sm:flex-row sm:items-center sm:justify-between">
@@ -237,12 +189,24 @@ function Sections({ property }: { property: Property }) {
               </p>
               <a
                 href={`tel:${property.emergencyContact.phone.replace(/\s+/g, "")}`}
-                className="inline-flex h-9 items-center justify-center gap-2 rounded-full bg-danger px-3 text-xs font-medium text-white hover:opacity-90"
+                className="inline-flex h-9 items-center justify-center gap-2 rounded-full bg-danger px-3 text-xs font-medium text-white transition-transform duration-150 hover:opacity-90 active:scale-[0.97]"
               >
                 <PhoneIcon className="h-3.5 w-3.5" />
                 {property.emergencyContact.phone}
               </a>
             </div>
+          </AccordionSection>
+        )}
+
+        {property.services.length > 0 && (
+          <AccordionSection
+            id="services"
+            group={ACCORDION_GROUP}
+            icon={CoffeeIcon}
+            title="Services"
+            subtitle={summarize(property.services)}
+          >
+            <ServiceList items={property.services} />
           </AccordionSection>
         )}
 
@@ -252,7 +216,7 @@ function Sections({ property }: { property: Property }) {
             group={ACCORDION_GROUP}
             icon={BinocularsIcon}
             title="Recent sightings"
-            count={property.sightings.length}
+            subtitle={summarize(property.sightings, "animal")}
           >
             <ul className="grid gap-2">
               {property.sightings.map((s) => (
@@ -286,9 +250,11 @@ function Sections({ property }: { property: Property }) {
             group={ACCORDION_GROUP}
             icon={UserIcon}
             title="Meet the team"
-            count={property.staff.length}
+            subtitle={`${property.staff.length} ${
+              property.staff.length === 1 ? "host" : "hosts"
+            } on site`}
           >
-            <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+            <div className="grid grid-cols-2 gap-2">
               {property.staff.map((m) => (
                 <div
                   key={m.name}
@@ -301,7 +267,7 @@ function Sections({ property }: { property: Property }) {
                       .slice(0, 2)
                       .join("")}
                   </div>
-                  <p className="mt-2 font-serif text-sm font-medium tracking-tight">
+                  <p className="mt-2 font-serif text-sm font-medium leading-tight tracking-tight">
                     {m.name}
                   </p>
                   <p className="text-[11px] text-primary">{m.role}</p>
@@ -320,7 +286,7 @@ function Sections({ property }: { property: Property }) {
             group={ACCORDION_GROUP}
             icon={LeafIcon}
             title="House rules"
-            count={property.rules.length}
+            subtitle={`${property.rules.length} small things`}
           >
             <ul className="grid gap-2">
               {property.rules.map((rule) => (
@@ -416,45 +382,40 @@ function ServiceList({
 
 function Contact({ property }: { property: Property }) {
   return (
-    <section
-      id="contact"
-      className="px-5 pt-6 sm:px-8 sm:pt-8 lg:px-12"
-    >
-      <div className="mx-auto w-full max-w-5xl">
-        <div className="rounded-2xl border border-border bg-surface p-4 sm:p-5">
-          <div className="flex items-center justify-between">
-            <span className="inline-flex items-center gap-2 rounded-full border border-border bg-background px-2.5 py-1 text-[10px] font-medium uppercase tracking-[0.22em] text-muted">
-              <span className="h-1 w-1 rounded-full bg-primary" />
-              Contact
+    <section id="contact" className="px-3 pt-4 sm:px-4">
+      <div className="rounded-2xl border border-border bg-surface p-4">
+        <div className="flex items-center justify-between">
+          <span className="inline-flex items-center gap-1.5 rounded-full border border-border bg-background px-2.5 py-1 text-[10px] font-medium uppercase tracking-[0.22em] text-muted">
+            <span className="h-1 w-1 rounded-full bg-primary" />
+            Contact
+          </span>
+          <span className="text-[10px] text-muted">{property.location}</span>
+        </div>
+        <h2 className="font-serif mt-2 text-lg font-medium leading-tight tracking-tight text-foreground">
+          We're a tap away.
+        </h2>
+        <div className="mt-3 grid gap-2">
+          <a
+            href={`tel:${property.emergencyContact.phone.replace(/\s+/g, "")}`}
+            className="inline-flex h-12 items-center justify-between gap-3 rounded-xl border border-border bg-background px-3 transition-colors hover:border-primary/40"
+          >
+            <span className="flex items-center gap-2">
+              <PhoneIcon className="h-4 w-4 text-primary" />
+              <span className="text-sm font-medium">
+                {property.emergencyContact.label}
+              </span>
             </span>
-            <span className="text-[10px] text-muted">{property.location}</span>
-          </div>
-          <h2 className="font-serif mt-2 text-lg font-medium leading-tight tracking-tight text-foreground">
-            We're a tap away.
-          </h2>
-          <div className="mt-3 grid gap-2 sm:grid-cols-2">
-            <a
-              href={`tel:${property.emergencyContact.phone.replace(/\s+/g, "")}`}
-              className="inline-flex h-11 items-center justify-between gap-3 rounded-xl border border-border bg-background px-3 hover:border-primary/40"
-            >
-              <span className="flex items-center gap-2">
-                <PhoneIcon className="h-4 w-4 text-primary" />
-                <span className="text-sm font-medium">
-                  {property.emergencyContact.label}
-                </span>
-              </span>
-              <span className="text-xs text-muted">
-                {property.emergencyContact.phone}
-              </span>
-            </a>
-            <Link
-              href="/"
-              className="inline-flex h-11 items-center justify-between gap-3 rounded-xl border border-border bg-background px-3 hover:border-primary/40"
-            >
-              <span className="text-sm font-medium">Back to KaribuLink</span>
-              <span className="text-xs text-muted">karibulink.com</span>
-            </Link>
-          </div>
+            <span className="text-xs text-muted">
+              {property.emergencyContact.phone}
+            </span>
+          </a>
+          <Link
+            href="/"
+            className="inline-flex h-12 items-center justify-between gap-3 rounded-xl border border-border bg-background px-3 transition-colors hover:border-primary/40"
+          >
+            <span className="text-sm font-medium">Back to KaribuLink</span>
+            <span className="text-xs text-muted">karibulink.com</span>
+          </Link>
         </div>
       </div>
     </section>
