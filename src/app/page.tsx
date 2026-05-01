@@ -20,7 +20,7 @@ import {
 
 export default function LandingPage() {
   return (
-    <>
+    <div className="landing-theme flex min-h-screen flex-col bg-background text-foreground">
       <SiteNav />
       <main className="flex-1">
         <Hero />
@@ -33,7 +33,7 @@ export default function LandingPage() {
         <FairDemoCta />
       </main>
       <SiteFooter />
-    </>
+    </div>
   );
 }
 
@@ -208,7 +208,7 @@ function AiNativeSection() {
     "When the network drops, the welcome page still works.",
   ];
   return (
-    <section id="ai" className="bg-primary text-primary-foreground">
+    <section id="ai" className="bg-[#1f3d2b] text-primary-foreground">
       <div className="mx-auto w-full max-w-6xl px-5 py-16 sm:px-8 sm:py-20 lg:px-12 lg:py-24">
         <div className="grid gap-10 lg:grid-cols-2 lg:items-center">
           <div>
