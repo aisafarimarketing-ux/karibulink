@@ -43,20 +43,18 @@ export function CampHub({
 }) {
   return (
     <LanguageProvider>
-      <main className={`flex-1 ${inPreview ? "" : "pb-28"}`}>
-        <MobileFrame>
+      <main className="flex-1">
+        <MobileFrame inPreview={inPreview}>
           <CampHero property={property} />
           <StickyActionBar actions={ACTIONS} />
           <Registration />
           <Sections property={property} />
           <Contact property={property} />
+          <StickyBottomBar
+            phone={property.emergencyContact.phone}
+            directionsQuery={`${property.name} ${property.location}`}
+          />
         </MobileFrame>
-
-        <StickyBottomBar
-          phone={property.emergencyContact.phone}
-          directionsQuery={`${property.name} ${property.location}`}
-          inPreview={inPreview}
-        />
         <AccordionAutoOpenScript />
       </main>
     </LanguageProvider>

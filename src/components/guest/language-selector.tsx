@@ -11,10 +11,14 @@ export function LanguageSelector() {
         value={lang}
         onChange={(e) => setLang(e.target.value as Language)}
         aria-label="Change language"
-        className="h-9 cursor-pointer appearance-none rounded-full border border-white/20 bg-white/10 pl-3 pr-7 text-[11px] font-semibold uppercase tracking-[0.18em] text-white backdrop-blur transition-colors hover:bg-white/15 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/30"
+        className="h-9 cursor-pointer appearance-none rounded-full border border-[#c9a84c] bg-[#f5f1e6] pl-3.5 pr-7 text-[11px] font-semibold uppercase tracking-[0.18em] text-[#1f3d2b] shadow-[0_8px_20px_-8px_rgba(0,0,0,0.35)] transition-colors hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c]/60 dark:border-[#c9a84c]/55 dark:bg-[#0f1f17] dark:text-[#f5f1e6] dark:hover:bg-[#15291f]"
       >
         {LANGUAGES.map((l) => (
-          <option key={l} value={l} className="text-foreground">
+          <option
+            key={l}
+            value={l}
+            className="bg-[#f5f1e6] text-[#1f3d2b] dark:bg-[#0f1f17] dark:text-[#f5f1e6]"
+          >
             {l}
           </option>
         ))}
@@ -22,7 +26,7 @@ export function LanguageSelector() {
       <svg
         viewBox="0 0 12 8"
         aria-hidden
-        className="pointer-events-none absolute right-2 h-2 w-2.5 text-white/85"
+        className="pointer-events-none absolute right-2.5 h-2 w-2.5 text-[#1f3d2b] dark:text-[#f5f1e6]"
       >
         <path
           d="M1 1l5 5 5-5"

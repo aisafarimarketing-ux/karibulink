@@ -5,16 +5,23 @@ import { useT } from "./language-context";
 
 const cleanPhone = (phone: string) => phone.replace(/[^0-9+]/g, "");
 
+/**
+ * Sticks to the bottom of the surrounding scroll container.
+ *
+ * - On the live guest pages this is the phone-shell scroll container
+ *   (desktop) or body (mobile).
+ * - In the admin preview this is the preview pane's scroll container.
+ *
+ * Always rendered inside <MobileFrame>.
+ */
 export function StickyBottomBar({
   phone,
   whatsappPhone,
   directionsQuery,
-  inPreview = false,
 }: {
   phone: string;
   whatsappPhone?: string;
   directionsQuery: string;
-  inPreview?: boolean;
 }) {
   const t = useT();
   const wa = cleanPhone(whatsappPhone ?? phone).replace(/^\+/, "");
@@ -22,45 +29,33 @@ export function StickyBottomBar({
     directionsQuery,
   )}`;
 
-  // In preview: sticks to the bottom of the surrounding scroll container.
-  // In production: pinned to viewport bottom.
-  const positionClass = inPreview
-    ? "sticky inset-x-0 bottom-0 z-30"
-    : "pointer-events-none fixed inset-x-0 bottom-0 z-50";
-
-  const innerClass = inPreview
-    ? "mx-auto w-full"
-    : "pointer-events-auto mx-auto w-full sm:max-w-[460px]";
-
   return (
     <div
-      className={positionClass}
+      className="sticky inset-x-0 bottom-0 z-30 mt-3"
       style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
     >
-      <div className={innerClass}>
-        <div className="border-t border-border/60 bg-surface/95 backdrop-blur sm:m-3 sm:rounded-2xl sm:border sm:shadow-[0_18px_40px_-18px_rgba(31,58,46,0.35)]">
-          <div className="grid grid-cols-3 gap-2 px-3 py-2 sm:gap-2.5 sm:px-3 sm:py-2.5">
-            <BarAction
-              href={`tel:${cleanPhone(phone)}`}
-              icon={PhoneIcon}
-              label={t("callLabel")}
-              variant="primary"
-            />
-            <BarAction
-              href={`https://wa.me/${wa}`}
-              icon={MessageIcon}
-              label={t("whatsappLabel")}
-              variant="whatsapp"
-              external
-            />
-            <BarAction
-              href={directions}
-              icon={CompassIcon}
-              label={t("directionsLabel")}
-              variant="secondary"
-              external
-            />
-          </div>
+      <div className="border-t border-border/60 bg-surface/95 backdrop-blur sm:m-3 sm:rounded-2xl sm:border sm:shadow-[0_18px_40px_-18px_rgba(31,58,46,0.35)]">
+        <div className="grid grid-cols-3 gap-2 px-3 py-2 sm:gap-2.5 sm:px-3 sm:py-2.5">
+          <BarAction
+            href={`tel:${cleanPhone(phone)}`}
+            icon={PhoneIcon}
+            label={t("callLabel")}
+            variant="primary"
+          />
+          <BarAction
+            href={`https://wa.me/${wa}`}
+            icon={MessageIcon}
+            label={t("whatsappLabel")}
+            variant="whatsapp"
+            external
+          />
+          <BarAction
+            href={directions}
+            icon={CompassIcon}
+            label={t("directionsLabel")}
+            variant="secondary"
+            external
+          />
         </div>
       </div>
     </div>

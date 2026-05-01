@@ -41,19 +41,18 @@ export function OperatorHub({ operator }: { operator: Operator }) {
 
   return (
     <LanguageProvider>
-      <main className="flex-1 pb-28">
+      <main className="flex-1">
         <MobileFrame>
           <OpHero operator={operator} />
           <StickyActionBar actions={ACTIONS} />
           {todayRoute && <RouteSummary route={todayRoute} />}
           <Sections operator={operator} />
           <Emergency operator={operator} />
+          <StickyBottomBar
+            phone={operator.emergencyContact.phone}
+            directionsQuery={`${operator.name} ${todayRoute?.fromTo ?? ""}`}
+          />
         </MobileFrame>
-
-        <StickyBottomBar
-          phone={operator.emergencyContact.phone}
-          directionsQuery={`${operator.name} ${todayRoute?.fromTo ?? ""}`}
-        />
         <AccordionAutoOpenScript />
       </main>
     </LanguageProvider>
