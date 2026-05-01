@@ -6,6 +6,7 @@ import {
   SectionHeading,
 } from "@/components/ui";
 import { SiteFooter, SiteNav } from "@/components/site-nav";
+import { Hero } from "@/components/hero";
 import {
   ArrowRightIcon,
   CheckIcon,
@@ -31,50 +32,6 @@ export default function LandingPage() {
       </main>
       <SiteFooter />
     </>
-  );
-}
-
-function Hero() {
-  return (
-    <section className="relative overflow-hidden">
-      <div className="absolute inset-0 -z-10 bg-gradient-to-b from-surface/60 via-background to-background" />
-      <div className="mx-auto w-full max-w-6xl px-5 sm:px-8 lg:px-12 pt-14 pb-20 sm:pt-20 sm:pb-28 lg:pt-28 lg:pb-36">
-        <div className="max-w-3xl">
-          <Eyebrow>Karibu — welcome</Eyebrow>
-          <h1 className="font-serif mt-5 text-5xl sm:text-6xl lg:text-7xl font-semibold leading-[1.05] tracking-tight text-foreground">
-            KaribuLink
-          </h1>
-          <p className="mt-6 text-lg sm:text-xl lg:text-2xl text-muted leading-relaxed max-w-2xl">
-            Digital welcome, concierge, and guest data platform for African
-            hospitality. Built for tour operators, camps, lodges, and BnBs.
-          </p>
-          <div className="mt-9 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-            <LinkButton href="/demo-camp" size="lg">
-              View Demo Camp
-              <ArrowRightIcon className="h-4 w-4" />
-            </LinkButton>
-            <LinkButton href="/demo-operator" variant="secondary" size="lg">
-              View Demo Tour Operator
-              <ArrowRightIcon className="h-4 w-4" />
-            </LinkButton>
-          </div>
-          <div className="mt-10 flex flex-wrap items-center gap-x-6 gap-y-3 text-sm text-muted">
-            <span className="inline-flex items-center gap-2">
-              <span className="h-1.5 w-1.5 rounded-full bg-primary" />
-              Mobile-first
-            </span>
-            <span className="inline-flex items-center gap-2">
-              <span className="h-1.5 w-1.5 rounded-full bg-primary" />
-              Works offline-friendly
-            </span>
-            <span className="inline-flex items-center gap-2">
-              <span className="h-1.5 w-1.5 rounded-full bg-primary" />
-              No app to download
-            </span>
-          </div>
-        </div>
-      </div>
-    </section>
   );
 }
 
