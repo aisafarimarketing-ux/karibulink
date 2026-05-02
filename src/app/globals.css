@@ -114,6 +114,36 @@
   border-bottom-color: var(--primary);
 }
 
+/* Full-bordered card. Edges square; subtle background. */
+.fair-theme .fair-box {
+  border: 1px solid var(--line);
+  background: var(--background);
+}
+
+/* Stack of rows — bottom-bordered except the last. */
+.fair-theme .fair-rows > * {
+  border-bottom: 1px solid var(--line);
+}
+.fair-theme .fair-rows > *:last-child {
+  border-bottom: none;
+}
+
+/* Pill — quiet uppercase tag used for badges. */
+.fair-theme .fair-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.35rem 0.7rem;
+  border: 1px solid var(--line);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--foreground);
+  background: var(--background);
+}
+
 /*
  * Landing-page-only palette: modern editorial.
  *

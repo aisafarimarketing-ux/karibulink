@@ -88,6 +88,9 @@ export interface FairActivity {
   description?: string;
   /** Short trailing tag — e.g. "Daily · Included" or "Premium add-on". */
   meta?: string;
+  iconKey?: IconKey;
+  /** Drives the Experiences split: Included vs Optional add-ons. */
+  category?: "included" | "optional";
 }
 
 export interface FairTradeOverview {
@@ -97,6 +100,73 @@ export interface FairTradeOverview {
   onTheGround?: string[];
   capacity?: string[];
   languages?: string[];
+}
+
+export interface FairContact {
+  name: string;
+  title: string;
+  company?: string;
+  email: string;
+  phone: string;
+  whatsapp?: string;
+  website?: string;
+  avatarUrl?: string;
+}
+
+export interface FairRoomSetup {
+  iconKey?: IconKey;
+  title: string;
+  count: number;
+  description?: string;
+  thumbnailUrl?: string;
+}
+
+export interface FairDownloadable {
+  title: string;
+  fileType: string;
+  url: string;
+  iconKey?: IconKey;
+}
+
+export interface FairSocialLink {
+  label: string;
+  url: string;
+  handle?: string;
+}
+
+export interface FairTripadvisor {
+  rating: number;
+  reviewCount?: number;
+  url?: string;
+}
+
+export interface FairTestimonial {
+  quote: string;
+  author: string;
+  role?: string;
+}
+
+export interface FairMatchAttributes {
+  idealFor?: string[];
+  experiences?: string[];
+  styleTags?: string[];
+  suitability?: string[];
+  customFitNotes?: string;
+}
+
+export interface FairLeadCapture {
+  headline: string;
+  subcopy: string;
+  bullets?: string[];
+  ctaLabel: string;
+  disclaimer?: string;
+  /** Options for the "interest" dropdown. */
+  interestOptions?: string[];
+}
+
+export interface FairSnapshotItem {
+  label: string;
+  value: string;
 }
 
 export interface FairMode {
@@ -139,6 +209,51 @@ export interface FairMode {
   photos?: string[];
   whatsappPhone?: string;
   email?: string;
+
+  /* --- Trade profile (full PNG-reference build) --- */
+
+  /** Brand / collection metadata for hero + header */
+  logoUrl?: string;
+  collection?: string;
+  rating?: { stars: number; source?: string };
+  destinationTag?: string;
+  budgetTag?: string;
+  styleTag?: string;
+
+  /** Overview block extras */
+  vibeText?: string;
+  overviewImageUrl?: string;
+
+  /** Sales contact for the Contact Card */
+  contact?: FairContact;
+
+  /** Bordered Trade Snapshot grid — six labelled facts. */
+  snapshot?: FairSnapshotItem[];
+
+  /** Per-setup room types (family / double / single, etc.) */
+  roomSetups?: FairRoomSetup[];
+
+  /** What's in the rate vs not. */
+  inclusions?: string[];
+  exclusions?: string[];
+
+  /** Offers & terms boxed section. */
+  offersText?: string;
+  termsText?: string;
+
+  /** Smart trade-fit attributes used for the matching block. */
+  matchAttributes?: FairMatchAttributes;
+
+  /** Trade pack downloadables. */
+  downloadables?: FairDownloadable[];
+
+  /** Social proof. */
+  socialLinks?: FairSocialLink[];
+  tripadvisor?: FairTripadvisor;
+  testimonial?: FairTestimonial;
+
+  /** Lead capture form copy + interest options. */
+  leadCapture?: FairLeadCapture;
 }
 
 export interface Property {

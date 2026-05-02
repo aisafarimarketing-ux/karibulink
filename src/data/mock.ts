@@ -297,6 +297,195 @@ export const PROPERTIES: Property[] = [
       ],
       whatsappPhone: "+255700000000",
       email: "operators@serengetiview.example",
+
+      /* --- Trade profile --- */
+
+      collection: "Serengeti View Camp Co.",
+      rating: { stars: 4.9, source: "Tour Operator Reviews" },
+      destinationTag: "Central Serengeti, Tanzania",
+      budgetTag: "$650 – $980 pp / night",
+      styleTag: "Tented · Low-impact · Editorial",
+      vibeText:
+        "Quiet at first light, gold at sundown. Canvas walls, copper basins, hand-stitched throws. Built to disappear into the plains, not stand against them.",
+      overviewImageUrl:
+        "https://images.unsplash.com/photo-1516426122078-c23e76319801?auto=format&fit=crop&w=1200&q=80",
+
+      contact: {
+        name: "Esther Mollel",
+        title: "Trade & Operations Lead",
+        company: "Serengeti View Camp Co.",
+        email: "operators@serengetiview.example",
+        phone: "+255 700 000 000",
+        whatsapp: "+255700000000",
+        website: "https://serengetiview.example",
+      },
+
+      snapshot: [
+        { label: "Total Rooms", value: "16 Tents" },
+        { label: "Best For", value: "Couples · Small groups" },
+        { label: "Style", value: "Tented · Low-impact" },
+        { label: "Season", value: "Open year-round" },
+        { label: "Destination", value: "Central Serengeti" },
+        { label: "Budget", value: "$650 – $980 pp / night" },
+      ],
+
+      roomSetups: [
+        {
+          iconKey: "user",
+          title: "Family Tents",
+          count: 2,
+          description:
+            "Two interconnected canvas tents for parents + children 8+. Shared veranda overlooking the plains.",
+          thumbnailUrl:
+            "https://images.unsplash.com/photo-1602002418082-a4443e081dd1?auto=format&fit=crop&w=600&q=80",
+        },
+        {
+          iconKey: "tent",
+          title: "Double Tents",
+          count: 12,
+          description:
+            "King-bed canvas tents with copper basin en-suite, indoor + outdoor showers, and a private deck.",
+          thumbnailUrl:
+            "https://images.unsplash.com/photo-1505881502353-a1986add3762?auto=format&fit=crop&w=600&q=80",
+        },
+        {
+          iconKey: "moon",
+          title: "Single Tents",
+          count: 2,
+          description:
+            "Solo-traveller tents with the same en-suite and deck setup. Single supplement applies in low season.",
+          thumbnailUrl:
+            "https://images.unsplash.com/photo-1487730116645-74489c95b41b?auto=format&fit=crop&w=600&q=80",
+        },
+      ],
+
+      inclusions: [
+        "Full board (breakfast, lunch, dinner)",
+        "House wines, beers and soft drinks",
+        "Twice-daily game drives in open Land Cruisers",
+        "Bush sundowners on a private kopje",
+        "Maasai-led walking safaris",
+        "Daily housekeeping and laundry",
+        "Airstrip transfers (Seronera / Kogatende)",
+        "Park fees and conservancy fees",
+      ],
+
+      exclusions: [
+        "International and domestic flights",
+        "Hot air balloon safaris (premium add-on)",
+        "Premium spirits and champagne",
+        "Travel insurance",
+        "Personal items and gratuities",
+        "Visa and reciprocity fees",
+      ],
+
+      offersText:
+        "10% rebooking discount for repeat agents. 5% group discount on bookings of 8+ guests. Honeymoon package: complimentary bush dinner + sundowner.",
+      termsText:
+        "30% deposit at booking. Balance due 60 days before arrival. Free cancellation up to 90 days out. Agent commission 12% net (15% on full camp buy-out).",
+
+      matchAttributes: {
+        idealFor: [
+          "Honeymooners",
+          "Photography clients",
+          "Repeat safari guests",
+          "Small private groups (2 – 8)",
+        ],
+        experiences: [
+          "Great Migration (Jun – Oct)",
+          "Predator-density viewing",
+          "Walking safaris",
+          "Cultural visits",
+        ],
+        styleTags: [
+          "Tented camp",
+          "Low-impact",
+          "Editorial design",
+          "Boutique",
+        ],
+        suitability: [
+          "Children 8+",
+          "Mobility: light walking required",
+          "No single supplement Apr – May",
+          "Vegetarian / vegan kitchen",
+        ],
+        customFitNotes:
+          "Best paired with Ngorongoro Crater (1 night) and Tarangire (2 nights) for a rounded northern-circuit itinerary. Camp manager can co-design 6 – 9 night programmes with operator partners.",
+      },
+
+      downloadables: [
+        {
+          title: "Trade Pack 2026",
+          fileType: "PDF · 4.2 MB",
+          url: "#",
+          iconKey: "info",
+        },
+        {
+          title: "Rate Sheet 2026",
+          fileType: "PDF · 1.1 MB",
+          url: "#",
+          iconKey: "info",
+        },
+        {
+          title: "Image Library",
+          fileType: "ZIP · 480 MB",
+          url: "#",
+          iconKey: "camera",
+        },
+        {
+          title: "Sample Itineraries",
+          fileType: "PDF · 2.6 MB",
+          url: "#",
+          iconKey: "route",
+        },
+        {
+          title: "Logo & Brand Marks",
+          fileType: "ZIP · 32 MB",
+          url: "#",
+          iconKey: "star",
+        },
+      ],
+
+      socialLinks: [
+        { label: "Instagram", url: "#", handle: "@serengetiviewcamp" },
+        { label: "LinkedIn", url: "#", handle: "Serengeti View Camp Co." },
+        { label: "YouTube", url: "#", handle: "Serengeti View" },
+      ],
+
+      tripadvisor: {
+        rating: 4.9,
+        reviewCount: 312,
+        url: "#",
+      },
+
+      testimonial: {
+        quote:
+          "The most thoughtful camp on the central plains. Esther and her team handle changes by WhatsApp, often within the hour — our clients land feeling held.",
+        author: "Anna Kowalska",
+        role: "Director, Wild Atlas Travel (Poland)",
+      },
+
+      leadCapture: {
+        headline: "Request your Trade Pack",
+        subcopy:
+          "Rates, sample itineraries, and a direct line to the camp manager. We reply within 24 hours.",
+        bullets: [
+          "Direct camp WhatsApp — no middle desks",
+          "Net rates + 12% agent commission",
+          "Custom itinerary support, no minimum",
+        ],
+        ctaLabel: "Send Request",
+        disclaimer:
+          "Your details go directly to the camp. We do not share with third parties or list-sellers.",
+        interestOptions: [
+          "Trade pack",
+          "FAM trip",
+          "Group booking (8+)",
+          "Honeymoon",
+          "Photography",
+          "Other",
+        ],
+      },
     },
     type: "camp",
     sections: presetFor("camp"),
