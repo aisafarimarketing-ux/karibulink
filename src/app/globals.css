@@ -53,9 +53,17 @@
   --muted: #5b5750;
   --border: rgba(31, 31, 27, 0.08);
 
-  /* Silk grid lines — thin, subtle, intentional. */
-  --line: rgba(31, 31, 27, 0.09);
-  --line-light: rgba(31, 31, 27, 0.05);
+  /* Silk grid lines — visible but quiet. */
+  --line: rgba(31, 31, 27, 0.14);
+  --line-light: rgba(31, 31, 27, 0.07);
+  --line-strong: rgba(31, 31, 27, 0.22);
+
+  /* Safari-tone bands for sectional rhythm. */
+  --tone-sand: #f4e8d2;
+  --tone-wheat: #ebd9b3;
+  --tone-cream: #faf3e1;
+  --tone-olive-soft: #e8eddc;
+  --tone-terracotta-soft: #f5e2cf;
 
   --primary: #c46a2b;
   --primary-hover: #a94f1f;

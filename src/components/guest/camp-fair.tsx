@@ -49,7 +49,7 @@ export function CampFair({ property }: { property: Property }) {
   const fair = property.fairMode ?? FALLBACK_FAIR;
 
   return (
-    <div className="fair-theme bg-background text-foreground pb-28 sm:pb-0">
+    <div className="@container fair-theme bg-background text-foreground pb-28 sm:pb-0">
       <MobileHeader property={property} />
       <Hero property={property} fair={fair} />
       <TradeSnapshot fair={fair} />
@@ -399,9 +399,12 @@ function TradeSnapshot({ fair }: { fair: FairMode }) {
   if (!items || items.length === 0) return null;
   return (
     <Reveal>
-      <Section className="pt-10 sm:pt-14 lg:pt-20">
+      <Section
+        className="py-10 sm:py-14 lg:py-20"
+        bandStyle={{ background: "var(--tone-olive-soft)" }}
+      >
         <SnapshotEyebrow text="Trade Snapshot" />
-        <ul className="fair-silk-grid mt-5 grid-cols-2 sm:grid-cols-3 lg:grid-cols-6">
+        <ul className="fair-silk-grid mt-5 grid-cols-2 @md:grid-cols-3 @3xl:grid-cols-6">
           {items.map((item) => (
             <li key={item.label} className="px-4 py-4 sm:px-5 sm:py-6">
               <p className="font-mono text-[9px] font-medium uppercase tracking-[0.24em] text-muted sm:text-[10px] sm:tracking-[0.26em]">
@@ -650,11 +653,11 @@ function Rooms({ fair }: { fair: FairMode }) {
         <p className="mt-4 max-w-xl text-[14px] leading-relaxed text-foreground/75 sm:text-base">
           Sixteen tents, three layouts. Mix and match within the same camp.
         </p>
-        <ul className="mt-7 grid gap-3 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3">
+        <ul className="mt-7 grid gap-3 @md:grid-cols-2 @md:gap-5 @2xl:grid-cols-3">
           {rooms.map((r) => (
             <li
               key={r.title}
-              className="fair-box flex overflow-hidden sm:flex-col"
+              className="fair-box flex overflow-hidden @md:flex-col"
             >
               {r.thumbnailUrl && (
                 /* eslint-disable-next-line @next/next/no-img-element */
@@ -662,23 +665,23 @@ function Rooms({ fair }: { fair: FairMode }) {
                   src={r.thumbnailUrl}
                   alt=""
                   loading="lazy"
-                  className="h-auto w-28 shrink-0 object-cover sm:h-44 sm:w-full"
+                  className="h-auto w-28 shrink-0 object-cover @md:h-44 @md:w-full"
                 />
               )}
-              <div className="flex flex-1 flex-col gap-2 p-4 sm:gap-3 sm:p-5">
+              <div className="flex flex-1 flex-col gap-2 p-4 @md:gap-3 @md:p-5">
                 <div className="flex items-start justify-between gap-3">
-                  <span className="grid h-8 w-8 place-items-center rounded-full bg-[#2f4a32]/10 text-[#2f4a32] sm:h-9 sm:w-9">
-                    {renderIcon(r.iconKey, "h-3.5 w-3.5 sm:h-4 sm:w-4")}
+                  <span className="grid h-8 w-8 place-items-center rounded-full bg-[#2f4a32]/10 text-[#2f4a32] @md:h-9 @md:w-9">
+                    {renderIcon(r.iconKey, "h-3.5 w-3.5 @md:h-4 @md:w-4")}
                   </span>
                   <span className="font-mono text-[10px] font-medium uppercase tracking-[0.24em] text-muted">
                     × {r.count}
                   </span>
                 </div>
-                <h3 className="font-serif text-[17px] font-medium leading-tight tracking-tight text-foreground sm:text-xl">
+                <h3 className="font-serif text-[17px] font-medium leading-tight tracking-tight text-foreground @md:text-xl">
                   {r.title}
                 </h3>
                 {r.description && (
-                  <p className="text-[13px] leading-relaxed text-foreground/75 line-clamp-3 sm:text-[14px]">
+                  <p className="text-[13px] leading-relaxed text-foreground/75 line-clamp-3 @md:text-[14px]">
                     {r.description}
                   </p>
                 )}
@@ -710,18 +713,55 @@ function Experiences({ fair }: { fair: FairMode }) {
     <Reveal>
       <Section className="pt-10 sm:pt-16 lg:pt-20">
         <SectionTitle eyebrow="Days at camp" title="Experiences" />
-        <div className="mt-7 grid gap-7 lg:grid-cols-2 lg:gap-12">
+        <div className="mt-7 grid gap-5 @xl:grid-cols-2 @xl:gap-12">
           <ExperienceList
             label="Included"
             items={included}
             tone="included"
           />
           {optional.length > 0 && (
-            <ExperienceList
-              label="Optional Add-ons"
-              items={optional}
-              tone="optional"
-            />
+            <>
+              {/* Narrow: collapsed accordion */}
+              <details className="fair-box group @xl:hidden">
+                <summary className="flex cursor-pointer list-none items-center justify-between gap-3 px-4 py-4 outline-none [&::-webkit-details-marker]:hidden">
+                  <div className="flex items-center gap-3">
+                    <span
+                      aria-hidden
+                      className="grid h-7 w-7 place-items-center rounded-full text-primary"
+                      style={{ border: "1px solid var(--line)" }}
+                    >
+                      <span className="text-[14px] leading-none">＋</span>
+                    </span>
+                    <span className="font-mono text-[11px] font-medium uppercase tracking-[0.28em] text-muted">
+                      Optional Add-ons
+                    </span>
+                    <span className="text-[13px] text-muted">
+                      ({optional.length})
+                    </span>
+                  </div>
+                  <ChevronDownIcon className="h-4 w-4 shrink-0 text-foreground/50 transition-transform duration-200 group-open:rotate-180" />
+                </summary>
+                <div
+                  className="border-t"
+                  style={{ borderColor: "var(--line)" }}
+                >
+                  <ExperienceList
+                    label="Optional Add-ons"
+                    items={optional}
+                    tone="optional"
+                    bare
+                  />
+                </div>
+              </details>
+              {/* Wide: side-by-side */}
+              <div className="hidden @xl:block">
+                <ExperienceList
+                  label="Optional Add-ons"
+                  items={optional}
+                  tone="optional"
+                />
+              </div>
+            </>
           )}
         </div>
       </Section>
@@ -733,13 +773,56 @@ function ExperienceList({
   label,
   items,
   tone,
+  bare = false,
 }: {
   label: string;
   items: FairActivity[];
   tone: "included" | "optional";
+  /** When true, render rows only (no outer label or box) — used inside an accordion. */
+  bare?: boolean;
 }) {
   if (items.length === 0) return null;
   const tag = tone === "included" ? "Included" : "Add-on";
+  if (bare) {
+    return (
+      <ul className="fair-rows">
+        {items.map((a) => (
+          <li
+            key={a.title}
+            className="flex items-start gap-3 px-4 py-4 sm:px-5 sm:py-5"
+          >
+            <span
+              aria-hidden
+              className="mt-1 grid h-6 w-6 shrink-0 place-items-center rounded-full bg-[#2f4a32]/10 text-[#2f4a32]"
+            >
+              {renderIcon(a.iconKey ?? "compass", "h-3 w-3")}
+            </span>
+            <div className="min-w-0 flex-1">
+              <div className="flex items-baseline justify-between gap-2">
+                <p className="font-serif text-[16px] font-medium leading-tight tracking-tight text-foreground sm:text-lg">
+                  {a.title}
+                </p>
+                <span
+                  className="ml-1 shrink-0 px-2 py-0.5 text-[9px] font-medium uppercase tracking-[0.18em] sm:text-[10px]"
+                  style={{
+                    border: "1px solid var(--line)",
+                    color: tone === "included" ? "#2f4a32" : "var(--primary)",
+                  }}
+                >
+                  {tag}
+                </span>
+              </div>
+              {a.description && (
+                <p className="mt-1 text-[13px] leading-relaxed text-foreground/70 sm:text-[14px]">
+                  {a.description}
+                </p>
+              )}
+            </div>
+          </li>
+        ))}
+      </ul>
+    );
+  }
   return (
     <div>
       <p className="font-mono text-[11px] font-medium uppercase tracking-[0.28em] text-muted">
@@ -792,26 +875,38 @@ function ExperienceList({
 function TradeFit({ fair }: { fair: FairMode }) {
   const m = fair.matchAttributes;
   if (!m) return null;
-  const chips: string[] = [
-    ...(m.idealFor ?? []),
-    ...(m.styleTags ?? []),
-    ...(m.experiences ?? []),
-    ...(m.suitability ?? []),
-  ];
-  if (chips.length === 0 && !m.customFitNotes) return null;
+  const groups: { label: string; tags: string[] }[] = [
+    { label: "Ideal For", tags: m.idealFor ?? [] },
+    { label: "Style", tags: m.styleTags ?? [] },
+    { label: "Experiences", tags: m.experiences ?? [] },
+    { label: "Suitability", tags: m.suitability ?? [] },
+  ].filter((g) => g.tags.length > 0);
+  if (groups.length === 0 && !m.customFitNotes) return null;
   return (
     <Reveal>
-      <Section className="pt-10 sm:pt-16 lg:pt-20">
+      <Section
+        className="py-12 sm:py-16 lg:py-20"
+        bandStyle={{ background: "var(--tone-terracotta-soft)" }}
+      >
         <SectionTitle eyebrow="Match profile" title="Trade Fit" />
-        {chips.length > 0 && (
-          <ul className="mt-6 flex flex-wrap gap-2">
-            {chips.map((t) => (
-              <li
-                key={t}
-                className="px-3 py-1.5 text-[12px] tracking-tight text-foreground sm:text-[13px]"
-                style={{ border: "1px solid var(--line)" }}
-              >
-                {t}
+        {groups.length > 0 && (
+          <ul className="fair-silk-grid mt-7 grid-cols-1 @md:grid-cols-2">
+            {groups.map((g) => (
+              <li key={g.label} className="px-4 py-5 sm:px-5 sm:py-6">
+                <p className="font-mono text-[10px] font-medium uppercase tracking-[0.28em] text-muted">
+                  {g.label}
+                </p>
+                <ul className="mt-3 flex flex-wrap gap-1.5">
+                  {g.tags.map((t) => (
+                    <li
+                      key={t}
+                      className="px-2.5 py-1 text-[12px] tracking-tight text-foreground"
+                      style={{ border: "1px solid var(--line)", background: "var(--background)" }}
+                    >
+                      {t}
+                    </li>
+                  ))}
+                </ul>
               </li>
             ))}
           </ul>
@@ -843,7 +938,7 @@ function InclusionsExclusions({ fair }: { fair: FairMode }) {
     <Reveal>
       <Section className="fair-section-frame mt-10 sm:mt-16" framePadded>
         <SectionTitle eyebrow="The rate" title="Inclusions & Exclusions" />
-        <div className="mt-7 grid gap-3 lg:grid-cols-2 lg:gap-6">
+        <div className="mt-7 grid gap-3 @xl:grid-cols-2 @xl:gap-6">
           {inc.length > 0 && (
             <AccordionPanel
               label="Included"
@@ -956,7 +1051,7 @@ function OffersTerms({ fair }: { fair: FairMode }) {
     <Reveal>
       <Section className="pt-10 sm:pt-16">
         <SectionTitle eyebrow="Commercial" title="Offers & Terms" />
-        <div className="fair-box mt-6 grid gap-5 p-5 sm:grid-cols-2 sm:gap-10 sm:p-7">
+        <div className="fair-box mt-6 grid gap-5 p-5 @md:grid-cols-2 @md:gap-10 @md:p-7">
           {fair.offersText && (
             <div>
               <p className="font-mono text-[10px] font-medium uppercase tracking-[0.28em] text-muted">
@@ -997,7 +1092,26 @@ function TradeMaterials({ fair }: { fair: FairMode }) {
         <p className="mt-4 max-w-xl text-[14px] leading-relaxed text-foreground/75 sm:text-base">
           Rate sheets, image library, and sample itineraries for your team.
         </p>
-        <ul className="fair-rows fair-box mt-6">
+        <details className="fair-box group mt-6">
+          <summary className="flex cursor-pointer list-none items-center justify-between gap-3 px-4 py-4 outline-none [&::-webkit-details-marker]:hidden">
+            <div className="flex items-center gap-3">
+              <span
+                aria-hidden
+                className="grid h-7 w-7 place-items-center rounded-full bg-[#2f4a32]/10 text-[#2f4a32]"
+              >
+                <DownloadIcon className="h-3.5 w-3.5" />
+              </span>
+              <span className="font-mono text-[11px] font-medium uppercase tracking-[0.28em] text-muted">
+                Files
+              </span>
+              <span className="text-[13px] text-muted">({items.length})</span>
+            </div>
+            <ChevronDownIcon className="h-4 w-4 shrink-0 text-foreground/50 transition-transform duration-200 group-open:rotate-180" />
+          </summary>
+          <ul
+            className="fair-rows border-t"
+            style={{ borderColor: "var(--line)" }}
+          >
           {items.map((d) => (
             <li
               key={d.title}
@@ -1031,7 +1145,8 @@ function TradeMaterials({ fair }: { fair: FairMode }) {
               </a>
             </li>
           ))}
-        </ul>
+          </ul>
+        </details>
       </Section>
     </Reveal>
   );
@@ -1046,9 +1161,12 @@ function SocialProof({ fair }: { fair: FairMode }) {
   if (!socialLinks?.length && !tripadvisor && !testimonial) return null;
   return (
     <Reveal>
-      <Section className="pt-10 sm:pt-16">
+      <Section
+        className="py-12 sm:py-16"
+        bandStyle={{ background: "var(--tone-wheat)" }}
+      >
         <SectionTitle eyebrow="Trust" title="Voices & Reviews" />
-        <div className="mt-6 grid gap-3 lg:grid-cols-[1fr_1fr_1.5fr] lg:gap-5">
+        <div className="mt-6 grid gap-3 @2xl:grid-cols-[1fr_1fr_1.5fr] @2xl:gap-5">
           {socialLinks && socialLinks.length > 0 && (
             <div className="fair-box p-5 sm:p-6">
               <p className="font-mono text-[10px] font-medium uppercase tracking-[0.28em] text-muted">
@@ -1253,7 +1371,7 @@ function LeadCapture({
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.3, ease: easeOut }}
-                className="grid gap-8 lg:grid-cols-[1fr_1.1fr] lg:gap-16"
+                className="grid gap-8 @xl:grid-cols-[1fr_1.1fr] @xl:gap-16"
               >
                 <div>
                   <SectionTitle eyebrow="Trade enquiry" title={headline} />
@@ -1551,17 +1669,19 @@ function Section({
   className = "",
   id,
   framePadded = false,
+  bandStyle,
 }: {
   children: ReactNode;
   className?: string;
   id?: string;
   framePadded?: boolean;
+  bandStyle?: React.CSSProperties;
 }) {
   const padding = framePadded
     ? "px-4 py-12 sm:px-8 sm:py-16 lg:px-16 lg:py-24"
     : "px-4 sm:px-8 lg:px-16";
   return (
-    <section id={id} className={`${padding} ${className}`}>
+    <section id={id} className={`${padding} ${className}`} style={bandStyle}>
       <div className="mx-auto max-w-5xl">{children}</div>
     </section>
   );
