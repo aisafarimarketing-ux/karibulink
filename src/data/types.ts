@@ -83,6 +83,11 @@ export interface EmergencyContact {
   phone: string;
 }
 
+export interface FairActivity {
+  title: string;
+  description?: string;
+}
+
 export interface FairMode {
   tagline?: string;
   highlights?: string[];
@@ -92,9 +97,16 @@ export interface FairMode {
   accessNote?: string;
   operatorResponseNote?: string;
   guidingNote?: string;
+  /** Quick-info strip facts. All optional — render only what's set. */
+  airstripDistance?: string;
+  season?: string;
+  guestType?: string;
+  power?: string;
   accommodation?: {
     rooms?: number;
     capacity?: number;
+    /** One-line lede above the feature bullets. */
+    descriptor?: string;
     features?: string[];
   };
   policies?: {
@@ -107,7 +119,8 @@ export interface FairMode {
     discounts?: string;
   };
   uniqueSellingPoints?: string[];
-  activities?: string[];
+  /** Accepts plain strings (legacy) or objects with a one-line description. */
+  activities?: Array<string | FairActivity>;
   photos?: string[];
   whatsappPhone?: string;
   email?: string;

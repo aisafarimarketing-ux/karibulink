@@ -17,7 +17,7 @@ import {
   PhoneIcon,
 } from "@/components/icons";
 import { saveFairLead } from "@/lib/fair-leads";
-import type { FairMode, Property } from "@/data/types";
+import type { FairActivity, FairMode, Property } from "@/data/types";
 
 const SHORTLIST_KEY = "kl-shortlist";
 const HERO_FALLBACK_SRC =
@@ -36,14 +36,64 @@ export function CampFair({ property }: { property: Property }) {
   return (
     <div className="fair-theme bg-background text-foreground">
       <Hero property={property} fair={fair} />
+      <QuickInfo fair={fair} />
       <Summary property={property} fair={fair} />
       <ActionBar property={property} fair={fair} />
       <Accommodation fair={fair} />
       <Experience fair={fair} />
+      <GoodToKnow fair={fair} />
       <Policies fair={fair} />
-      <Inquiry property={property} />
+      <Inquiry property={property} fair={fair} />
       <BottomCTA property={property} fair={fair} />
     </div>
+  );
+}
+
+/* --------------------------------------------------------------- */
+/*  Quick Info — horizontal facts strip under the hero               */
+/* --------------------------------------------------------------- */
+
+function QuickInfo({ fair }: { fair: FairMode }) {
+  const facts: { label: string; value: string }[] = [];
+  if (fair.accommodation?.rooms !== undefined) {
+    facts.push({ label: "Tents", value: String(fair.accommodation.rooms) });
+  }
+  if (fair.airstripDistance) {
+    facts.push({ label: "Airstrip", value: fair.airstripDistance });
+  }
+  if (fair.season) {
+    facts.push({ label: "Season", value: fair.season });
+  }
+  if (fair.guestType) {
+    facts.push({ label: "Ideal for", value: fair.guestType });
+  }
+  if (fair.power) {
+    facts.push({ label: "Power", value: fair.power });
+  }
+  if (facts.length === 0) return null;
+
+  return (
+    <Reveal>
+      <section className="px-6 pt-14 sm:px-10 sm:pt-20 lg:px-16 lg:pt-24">
+        <div className="mx-auto max-w-5xl">
+          <ul
+            className="grid grid-cols-2 gap-y-8 gap-x-6 sm:grid-cols-3 sm:gap-x-10 lg:grid-cols-5 lg:gap-x-12"
+            role="list"
+          >
+            {facts.map((fact) => (
+              <li key={fact.label}>
+                <p className="font-mono text-[10px] font-medium uppercase tracking-[0.28em] text-muted">
+                  {fact.label}
+                </p>
+                <p className="font-serif mt-2 text-[20px] font-medium leading-snug tracking-tight text-foreground sm:text-[22px]">
+                  {fact.value}
+                </p>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+    </Reveal>
   );
 }
 
@@ -289,7 +339,12 @@ function Accommodation({ fair }: { fair: FairMode }) {
       <section className="px-6 pt-20 sm:px-10 sm:pt-28 lg:px-16 lg:pt-32">
         <div className="mx-auto max-w-3xl">
           <SectionTitle eyebrow="Stay" title="Accommodation" />
-          <div className="mt-8 grid gap-6 sm:grid-cols-2 sm:gap-8">
+          {acc.descriptor && (
+            <p className="mt-6 max-w-xl text-lg leading-[1.7] text-foreground/80 sm:text-xl">
+              {acc.descriptor}
+            </p>
+          )}
+          <div className="mt-10 grid gap-6 sm:grid-cols-2 sm:gap-8">
             {acc.rooms !== undefined && (
               <Stat label="Tents" value={String(acc.rooms)} />
             )}
@@ -327,26 +382,34 @@ function Accommodation({ fair }: { fair: FairMode }) {
 /* --------------------------------------------------------------- */
 
 function Experience({ fair }: { fair: FairMode }) {
-  const activities = fair.activities ?? [];
+  const activities: FairActivity[] = (fair.activities ?? []).map((a) =>
+    typeof a === "string" ? { title: a } : a,
+  );
   if (activities.length === 0) return null;
   return (
     <Reveal>
       <section className="px-6 pt-20 sm:px-10 sm:pt-28 lg:px-16 lg:pt-32">
         <div className="mx-auto max-w-3xl">
           <SectionTitle eyebrow="Days at camp" title="Experience" />
-          <ul className="mt-10 grid gap-5 sm:grid-cols-2 sm:gap-x-10 sm:gap-y-6">
+          <ul className="mt-10 grid gap-7 sm:grid-cols-2 sm:gap-x-10 sm:gap-y-9">
             {activities.map((a) => (
-              <li
-                key={a}
-                className="flex items-start gap-3 text-base leading-relaxed text-foreground/85"
-              >
+              <li key={a.title} className="flex items-start gap-3">
                 <span
                   aria-hidden
                   className="mt-1.5 grid h-6 w-6 shrink-0 place-items-center rounded-full bg-[#2f4a32]/10 text-[#2f4a32]"
                 >
                   <CompassIcon className="h-3 w-3" />
                 </span>
-                {a}
+                <div>
+                  <p className="font-serif text-lg font-medium leading-tight tracking-tight text-foreground sm:text-xl">
+                    {a.title}
+                  </p>
+                  {a.description && (
+                    <p className="mt-1 text-[15px] leading-relaxed text-foreground/70">
+                      {a.description}
+                    </p>
+                  )}
+                </div>
               </li>
             ))}
           </ul>
@@ -357,7 +420,50 @@ function Experience({ fair }: { fair: FairMode }) {
 }
 
 /* --------------------------------------------------------------- */
-/*  6. Policies (collapsible)                                        */
+/*  6. Good to Know — scannable definition list                      */
+/* --------------------------------------------------------------- */
+
+function GoodToKnow({ fair }: { fair: FairMode }) {
+  const rows: { label: string; value: string }[] = [];
+  if (fair.accessNote) {
+    rows.push({ label: "Location", value: fair.accessNote });
+  }
+  if (fair.bestFor) {
+    rows.push({ label: "Best for", value: fair.bestFor });
+  }
+  const logistics = [fair.guidingNote, fair.operatorResponseNote]
+    .filter(Boolean)
+    .join(" · ");
+  if (logistics) {
+    rows.push({ label: "On the ground", value: logistics });
+  }
+  if (rows.length === 0) return null;
+
+  return (
+    <Reveal>
+      <section className="px-6 pt-20 sm:px-10 sm:pt-28 lg:px-16 lg:pt-32">
+        <div className="mx-auto max-w-3xl">
+          <SectionTitle eyebrow="Good to know" title="Context for the trade" />
+          <dl className="mt-10 grid gap-8 sm:grid-cols-3 sm:gap-x-10">
+            {rows.map((row) => (
+              <div key={row.label}>
+                <dt className="font-mono text-[10px] font-medium uppercase tracking-[0.28em] text-muted">
+                  {row.label}
+                </dt>
+                <dd className="mt-3 text-[15px] leading-relaxed text-foreground/85">
+                  {row.value}
+                </dd>
+              </div>
+            ))}
+          </dl>
+        </div>
+      </section>
+    </Reveal>
+  );
+}
+
+/* --------------------------------------------------------------- */
+/*  7. Policies (collapsible)                                        */
 /* --------------------------------------------------------------- */
 
 function Policies({ fair }: { fair: FairMode }) {
@@ -374,7 +480,7 @@ function Policies({ fair }: { fair: FairMode }) {
         <div className="mx-auto max-w-3xl">
           <details className="group">
             <summary className="flex cursor-pointer items-center justify-between gap-4 outline-none [&::-webkit-details-marker]:hidden focus-visible:ring-2 focus-visible:ring-primary/40">
-              <SectionTitle eyebrow="Good to know" title="Camp Policies" />
+              <SectionTitle eyebrow="Policies" title="Camp Policies" />
               <ChevronDownIcon className="h-5 w-5 shrink-0 text-foreground/50 transition-transform duration-200 group-open:rotate-180" />
             </summary>
             <div className="pt-8">
@@ -402,7 +508,13 @@ function Policies({ fair }: { fair: FairMode }) {
 /*  7. Inquiry form                                                  */
 /* --------------------------------------------------------------- */
 
-function Inquiry({ property }: { property: Property }) {
+function Inquiry({
+  property,
+  fair,
+}: {
+  property: Property;
+  fair: FairMode;
+}) {
   const [submitted, setSubmitted] = useState(false);
   const [form, setForm] = useState({
     name: "",
@@ -432,9 +544,11 @@ function Inquiry({ property }: { property: Property }) {
     setSubmitted(true);
   };
 
-  const fair = property.fairMode;
-  const phone = fair?.whatsappPhone ?? property.emergencyContact.phone;
+  const phone = fair.whatsappPhone ?? property.emergencyContact.phone;
   const wa = whatsappLink(phone, property.name);
+  const responseNote = fair.operatorResponseNote
+    ? `Most replies happen ${fair.operatorResponseNote.toLowerCase()}.`
+    : "Most replies happen within 24 hours.";
 
   return (
     <section
@@ -503,7 +617,7 @@ function Inquiry({ property }: { property: Property }) {
                   title="Send Trade Inquiry"
                 />
                 <p className="mt-5 max-w-md text-base leading-[1.7] text-foreground/75 sm:text-lg">
-                  Your details go directly to the camp.
+                  Your details go directly to the camp. {responseNote}
                 </p>
                 <form onSubmit={onSubmit} className="mt-10 grid gap-5">
                   <Field

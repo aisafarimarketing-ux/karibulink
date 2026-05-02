@@ -201,9 +201,15 @@ export const PROPERTIES: Property[] = [
       accessNote: "20-min charter from Arusha (HTM)",
       operatorResponseNote: "Within 24 hours, weekdays",
       guidingNote: "Maasai-born guides, average 12 years' experience",
+      airstripDistance: "20 min from airstrip",
+      season: "Open year-round",
+      guestType: "Couples & small groups",
+      power: "100% solar",
       accommodation: {
         rooms: 16,
         capacity: 32,
+        descriptor:
+          "Sixteen canvas tents along the migration line — each one private, low-impact, and built to wake up in.",
         features: [
           "King and twin tents",
           "Private bathroom · hot shower",
@@ -233,11 +239,26 @@ export const PROPERTIES: Property[] = [
         "100% solar — no diesel generators",
       ],
       activities: [
-        "Game drives (sunrise & sunset)",
-        "Walking safari with a Maasai guide",
-        "Hot air balloon (premium add-on)",
-        "Cultural visit to a nearby Maasai boma",
-        "Bush sundowner with a private chef",
+        {
+          title: "Game drives",
+          description: "Sunrise and sunset, in open Land Cruisers.",
+        },
+        {
+          title: "Walking safari",
+          description: "Two-hour walks with an armed Maasai guide.",
+        },
+        {
+          title: "Hot air balloon",
+          description: "Dawn flight over the migration. Premium add-on.",
+        },
+        {
+          title: "Cultural visit",
+          description: "Half-day at a nearby Maasai boma, by invitation.",
+        },
+        {
+          title: "Bush sundowner",
+          description: "Drinks at sunset on a private kopje, with chef.",
+        },
       ],
       whatsappPhone: "+255700000000",
       email: "operators@serengetiview.example",
