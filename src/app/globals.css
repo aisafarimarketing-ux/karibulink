@@ -53,6 +53,10 @@
   --muted: #5b5750;
   --border: rgba(31, 31, 27, 0.08);
 
+  /* Silk grid lines — thin, subtle, intentional. */
+  --line: rgba(31, 31, 27, 0.09);
+  --line-light: rgba(31, 31, 27, 0.05);
+
   --primary: #c46a2b;
   --primary-hover: #a94f1f;
   --primary-foreground: #faf7f0;
@@ -63,6 +67,51 @@
 
   /* Cormorant for headings — keeps the lodge / safari feel. */
   --font-serif: var(--font-cormorant), ui-serif, Georgia, serif;
+}
+
+/*
+ * Silk grid — subtle borders that structure the Fair Mode page
+ * without adding visual weight. Lines stay thin and quiet.
+ */
+.fair-theme .fair-section-frame {
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+
+.fair-theme .fair-divider {
+  height: 1px;
+  background: var(--line);
+}
+
+/* Boxed grid — uses gap+background so dividers appear between
+ * cells regardless of how the grid wraps at different breakpoints. */
+.fair-theme .fair-silk-grid {
+  position: relative;
+  display: grid;
+  gap: 1px;
+  background: var(--line);
+  border: 1px solid var(--line);
+}
+
+.fair-theme .fair-silk-grid > * {
+  background: var(--background);
+}
+
+.fair-theme .fair-silk-row {
+  border-bottom: 1px solid var(--line-light);
+}
+
+.fair-theme .fair-silk-row:last-child {
+  border-bottom: none;
+}
+
+.fair-theme .fair-field {
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 14px;
+}
+
+.fair-theme .fair-field:focus-within {
+  border-bottom-color: var(--primary);
 }
 
 /*

@@ -86,6 +86,17 @@ export interface EmergencyContact {
 export interface FairActivity {
   title: string;
   description?: string;
+  /** Short trailing tag — e.g. "Daily · Included" or "Premium add-on". */
+  meta?: string;
+}
+
+export interface FairTradeOverview {
+  /** Multi-line value lists. Each string is rendered on its own line. */
+  location?: string[];
+  bestFor?: string[];
+  onTheGround?: string[];
+  capacity?: string[];
+  languages?: string[];
 }
 
 export interface FairMode {
@@ -94,9 +105,13 @@ export interface FairMode {
   about?: string;
   /** Conversion-trust signals for the "Why work with us" block. */
   bestFor?: string;
+  /** Three-or-so phrases under the intro paragraph (e.g. "Couples"). */
+  bestForList?: string[];
   accessNote?: string;
   operatorResponseNote?: string;
   guidingNote?: string;
+  /** Structured rows for the Trade Overview section. */
+  tradeOverview?: FairTradeOverview;
   /** Quick-info strip facts. All optional — render only what's set. */
   airstripDistance?: string;
   season?: string;

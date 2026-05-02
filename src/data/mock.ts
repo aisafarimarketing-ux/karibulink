@@ -193,29 +193,59 @@ export const PROPERTIES: Property[] = [
     waiverText:
       "By staying with us, you agree to follow camp safety guidance, respect the conservancy, and never leave camp on foot after dark without an escort.",
     fairMode: {
-      tagline: "Sixteen tents on the Serengeti migration plains.",
-      highlights: ["16 luxury tents", "20 min from airstrip", "Open all year"],
+      tagline:
+        "Located in the central Serengeti migration corridor, offering year-round wildlife access with an intimate, low-impact camp setup.",
+      highlights: [
+        "16 Luxury Tents",
+        "Open Year-Round",
+        "100% Solar Powered",
+      ],
       about:
-        "Serengeti View Camp blends classic safari hospitality with thoughtful, low-impact design. Each tent opens onto the migration plains; our team — most of them born within the conservancy — is what guests remember most.",
-      bestFor: "Couples and small groups, May – November",
-      accessNote: "20-min charter from Arusha (HTM)",
-      operatorResponseNote: "Within 24 hours, weekdays",
+        "Positioned in the central Serengeti, this camp offers direct access to year-round wildlife movement. Designed for small groups and couples, it focuses on low-impact stays with experienced, locally rooted guides.",
+      bestFor: "Couples, small groups, migration-focused itineraries",
+      bestForList: [
+        "Couples",
+        "Small groups",
+        "Migration-focused itineraries",
+      ],
+      accessNote: "Central Serengeti · 20-min charter from Arusha",
+      operatorResponseNote: "Within 24 hours",
       guidingNote: "Maasai-born guides, average 12 years' experience",
-      airstripDistance: "20 min from airstrip",
-      season: "Open year-round",
-      guestType: "Couples & small groups",
-      power: "100% solar",
+      airstripDistance: "20 min from Airstrip",
+      season: "Open Year-Round",
+      guestType: "Up to 32 Guests",
+      power: "Fully Solar Powered",
       accommodation: {
         rooms: 16,
         capacity: 32,
         descriptor:
-          "Sixteen canvas tents along the migration line — each one private, low-impact, and built to wake up in.",
+          "Sixteen canvas tents positioned along the migration plains, designed for privacy and uninterrupted views.",
         features: [
-          "King and twin tents",
-          "Private bathroom · hot shower",
-          "Solar power 24/7",
-          "Veranda with plains view",
+          "King or twin configurations",
+          "En-suite bathrooms with hot showers",
+          "Private verandas overlooking plains",
+          "Solar-powered camp (24/7)",
           "Daily housekeeping",
+          "Laundry service available",
+        ],
+      },
+      tradeOverview: {
+        location: [
+          "Central Serengeti (20-min charter from Arusha)",
+          "Direct fly-in access",
+        ],
+        bestFor: ["Couples, small groups, migration itineraries"],
+        onTheGround: [
+          "Maasai-born guides (avg. 12 years experience)",
+          "Replies within 24 hours",
+        ],
+        capacity: [
+          "Up to 32 guests",
+          "Full camp buy-out available",
+        ],
+        languages: [
+          "English, Swahili",
+          "French / Italian on request",
         ],
       },
       policies: {
@@ -240,24 +270,29 @@ export const PROPERTIES: Property[] = [
       ],
       activities: [
         {
-          title: "Game drives",
-          description: "Sunrise and sunset, in open Land Cruisers.",
+          title: "Game Drives",
+          description: "Sunrise and sunset drives in open Land Cruisers.",
+          meta: "Daily · Included",
         },
         {
-          title: "Walking safari",
-          description: "Two-hour walks with an armed Maasai guide.",
+          title: "Walking Safari",
+          description: "Two-hour walks with an armed Maasai tracker.",
+          meta: "On request · Included",
         },
         {
-          title: "Hot air balloon",
-          description: "Dawn flight over the migration. Premium add-on.",
+          title: "Hot Air Balloon",
+          description: "Dawn flight over the migration plains.",
+          meta: "Premium add-on",
         },
         {
-          title: "Cultural visit",
+          title: "Cultural Visit",
           description: "Half-day at a nearby Maasai boma, by invitation.",
+          meta: "By invitation",
         },
         {
-          title: "Bush sundowner",
+          title: "Bush Sundowner",
           description: "Drinks at sunset on a private kopje, with chef.",
+          meta: "Daily · Included",
         },
       ],
       whatsappPhone: "+255700000000",
