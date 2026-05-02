@@ -23,6 +23,7 @@ import {
   RouteIcon,
   InfoIcon,
 } from "@/components/icons";
+import { ImageSlider } from "@/components/image-slider";
 import { saveFairLead } from "@/lib/fair-leads";
 import type {
   FairActivity,
@@ -296,7 +297,8 @@ function Hero({
   property: Property;
   fair: FairMode;
 }) {
-  const imageSrc = property.heroImageUrl || HERO_FALLBACK_SRC;
+  const heroImage = property.heroImageUrl || HERO_FALLBACK_SRC;
+  const photos = fair.photos && fair.photos.length > 0 ? fair.photos : [heroImage];
   const heroMeta = (fair.highlights ?? []).slice(0, 3);
   return (
     <section
@@ -304,20 +306,12 @@ function Hero({
       className="relative w-full overflow-hidden"
     >
       <div className="relative h-[70vh] w-full sm:h-[80vh] lg:h-[86vh]">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <motion.img
-          src={imageSrc}
-          alt=""
-          loading="eager"
-          initial={{ scale: 1 }}
-          animate={{ scale: 1.04 }}
-          transition={{
-            duration: 14,
-            ease: "easeInOut",
-            repeat: Infinity,
-            repeatType: "reverse",
-          }}
-          className="absolute inset-0 h-full w-full object-cover"
+        <ImageSlider
+          images={photos}
+          interval={5500}
+          showDots={false}
+          alt={`${property.name} — gallery`}
+          className="absolute inset-0 bg-transparent"
         />
         <div className="pointer-events-none absolute inset-x-0 top-0 h-1/4 bg-gradient-to-b from-black/45 to-transparent" />
         <div className="pointer-events-none absolute inset-x-0 bottom-0 h-3/5 bg-gradient-to-t from-black/85 via-black/35 to-transparent" />
@@ -620,17 +614,20 @@ function PropertyOverview({
             {fair.vibeText}
           </p>
         )}
-        {fair.overviewImageUrl && (
+        {(fair.photos?.length || fair.overviewImageUrl) && (
           <div
-            className="mt-7 overflow-hidden"
+            className="relative mt-7 h-52 w-full overflow-hidden sm:h-72 lg:h-80"
             style={{ border: "1px solid var(--line)" }}
           >
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={fair.overviewImageUrl}
-              alt=""
-              loading="lazy"
-              className="h-52 w-full object-cover sm:h-72 lg:h-80"
+            <ImageSlider
+              images={
+                fair.photos && fair.photos.length > 0
+                  ? fair.photos
+                  : [fair.overviewImageUrl!]
+              }
+              interval={6500}
+              alt={`${property.name} — overview`}
+              className="bg-transparent"
             />
           </div>
         )}

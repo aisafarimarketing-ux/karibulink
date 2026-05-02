@@ -297,6 +297,13 @@ export const PROPERTIES: Property[] = [
       ],
       whatsappPhone: "+255700000000",
       email: "operators@serengetiview.example",
+      photos: [
+        "https://images.unsplash.com/photo-1547471080-7cc2caa01a7e?auto=format&fit=crop&w=2200&q=80",
+        "https://images.unsplash.com/photo-1516426122078-c23e76319801?auto=format&fit=crop&w=2200&q=80",
+        "https://images.unsplash.com/photo-1535941339077-2dd1c7963098?auto=format&fit=crop&w=2200&q=80",
+        "https://images.unsplash.com/photo-1547721064-da6cfb341d50?auto=format&fit=crop&w=2200&q=80",
+        "https://images.unsplash.com/photo-1505881502353-a1986add3762?auto=format&fit=crop&w=2200&q=80",
+      ],
 
       /* --- Trade profile --- */
 
