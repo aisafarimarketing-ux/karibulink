@@ -150,7 +150,7 @@ function UseCasesSection() {
       label: "At trade fairs",
       title: "Karibu Kili and beyond.",
       body: "Tour operators scan your QR, explore your camp, and send inquiries instantly. You walk away with structured leads instead of business cards.",
-      href: "/camp/serengeti-view-camp?mode=fair",
+      href: "/demo-fair",
       cta: "See Fair Mode",
     },
     {
@@ -473,7 +473,7 @@ function FinalCTA() {
             <ArrowRightIcon className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5" />
           </Link>
           <Link
-            href="/camp/serengeti-view-camp?mode=fair"
+            href="/demo-fair"
             className="group inline-flex h-[52px] items-center justify-center gap-1.5 px-2 text-sm font-semibold tracking-tight text-foreground/70 hover:text-foreground"
           >
             See Fair Mode
