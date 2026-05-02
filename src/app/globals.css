@@ -77,19 +77,22 @@
  * own type and palette.
  */
 .landing-theme {
-  --background: #e7dfcd;
-  --surface: #f6f1e6;
-  --soft: #f2ebdd;
-  --foreground: #163a2e;
-  --muted: #5a6b63;
-  --border: rgba(22, 58, 46, 0.09);
+  /* Warm white as the page canvas — sand cream supports it as a band tone. */
+  --background: #faf7f0;
+  --surface: #f4e8d2;
+  --soft: #f4e8d2;
+  --foreground: #1f1f1b;
+  --muted: #5b5750;
+  --border: rgba(31, 31, 27, 0.08);
 
-  --primary: #a85c2e;
-  --primary-hover: #8e4b22;
-  --primary-foreground: #f6f1e6;
+  /* Deep orange — reserved for primary CTAs and key highlights only. */
+  --primary: #c46a2b;
+  --primary-hover: #a94f1f;
+  --primary-foreground: #faf7f0;
 
-  --accent: #c8a24b;
-  --accent-foreground: #163a2e;
+  /* Olive green — the brand anchor for hero / final-CTA dark bands. */
+  --accent: #2f4a32;
+  --accent-foreground: #faf7f0;
   --danger: #8a3a2a;
 
   --font-serif: var(--font-ibm-plex-sans), ui-sans-serif, system-ui,

@@ -22,11 +22,21 @@ const OPEN_SANS: React.CSSProperties = {
 
 export function Hero() {
   return (
-    <section className="px-6 pt-12 pb-20 sm:px-10 sm:pt-16 sm:pb-28 lg:px-10 lg:pt-24 lg:pb-32 xl:px-12">
-      <div className="mx-auto grid max-w-6xl gap-12 lg:grid-cols-[1.05fr_1fr] lg:items-center lg:gap-16 xl:gap-24">
-        <Copy />
-        <PhoneMockup />
+    <section className="relative overflow-hidden bg-[#2f4a32] text-[#faf7f0]">
+      <div className="mx-auto max-w-6xl px-6 pt-16 pb-20 sm:px-10 sm:pt-20 sm:pb-28 lg:px-10 lg:pt-24 lg:pb-32 xl:px-12">
+        <div className="grid gap-14 lg:grid-cols-[1.05fr_1fr] lg:items-center lg:gap-16 xl:gap-24">
+          <Copy />
+          <PhoneMockup />
+        </div>
       </div>
+      {/* Subtle warm wash so the band reads layered, not flat. */}
+      <div
+        className="pointer-events-none absolute inset-x-0 bottom-0 h-1/3"
+        style={{
+          background:
+            "linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(31,51,35,0.55) 100%)",
+        }}
+      />
     </section>
   );
 }
@@ -38,9 +48,9 @@ function Copy() {
         initial={{ opacity: 0, y: 8 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.7, ease: easeOut }}
-        className="font-mono text-[11px] uppercase tracking-[0.32em] text-muted"
+        className="font-mono text-[11px] uppercase tracking-[0.32em] text-[#faf7f0]/70"
       >
-        For hospitality brands &amp; tour operators
+        For safari camps
       </motion.p>
 
       <motion.h1
@@ -52,16 +62,16 @@ function Copy() {
             transition: { staggerChildren: 0.16, delayChildren: 0.2 },
           },
         }}
-        className="font-serif mt-6 text-[44px] font-semibold leading-[1.04] tracking-tight text-foreground sm:text-[56px] lg:text-[60px] xl:text-[68px]"
+        className="font-serif mt-6 text-[40px] font-semibold leading-[1.05] tracking-tight text-[#faf7f0] sm:text-[52px] lg:text-[58px] xl:text-[66px]"
       >
-        <Line>Capture every</Line>
-        <Line>guest and operator —</Line>
+        <Line>Turn every camp</Line>
+        <Line>interaction into a</Line>
         <Line>
-          <em className="relative inline-block font-semibold italic text-primary">
-            instantly.
+          <em className="relative inline-block font-semibold italic text-[#f4e8d2]">
+            captured lead.
             <span
               aria-hidden
-              className="absolute -bottom-1 left-0 right-1 h-[3px] bg-accent"
+              className="absolute -bottom-1 left-0 right-1 h-[3px] bg-[#c46a2b]"
             />
           </em>
         </Line>
@@ -71,11 +81,11 @@ function Copy() {
         initial={{ opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, ease: easeOut, delay: 0.95 }}
-        className="mt-7 max-w-md text-base leading-[1.7] text-muted sm:text-[17px]"
+        className="mt-7 max-w-md text-[15px] leading-[1.7] text-[#faf7f0]/80 sm:text-[17px]"
         style={OPEN_SANS}
       >
-        From fairs to camp check-ins, KaribuLink turns every interaction into
-        structured data you can use.
+        KaribuLink helps safari camps replace paper forms, business cards,
+        and missed follow-ups with one simple mobile experience.
       </motion.p>
 
       <motion.div
@@ -86,16 +96,16 @@ function Copy() {
       >
         <Link
           href="/demo-camp"
-          className="group inline-flex h-[52px] items-center justify-center gap-2 rounded-full bg-primary px-9 text-[15px] font-semibold tracking-tight text-primary-foreground shadow-[0_22px_44px_-20px_rgba(168,92,46,0.65)] transition-transform duration-200 hover:scale-[1.02] hover:bg-primary-hover active:scale-[0.98]"
+          className="group inline-flex h-[52px] items-center justify-center gap-2 rounded-full bg-[#c46a2b] px-9 text-[15px] font-semibold tracking-tight text-[#faf7f0] shadow-[0_22px_44px_-20px_rgba(196,106,43,0.6)] transition-transform duration-200 hover:scale-[1.02] hover:bg-[#a94f1f] active:scale-[0.98]"
         >
-          View Demo
+          View Live Camp Demo
           <ArrowRightIcon className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5" />
         </Link>
         <Link
           href="#how-it-works"
-          className="group inline-flex h-[52px] items-center justify-center gap-1.5 px-2 text-sm font-semibold tracking-tight text-foreground hover:text-primary"
+          className="group inline-flex h-[52px] items-center justify-center gap-1.5 px-2 text-sm font-semibold tracking-tight text-[#f4e8d2] hover:text-[#faf7f0]"
         >
-          See how it works
+          See How It Works
           <ArrowRightIcon className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5" />
         </Link>
       </motion.div>
@@ -104,9 +114,9 @@ function Copy() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.9, ease: easeOut, delay: 1.4 }}
-        className="font-mono mt-10 text-[11px] uppercase tracking-[0.28em] text-muted"
+        className="font-mono mt-10 text-[11px] uppercase tracking-[0.28em] text-[#faf7f0]/55"
       >
-        Built for hospitality brands and tour operators
+        Built for safari camps and tour operators
       </motion.p>
     </div>
   );
@@ -134,28 +144,26 @@ function PhoneMockup() {
       aria-hidden
     >
       <div
-        className="relative aspect-[9/19.5] rounded-[2.6rem] bg-foreground p-3"
+        className="relative aspect-[9/19.5] rounded-[2.6rem] bg-[#1f1f1b] p-3"
         style={{
           boxShadow:
-            "0 30px 80px -32px rgba(22, 58, 46, 0.45), 0 1px 0 0 rgba(255,255,255,0.06) inset",
+            "0 30px 80px -32px rgba(0, 0, 0, 0.55), 0 1px 0 0 rgba(255,255,255,0.06) inset",
         }}
       >
-        <div className="relative h-full overflow-hidden rounded-[2rem] bg-background">
+        <div className="relative h-full overflow-hidden rounded-[2rem] bg-[#faf7f0]">
           {/* Dynamic island / camera */}
-          <div className="absolute left-1/2 top-2.5 z-10 h-[18px] w-[80px] -translate-x-1/2 rounded-full bg-foreground" />
+          <div className="absolute left-1/2 top-2.5 z-10 h-[18px] w-[80px] -translate-x-1/2 rounded-full bg-[#1f1f1b]" />
 
           <div className="relative flex h-full flex-col px-3 pb-4 pt-9">
-            {/* Hero card preview — deep-green block with text only, no images */}
-            <div className="overflow-hidden rounded-2xl bg-foreground p-4">
-              <p
-                className="font-mono text-[8px] uppercase tracking-[0.22em] text-background/65"
-              >
+            {/* Hero card preview — olive green block with text only */}
+            <div className="overflow-hidden rounded-2xl bg-[#2f4a32] p-4 text-[#faf7f0]">
+              <p className="font-mono text-[8px] uppercase tracking-[0.22em] text-[#faf7f0]/65">
                 Karibu — welcome
               </p>
-              <p className="font-serif mt-1.5 text-[22px] font-semibold leading-[1.05] text-background">
+              <p className="font-serif mt-1.5 text-[22px] font-semibold leading-[1.05]">
                 Welcome.
               </p>
-              <p className="font-mono mt-1.5 text-[8px] uppercase tracking-[0.18em] text-background/55">
+              <p className="font-mono mt-1.5 text-[8px] uppercase tracking-[0.18em] text-[#faf7f0]/55">
                 Serengeti View Camp
               </p>
             </div>
@@ -173,16 +181,14 @@ function PhoneMockup() {
                 ].map((label, i) => (
                   <div
                     key={`${label}-${i}`}
-                    className="flex aspect-square flex-col items-center justify-center gap-1 rounded-xl bg-soft"
+                    className="flex aspect-square flex-col items-center justify-center gap-1 rounded-xl bg-[#f4e8d2]"
                   >
                     <div
                       className={`h-2 w-2 rounded-full ${
-                        i === 0 ? "bg-primary" : "bg-foreground/30"
+                        i === 0 ? "bg-[#c46a2b]" : "bg-[#2f4a32]/35"
                       }`}
                     />
-                    <span
-                      className="font-mono text-[7px] uppercase tracking-[0.12em] text-foreground/70"
-                    >
+                    <span className="font-mono text-[7px] uppercase tracking-[0.12em] text-[#1f1f1b]/70">
                       {label}
                     </span>
                   </div>
@@ -196,19 +202,21 @@ function PhoneMockup() {
                 (label, i) => (
                   <div
                     key={label}
-                    className="flex items-center gap-2 rounded-xl bg-soft px-3 py-2"
+                    className="flex items-center gap-2 rounded-xl bg-[#f4e8d2] px-3 py-2"
                   >
-                    <span className="grid h-5 w-5 place-items-center rounded-md bg-primary/15">
-                      <span className="block h-1 w-1 rounded-full bg-primary" />
+                    <span className="grid h-5 w-5 place-items-center rounded-md bg-[#c46a2b]/20">
+                      <span className="block h-1 w-1 rounded-full bg-[#c46a2b]" />
                     </span>
                     <div className="flex-1">
-                      <div className="font-serif text-[10px] font-semibold leading-tight text-foreground">
+                      <div className="font-serif text-[10px] font-semibold leading-tight text-[#1f1f1b]">
                         {label}
                       </div>
-                      <div className="mt-0.5 h-[3px] w-[60%] rounded-full bg-foreground/15" />
+                      <div className="mt-0.5 h-[3px] w-[60%] rounded-full bg-[#2f4a32]/15" />
                     </div>
                     <span
-                      className={`text-[8px] text-foreground/40 ${i === 0 ? "rotate-180" : ""}`}
+                      className={`text-[8px] text-[#1f1f1b]/40 ${
+                        i === 0 ? "rotate-180" : ""
+                      }`}
                     >
                       ▾
                     </span>
@@ -218,15 +226,15 @@ function PhoneMockup() {
             </div>
 
             {/* Bottom action bar */}
-            <div className="mt-auto rounded-2xl bg-soft p-2">
+            <div className="mt-auto rounded-2xl bg-[#f4e8d2] p-2">
               <div className="grid grid-cols-3 gap-1.5">
-                <div className="flex h-7 items-center justify-center rounded-lg bg-primary text-[8px] font-semibold tracking-tight text-primary-foreground">
+                <div className="flex h-7 items-center justify-center rounded-lg bg-[#c46a2b] text-[8px] font-semibold tracking-tight text-[#faf7f0]">
                   Call
                 </div>
                 <div className="flex h-7 items-center justify-center rounded-lg bg-[#25d366] text-[8px] font-semibold tracking-tight text-white">
                   WhatsApp
                 </div>
-                <div className="flex h-7 items-center justify-center rounded-lg bg-background text-[8px] font-semibold tracking-tight text-foreground">
+                <div className="flex h-7 items-center justify-center rounded-lg bg-[#faf7f0] text-[8px] font-semibold tracking-tight text-[#1f1f1b]">
                   Map
                 </div>
               </div>
