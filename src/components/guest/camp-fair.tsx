@@ -11,6 +11,7 @@ import {
 import {
   ArrowRightIcon,
   CheckIcon,
+  ChevronDownIcon,
   CompassIcon,
   MessageIcon,
   PhoneIcon,
@@ -51,12 +52,14 @@ export function CampFair({ property }: { property: Property }) {
       <MobileHeader property={property} />
       <Hero property={property} fair={fair} />
       <TradeSnapshot fair={fair} />
-      <OverviewAndContact property={property} fair={fair} />
+      <QuickActions property={property} fair={fair} />
+      <ContactCardSection property={property} fair={fair} />
+      <PropertyOverview property={property} fair={fair} />
       <Rooms fair={fair} />
       <Experiences fair={fair} />
+      <TradeFit fair={fair} />
       <InclusionsExclusions fair={fair} />
       <OffersTerms fair={fair} />
-      <TradeFit fair={fair} />
       <TradeMaterials fair={fair} />
       <SocialProof fair={fair} />
       <LeadCapture property={property} fair={fair} />
@@ -249,7 +252,7 @@ function MobileHeader({ property }: { property: Property }) {
         borderBottom: "1px solid var(--line)",
       }}
     >
-      <div className="mx-auto flex h-12 max-w-6xl items-center justify-between px-5 sm:h-14 sm:px-8 lg:px-16">
+      <div className="mx-auto flex h-12 max-w-6xl items-center justify-between px-4 sm:h-14 sm:px-8 lg:px-16">
         <Link
           href="/"
           className="font-serif text-base font-medium tracking-tight text-foreground sm:text-lg"
@@ -261,7 +264,7 @@ function MobileHeader({ property }: { property: Property }) {
             type="button"
             onClick={onShare}
             aria-label="Share"
-            className="grid h-9 w-9 place-items-center rounded-full text-foreground/70 transition-colors hover:bg-soft/60 hover:text-foreground"
+            className="grid h-10 w-10 place-items-center rounded-full text-foreground/70 transition-colors hover:bg-soft/60 hover:text-foreground"
           >
             <ShareIcon className="h-4 w-4" />
           </button>
@@ -270,7 +273,7 @@ function MobileHeader({ property }: { property: Property }) {
             onClick={toggleShortlist}
             aria-pressed={shortlisted}
             aria-label={shortlisted ? "Saved" : "Save camp"}
-            className="grid h-9 w-9 place-items-center rounded-full text-foreground/70 transition-colors hover:bg-soft/60 hover:text-foreground"
+            className="grid h-10 w-10 place-items-center rounded-full text-foreground/70 transition-colors hover:bg-soft/60 hover:text-foreground"
           >
             <span aria-hidden className="text-base leading-none">
               {shortlisted && hydrated ? "❤" : "♡"}
@@ -295,10 +298,12 @@ function Hero({
 }) {
   const imageSrc = property.heroImageUrl || HERO_FALLBACK_SRC;
   const heroMeta = (fair.highlights ?? []).slice(0, 3);
-  const totalRooms = fair.accommodation?.rooms;
   return (
-    <section className="relative w-full overflow-hidden">
-      <div className="relative h-[78vh] w-full sm:h-[82vh] lg:h-[86vh]">
+    <section
+      id="trade-hero"
+      className="relative w-full overflow-hidden"
+    >
+      <div className="relative h-[70vh] w-full sm:h-[80vh] lg:h-[86vh]">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <motion.img
           src={imageSrc}
@@ -314,15 +319,15 @@ function Hero({
           }}
           className="absolute inset-0 h-full w-full object-cover"
         />
-        <div className="pointer-events-none absolute inset-x-0 top-0 h-1/4 bg-gradient-to-b from-black/40 to-transparent" />
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-3/5 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-1/4 bg-gradient-to-b from-black/45 to-transparent" />
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-3/5 bg-gradient-to-t from-black/85 via-black/35 to-transparent" />
 
         {/* Trade profile badge */}
         <motion.span
           initial={{ opacity: 0, y: -6 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, ease: easeOut, delay: 0.25 }}
-          className="absolute left-5 top-5 inline-flex items-center gap-2 px-3 py-1.5 text-[10px] font-medium uppercase tracking-[0.24em] text-[#faf7f0] sm:left-8 sm:top-8 sm:text-[11px]"
+          className="absolute left-4 top-4 inline-flex items-center gap-2 px-3 py-1.5 text-[10px] font-medium uppercase tracking-[0.24em] text-[#faf7f0] sm:left-8 sm:top-8 sm:text-[11px]"
           style={{
             border: "1px solid rgba(250, 247, 240, 0.55)",
             background: "rgba(0, 0, 0, 0.18)",
@@ -341,7 +346,7 @@ function Hero({
           initial={{ opacity: 0, y: 18 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.85, ease: easeOut, delay: 0.2 }}
-          className="absolute inset-x-0 bottom-0 px-5 pb-9 text-[#faf7f0] sm:px-10 sm:pb-14 lg:px-16 lg:pb-20"
+          className="absolute inset-x-0 bottom-0 px-4 pb-7 text-[#faf7f0] sm:px-10 sm:pb-12 lg:px-16 lg:pb-20"
         >
           <div className="mx-auto max-w-5xl">
             {fair.collection && (
@@ -349,10 +354,10 @@ function Hero({
                 {fair.collection}
               </p>
             )}
-            <h1 className="font-serif mt-3 text-[40px] font-medium leading-[0.96] tracking-tight sm:text-[60px] lg:text-[76px]">
+            <h1 className="font-serif mt-2.5 text-[34px] font-medium leading-[0.98] tracking-tight sm:text-[56px] lg:text-[76px]">
               {property.name}
             </h1>
-            <p className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-1 text-[12px] uppercase tracking-[0.22em] text-[#faf7f0]/85 sm:text-[13px]">
+            <p className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] uppercase tracking-[0.2em] text-[#faf7f0]/85 sm:text-[13px]">
               <span className="inline-flex items-center gap-1.5">
                 <span aria-hidden>📍</span>
                 {property.location}
@@ -366,35 +371,20 @@ function Hero({
                   </span>
                 </>
               )}
-              {totalRooms !== undefined && (
-                <>
-                  <span aria-hidden className="text-[#faf7f0]/40">·</span>
-                  <span>{totalRooms} Tents</span>
-                </>
-              )}
-              {fair.destinationTag && (
-                <>
-                  <span aria-hidden className="text-[#faf7f0]/40">·</span>
-                  <span>{fair.destinationTag.split(",")[0]}</span>
-                </>
-              )}
             </p>
-            {fair.tagline && (
-              <p className="mt-4 max-w-xl text-base leading-relaxed text-[#faf7f0]/90 sm:text-lg">
-                {fair.tagline}
-              </p>
-            )}
             {heroMeta.length > 0 && (
-              <ul className="mt-5 flex flex-wrap items-center gap-x-5 gap-y-2 text-[11px] font-medium uppercase tracking-[0.2em] text-[#faf7f0]/85 sm:text-[12px]">
-                {heroMeta.map((item, i) => (
-                  <li key={item} className="flex items-center gap-x-5">
-                    {i > 0 && (
-                      <span
-                        aria-hidden
-                        className="hidden h-1 w-1 rounded-full bg-[#faf7f0]/60 sm:inline-block"
-                      />
-                    )}
-                    <span>{item}</span>
+              <ul className="mt-4 flex flex-wrap gap-1.5 sm:gap-2">
+                {heroMeta.map((item) => (
+                  <li
+                    key={item}
+                    className="inline-flex items-center px-2.5 py-1 text-[10px] font-medium uppercase tracking-[0.18em] text-[#faf7f0]/95 sm:px-3 sm:py-1.5 sm:text-[11px]"
+                    style={{
+                      border: "1px solid rgba(250, 247, 240, 0.35)",
+                      background: "rgba(0, 0, 0, 0.18)",
+                      backdropFilter: "blur(4px)",
+                    }}
+                  >
+                    {item}
                   </li>
                 ))}
               </ul>
@@ -415,15 +405,15 @@ function TradeSnapshot({ fair }: { fair: FairMode }) {
   if (!items || items.length === 0) return null;
   return (
     <Reveal>
-      <Section className="pt-12 sm:pt-16 lg:pt-20">
+      <Section className="pt-10 sm:pt-14 lg:pt-20">
         <SnapshotEyebrow text="Trade Snapshot" />
-        <ul className="fair-silk-grid mt-6 grid-cols-2 sm:grid-cols-3 lg:grid-cols-6">
+        <ul className="fair-silk-grid mt-5 grid-cols-2 sm:grid-cols-3 lg:grid-cols-6">
           {items.map((item) => (
-            <li key={item.label} className="px-4 py-5 sm:px-5 sm:py-6">
-              <p className="font-mono text-[10px] font-medium uppercase tracking-[0.26em] text-muted">
+            <li key={item.label} className="px-4 py-4 sm:px-5 sm:py-6">
+              <p className="font-mono text-[9px] font-medium uppercase tracking-[0.24em] text-muted sm:text-[10px] sm:tracking-[0.26em]">
                 {item.label}
               </p>
-              <p className="font-serif mt-2 text-[17px] font-medium leading-snug tracking-tight text-foreground sm:text-[19px]">
+              <p className="font-serif mt-2 text-[16px] font-medium leading-snug tracking-tight text-foreground sm:text-[19px]">
                 {item.value}
               </p>
             </li>
@@ -435,45 +425,76 @@ function TradeSnapshot({ fair }: { fair: FairMode }) {
 }
 
 /* --------------------------------------------------------------- */
-/*  4. Property Overview + Contact Card                              */
+/*  4. Quick Actions                                                 */
 /* --------------------------------------------------------------- */
 
-function OverviewAndContact({
+function QuickActions({
   property,
   fair,
 }: {
   property: Property;
   fair: FairMode;
 }) {
+  const phone = fair.contact?.whatsapp ?? fair.whatsappPhone ?? property.emergencyContact.phone;
+  const wa = whatsappLink(phone, property.name);
+  const factSheet = fair.downloadables?.[0];
   return (
     <Reveal>
-      <Section className="pt-14 sm:pt-20 lg:pt-24">
-        <div className="grid gap-10 lg:grid-cols-[1.5fr_1fr] lg:gap-14">
-          <div>
-            <SectionTitle eyebrow="Overview" title="Property Overview" />
-            <p className="mt-7 text-base leading-[1.75] text-foreground/85 sm:text-lg">
-              {fair.about ?? property.welcomeMessage}
-            </p>
-            {fair.vibeText && (
-              <p className="font-serif mt-6 border-l-2 pl-5 text-[17px] leading-relaxed tracking-tight text-foreground/80 sm:text-[19px]"
-                 style={{ borderColor: "var(--primary)" }}>
-                {fair.vibeText}
-              </p>
-            )}
-            {fair.overviewImageUrl && (
-              <div className="mt-8 overflow-hidden" style={{ border: "1px solid var(--line)" }}>
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={fair.overviewImageUrl}
-                  alt=""
-                  loading="lazy"
-                  className="h-56 w-full object-cover sm:h-72 lg:h-80"
-                />
-              </div>
+      <Section className="pt-8 sm:pt-12">
+        <div className="fair-box p-3 sm:p-4">
+          <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
+            <a
+              href={wa}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex h-12 items-center justify-center gap-2 rounded-full bg-primary px-4 text-[14px] font-semibold tracking-tight text-primary-foreground transition-colors hover:bg-primary-hover sm:h-12"
+            >
+              <MessageIcon className="h-4 w-4" />
+              Chat on WhatsApp
+            </a>
+            <a
+              href="#inquiry"
+              className="inline-flex h-12 items-center justify-center gap-2 rounded-full px-4 text-[14px] font-semibold tracking-tight text-foreground transition-colors hover:bg-soft/60"
+              style={{ border: "1px solid var(--line)" }}
+            >
+              Request Trade Pack
+              <ArrowRightIcon className="h-3.5 w-3.5" />
+            </a>
+            {factSheet && (
+              <a
+                href={factSheet.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex h-12 items-center justify-center gap-2 rounded-full px-4 text-[14px] font-semibold tracking-tight text-foreground transition-colors hover:bg-soft/60"
+                style={{ border: "1px solid var(--line)" }}
+              >
+                <DownloadIcon className="h-3.5 w-3.5" />
+                Fact Sheet
+              </a>
             )}
           </div>
-          <ContactCard property={property} fair={fair} />
         </div>
+      </Section>
+    </Reveal>
+  );
+}
+
+/* --------------------------------------------------------------- */
+/*  5. Contact Card section — moved up on mobile                     */
+/* --------------------------------------------------------------- */
+
+function ContactCardSection({
+  property,
+  fair,
+}: {
+  property: Property;
+  fair: FairMode;
+}) {
+  if (!fair.contact) return null;
+  return (
+    <Reveal>
+      <Section className="pt-10 sm:pt-14">
+        <ContactCard property={property} fair={fair} />
       </Section>
     </Reveal>
   );
@@ -495,11 +516,11 @@ function ContactCard({
     .slice(0, 2)
     .join("");
   return (
-    <aside className="fair-box self-start p-6 sm:p-7">
+    <aside className="fair-box p-5 sm:p-7">
       <p className="font-mono text-[10px] font-medium uppercase tracking-[0.28em] text-muted">
         Trade Contact
       </p>
-      <div className="mt-5 flex items-start gap-4">
+      <div className="mt-4 flex items-start gap-4">
         <div
           aria-hidden
           className="grid h-12 w-12 shrink-0 place-items-center rounded-full bg-[#2f4a32] text-[#faf7f0]"
@@ -508,8 +529,8 @@ function ContactCard({
             {initials}
           </span>
         </div>
-        <div className="min-w-0">
-          <p className="font-serif text-xl font-medium leading-tight tracking-tight text-foreground">
+        <div className="min-w-0 flex-1">
+          <p className="font-serif text-lg font-medium leading-tight tracking-tight text-foreground sm:text-xl">
             {c.name}
           </p>
           <p className="mt-0.5 text-[13px] text-muted">{c.title}</p>
@@ -519,12 +540,12 @@ function ContactCard({
         </div>
       </div>
 
-      <dl className="fair-rows mt-6 text-[14px] text-foreground/85">
+      <dl className="fair-rows mt-5 text-[14px] text-foreground/85">
         <div className="flex items-start justify-between gap-4 py-3">
           <dt className="font-mono text-[10px] uppercase tracking-[0.24em] text-muted">
             Email
           </dt>
-          <dd className="text-right">
+          <dd className="text-right break-all">
             <a className="hover:underline" href={`mailto:${c.email}`}>
               {c.email}
             </a>
@@ -540,38 +561,21 @@ function ContactCard({
             </a>
           </dd>
         </div>
-        {c.website && (
-          <div className="flex items-start justify-between gap-4 py-3">
-            <dt className="font-mono text-[10px] uppercase tracking-[0.24em] text-muted">
-              Website
-            </dt>
-            <dd>
-              <a
-                className="hover:underline"
-                href={c.website}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                {c.website.replace(/^https?:\/\//, "")}
-              </a>
-            </dd>
-          </div>
-        )}
       </dl>
 
-      <div className="mt-6 grid grid-cols-2 gap-2">
+      <div className="mt-5 grid grid-cols-3 gap-2">
         <a
           href={wa}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex h-11 items-center justify-center gap-2 rounded-full bg-primary px-3 text-[13px] font-semibold tracking-tight text-primary-foreground transition-colors hover:bg-primary-hover"
+          className="inline-flex h-12 items-center justify-center gap-1.5 rounded-full bg-primary px-2 text-[12px] font-semibold tracking-tight text-primary-foreground transition-colors hover:bg-primary-hover sm:text-[13px]"
         >
           <MessageIcon className="h-3.5 w-3.5" />
           WhatsApp
         </a>
         <a
           href={`mailto:${c.email}`}
-          className="inline-flex h-11 items-center justify-center gap-2 rounded-full px-3 text-[13px] font-semibold tracking-tight text-foreground transition-colors hover:bg-soft/60"
+          className="inline-flex h-12 items-center justify-center gap-1.5 rounded-full px-2 text-[12px] font-semibold tracking-tight text-foreground transition-colors hover:bg-soft/60 sm:text-[13px]"
           style={{ border: "1px solid var(--line)" }}
         >
           <MailIcon className="h-3.5 w-3.5" />
@@ -579,31 +583,64 @@ function ContactCard({
         </a>
         <a
           href={`tel:${c.phone.replace(/\s+/g, "")}`}
-          className="inline-flex h-11 items-center justify-center gap-2 rounded-full px-3 text-[13px] font-semibold tracking-tight text-foreground transition-colors hover:bg-soft/60"
+          className="inline-flex h-12 items-center justify-center gap-1.5 rounded-full px-2 text-[12px] font-semibold tracking-tight text-foreground transition-colors hover:bg-soft/60 sm:text-[13px]"
           style={{ border: "1px solid var(--line)" }}
         >
           <PhoneIcon className="h-3.5 w-3.5" />
           Call
         </a>
-        {c.website && (
-          <a
-            href={c.website}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex h-11 items-center justify-center gap-2 rounded-full px-3 text-[13px] font-semibold tracking-tight text-foreground transition-colors hover:bg-soft/60"
-            style={{ border: "1px solid var(--line)" }}
-          >
-            <GlobeIcon className="h-3.5 w-3.5" />
-            Website
-          </a>
-        )}
       </div>
     </aside>
   );
 }
 
 /* --------------------------------------------------------------- */
-/*  5. Rooms & Setups                                                */
+/*  6. Property Overview — short                                     */
+/* --------------------------------------------------------------- */
+
+function PropertyOverview({
+  property,
+  fair,
+}: {
+  property: Property;
+  fair: FairMode;
+}) {
+  return (
+    <Reveal>
+      <Section className="pt-10 sm:pt-14 lg:pt-20">
+        <SectionTitle eyebrow="Overview" title="About the camp" />
+        <p className="mt-5 text-[15.5px] leading-[1.7] text-foreground/85 sm:text-lg">
+          {fair.about ?? property.welcomeMessage}
+        </p>
+        {fair.vibeText && (
+          <p
+            className="font-serif mt-5 border-l-2 pl-4 text-[16px] leading-relaxed tracking-tight text-foreground/80 sm:pl-5 sm:text-[19px]"
+            style={{ borderColor: "var(--primary)" }}
+          >
+            {fair.vibeText}
+          </p>
+        )}
+        {fair.overviewImageUrl && (
+          <div
+            className="mt-7 overflow-hidden"
+            style={{ border: "1px solid var(--line)" }}
+          >
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={fair.overviewImageUrl}
+              alt=""
+              loading="lazy"
+              className="h-52 w-full object-cover sm:h-72 lg:h-80"
+            />
+          </div>
+        )}
+      </Section>
+    </Reveal>
+  );
+}
+
+/* --------------------------------------------------------------- */
+/*  7. Rooms & Setups                                                */
 /* --------------------------------------------------------------- */
 
 function Rooms({ fair }: { fair: FairMode }) {
@@ -611,17 +648,16 @@ function Rooms({ fair }: { fair: FairMode }) {
   if (rooms.length === 0) return null;
   return (
     <Reveal>
-      <Section className="fair-section-frame mt-14 sm:mt-20" framePadded>
+      <Section className="fair-section-frame mt-10 sm:mt-16" framePadded>
         <SectionTitle eyebrow="Stay" title="Rooms & Setups" />
-        <p className="mt-5 max-w-xl text-base leading-relaxed text-foreground/75">
-          Sixteen tents, three layouts. Mix and match for couples,
-          families, or single travellers within the same camp.
+        <p className="mt-4 max-w-xl text-[14px] leading-relaxed text-foreground/75 sm:text-base">
+          Sixteen tents, three layouts. Mix and match within the same camp.
         </p>
-        <ul className="mt-10 grid gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3">
+        <ul className="mt-7 grid gap-3 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3">
           {rooms.map((r) => (
             <li
               key={r.title}
-              className="fair-box flex flex-col overflow-hidden"
+              className="fair-box flex overflow-hidden sm:flex-col"
             >
               {r.thumbnailUrl && (
                 /* eslint-disable-next-line @next/next/no-img-element */
@@ -629,23 +665,23 @@ function Rooms({ fair }: { fair: FairMode }) {
                   src={r.thumbnailUrl}
                   alt=""
                   loading="lazy"
-                  className="h-40 w-full object-cover sm:h-44"
+                  className="h-auto w-28 shrink-0 object-cover sm:h-44 sm:w-full"
                 />
               )}
-              <div className="flex flex-1 flex-col gap-3 p-5">
+              <div className="flex flex-1 flex-col gap-2 p-4 sm:gap-3 sm:p-5">
                 <div className="flex items-start justify-between gap-3">
-                  <span className="grid h-9 w-9 place-items-center rounded-full bg-[#2f4a32]/10 text-[#2f4a32]">
-                    {renderIcon(r.iconKey, "h-4 w-4")}
+                  <span className="grid h-8 w-8 place-items-center rounded-full bg-[#2f4a32]/10 text-[#2f4a32] sm:h-9 sm:w-9">
+                    {renderIcon(r.iconKey, "h-3.5 w-3.5 sm:h-4 sm:w-4")}
                   </span>
                   <span className="font-mono text-[10px] font-medium uppercase tracking-[0.24em] text-muted">
                     × {r.count}
                   </span>
                 </div>
-                <h3 className="font-serif text-xl font-medium leading-tight tracking-tight text-foreground">
+                <h3 className="font-serif text-[17px] font-medium leading-tight tracking-tight text-foreground sm:text-xl">
                   {r.title}
                 </h3>
                 {r.description && (
-                  <p className="text-[14px] leading-relaxed text-foreground/75">
+                  <p className="text-[13px] leading-relaxed text-foreground/75 line-clamp-3 sm:text-[14px]">
                     {r.description}
                   </p>
                 )}
@@ -659,7 +695,7 @@ function Rooms({ fair }: { fair: FairMode }) {
 }
 
 /* --------------------------------------------------------------- */
-/*  6. Experiences                                                   */
+/*  8. Experiences                                                   */
 /* --------------------------------------------------------------- */
 
 function Experiences({ fair }: { fair: FairMode }) {
@@ -675,11 +711,11 @@ function Experiences({ fair }: { fair: FairMode }) {
   );
   return (
     <Reveal>
-      <Section className="pt-14 sm:pt-20 lg:pt-24">
+      <Section className="pt-10 sm:pt-16 lg:pt-20">
         <SectionTitle eyebrow="Days at camp" title="Experiences" />
-        <div className="mt-10 grid gap-10 lg:grid-cols-2 lg:gap-12">
+        <div className="mt-7 grid gap-7 lg:grid-cols-2 lg:gap-12">
           <ExperienceList
-            label="Included Experiences"
+            label="Included"
             items={included}
             tone="included"
           />
@@ -712,11 +748,11 @@ function ExperienceList({
       <p className="font-mono text-[11px] font-medium uppercase tracking-[0.28em] text-muted">
         {label}
       </p>
-      <ul className="fair-rows mt-4 fair-box">
+      <ul className="fair-rows fair-box mt-3">
         {items.map((a) => (
           <li
             key={a.title}
-            className="flex items-start gap-3 px-5 py-5 transition-transform duration-200 hover:-translate-y-[1px]"
+            className="flex items-start gap-3 px-4 py-4 sm:px-5 sm:py-5"
           >
             <span
               aria-hidden
@@ -724,31 +760,27 @@ function ExperienceList({
             >
               {renderIcon(a.iconKey ?? "compass", "h-3 w-3")}
             </span>
-            <div className="flex-1">
-              <p className="font-serif text-lg font-medium leading-tight tracking-tight text-foreground">
-                {a.title}
-              </p>
+            <div className="min-w-0 flex-1">
+              <div className="flex items-baseline justify-between gap-2">
+                <p className="font-serif text-[16px] font-medium leading-tight tracking-tight text-foreground sm:text-lg">
+                  {a.title}
+                </p>
+                <span
+                  className="ml-1 shrink-0 px-2 py-0.5 text-[9px] font-medium uppercase tracking-[0.18em] sm:text-[10px]"
+                  style={{
+                    border: "1px solid var(--line)",
+                    color: tone === "included" ? "#2f4a32" : "var(--primary)",
+                  }}
+                >
+                  {tag}
+                </span>
+              </div>
               {a.description && (
-                <p className="mt-1 text-[14px] leading-relaxed text-foreground/70">
+                <p className="mt-1 text-[13px] leading-relaxed text-foreground/70 sm:text-[14px]">
                   {a.description}
                 </p>
               )}
-              {a.meta && (
-                <p className="mt-2 font-mono text-[10px] font-medium uppercase tracking-[0.24em] text-muted">
-                  {a.meta}
-                </p>
-              )}
             </div>
-            <span
-              className="ml-2 hidden shrink-0 px-2.5 py-1 text-[10px] font-medium uppercase tracking-[0.18em] sm:inline-block"
-              style={{
-                border: "1px solid var(--line)",
-                color:
-                  tone === "included" ? "#2f4a32" : "var(--primary)",
-              }}
-            >
-              {tag}
-            </span>
           </li>
         ))}
       </ul>
@@ -757,7 +789,53 @@ function ExperienceList({
 }
 
 /* --------------------------------------------------------------- */
-/*  7. Inclusions & Exclusions                                       */
+/*  9. Trade Fit — compact chip cloud                                */
+/* --------------------------------------------------------------- */
+
+function TradeFit({ fair }: { fair: FairMode }) {
+  const m = fair.matchAttributes;
+  if (!m) return null;
+  const chips: string[] = [
+    ...(m.idealFor ?? []),
+    ...(m.styleTags ?? []),
+    ...(m.experiences ?? []),
+    ...(m.suitability ?? []),
+  ];
+  if (chips.length === 0 && !m.customFitNotes) return null;
+  return (
+    <Reveal>
+      <Section className="pt-10 sm:pt-16 lg:pt-20">
+        <SectionTitle eyebrow="Match profile" title="Trade Fit" />
+        {chips.length > 0 && (
+          <ul className="mt-6 flex flex-wrap gap-2">
+            {chips.map((t) => (
+              <li
+                key={t}
+                className="px-3 py-1.5 text-[12px] tracking-tight text-foreground sm:text-[13px]"
+                style={{ border: "1px solid var(--line)" }}
+              >
+                {t}
+              </li>
+            ))}
+          </ul>
+        )}
+        {m.customFitNotes && (
+          <div className="fair-box mt-5 p-5 sm:p-6">
+            <p className="font-mono text-[10px] font-medium uppercase tracking-[0.28em] text-muted">
+              Custom Fit Note
+            </p>
+            <p className="font-serif mt-3 text-[15.5px] leading-relaxed tracking-tight text-foreground/85 sm:text-[18px]">
+              {m.customFitNotes}
+            </p>
+          </div>
+        )}
+      </Section>
+    </Reveal>
+  );
+}
+
+/* --------------------------------------------------------------- */
+/*  10. Inclusions & Exclusions — accordion on mobile                */
 /* --------------------------------------------------------------- */
 
 function InclusionsExclusions({ fair }: { fair: FairMode }) {
@@ -766,19 +844,20 @@ function InclusionsExclusions({ fair }: { fair: FairMode }) {
   if (inc.length === 0 && exc.length === 0) return null;
   return (
     <Reveal>
-      <Section className="fair-section-frame mt-14 sm:mt-20" framePadded>
+      <Section className="fair-section-frame mt-10 sm:mt-16" framePadded>
         <SectionTitle eyebrow="The rate" title="Inclusions & Exclusions" />
-        <div className="mt-10 grid gap-8 lg:grid-cols-2 lg:gap-14">
+        <div className="mt-7 grid gap-3 lg:grid-cols-2 lg:gap-6">
           {inc.length > 0 && (
-            <div>
-              <p className="font-mono text-[11px] font-medium uppercase tracking-[0.28em] text-muted">
-                Included
-              </p>
-              <ul className="fair-rows mt-4 fair-box">
+            <AccordionPanel
+              label="Included"
+              count={inc.length}
+              icon="check"
+            >
+              <ul className="fair-rows">
                 {inc.map((item) => (
                   <li
                     key={item}
-                    className="flex items-start gap-3 px-5 py-3.5 text-[14px] leading-relaxed text-foreground/85"
+                    className="flex items-start gap-3 px-4 py-3 text-[14px] leading-relaxed text-foreground/85"
                   >
                     <span
                       aria-hidden
@@ -790,18 +869,19 @@ function InclusionsExclusions({ fair }: { fair: FairMode }) {
                   </li>
                 ))}
               </ul>
-            </div>
+            </AccordionPanel>
           )}
           {exc.length > 0 && (
-            <div>
-              <p className="font-mono text-[11px] font-medium uppercase tracking-[0.28em] text-muted">
-                Not Included
-              </p>
-              <ul className="fair-rows mt-4 fair-box">
+            <AccordionPanel
+              label="Not Included"
+              count={exc.length}
+              icon="x"
+            >
+              <ul className="fair-rows">
                 {exc.map((item) => (
                   <li
                     key={item}
-                    className="flex items-start gap-3 px-5 py-3.5 text-[14px] leading-relaxed text-foreground/75"
+                    className="flex items-start gap-3 px-4 py-3 text-[14px] leading-relaxed text-foreground/75"
                   >
                     <span
                       aria-hidden
@@ -814,7 +894,7 @@ function InclusionsExclusions({ fair }: { fair: FairMode }) {
                   </li>
                 ))}
               </ul>
-            </div>
+            </AccordionPanel>
           )}
         </div>
       </Section>
@@ -822,23 +902,70 @@ function InclusionsExclusions({ fair }: { fair: FairMode }) {
   );
 }
 
+function AccordionPanel({
+  label,
+  count,
+  icon,
+  children,
+}: {
+  label: string;
+  count: number;
+  icon: "check" | "x";
+  children: ReactNode;
+}) {
+  return (
+    <details className="fair-box group">
+      <summary className="flex cursor-pointer list-none items-center justify-between gap-3 px-4 py-4 outline-none [&::-webkit-details-marker]:hidden">
+        <div className="flex items-center gap-3">
+          <span
+            aria-hidden
+            className={
+              icon === "check"
+                ? "grid h-7 w-7 place-items-center rounded-full bg-[#2f4a32]/10 text-[#2f4a32]"
+                : "grid h-7 w-7 place-items-center rounded-full text-foreground/50"
+            }
+            style={icon === "x" ? { border: "1px solid var(--line)" } : undefined}
+          >
+            {icon === "check" ? (
+              <CheckIcon className="h-3.5 w-3.5" />
+            ) : (
+              <XIcon className="h-3.5 w-3.5" />
+            )}
+          </span>
+          <span className="font-mono text-[11px] font-medium uppercase tracking-[0.28em] text-muted">
+            {label}
+          </span>
+          <span className="text-[13px] text-muted">({count})</span>
+        </div>
+        <ChevronDownIcon className="h-4 w-4 shrink-0 text-foreground/50 transition-transform duration-200 group-open:rotate-180" />
+      </summary>
+      <div
+        className="border-t pb-2"
+        style={{ borderColor: "var(--line)" }}
+      >
+        {children}
+      </div>
+    </details>
+  );
+}
+
 /* --------------------------------------------------------------- */
-/*  8. Offers & Terms                                                */
+/*  11. Offers & Terms                                               */
 /* --------------------------------------------------------------- */
 
 function OffersTerms({ fair }: { fair: FairMode }) {
   if (!fair.offersText && !fair.termsText) return null;
   return (
     <Reveal>
-      <Section className="pt-14 sm:pt-20">
+      <Section className="pt-10 sm:pt-16">
         <SectionTitle eyebrow="Commercial" title="Offers & Terms" />
-        <div className="fair-box mt-8 grid gap-6 p-6 sm:grid-cols-2 sm:gap-10 sm:p-8">
+        <div className="fair-box mt-6 grid gap-5 p-5 sm:grid-cols-2 sm:gap-10 sm:p-7">
           {fair.offersText && (
             <div>
               <p className="font-mono text-[10px] font-medium uppercase tracking-[0.28em] text-muted">
                 Current Offers
               </p>
-              <p className="mt-3 text-[15px] leading-relaxed text-foreground/85">
+              <p className="mt-3 text-[14.5px] leading-relaxed text-foreground/85 sm:text-[15px]">
                 {fair.offersText}
               </p>
             </div>
@@ -848,7 +975,7 @@ function OffersTerms({ fair }: { fair: FairMode }) {
               <p className="font-mono text-[10px] font-medium uppercase tracking-[0.28em] text-muted">
                 Booking Terms
               </p>
-              <p className="mt-3 text-[15px] leading-relaxed text-foreground/85">
+              <p className="mt-3 text-[14.5px] leading-relaxed text-foreground/85 sm:text-[15px]">
                 {fair.termsText}
               </p>
             </div>
@@ -860,66 +987,7 @@ function OffersTerms({ fair }: { fair: FairMode }) {
 }
 
 /* --------------------------------------------------------------- */
-/*  9. Trade Fit                                                     */
-/* --------------------------------------------------------------- */
-
-function TradeFit({ fair }: { fair: FairMode }) {
-  const m = fair.matchAttributes;
-  if (!m) return null;
-  const blocks: { label: string; tags: string[] }[] = [];
-  if (m.idealFor?.length) blocks.push({ label: "Ideal For", tags: m.idealFor });
-  if (m.experiences?.length)
-    blocks.push({ label: "Experiences", tags: m.experiences });
-  if (m.styleTags?.length) blocks.push({ label: "Style", tags: m.styleTags });
-  if (m.suitability?.length)
-    blocks.push({ label: "Suitability", tags: m.suitability });
-  if (blocks.length === 0 && !m.customFitNotes) return null;
-  return (
-    <Reveal>
-      <Section className="fair-section-frame mt-14 sm:mt-20" framePadded>
-        <div className="flex items-baseline justify-between gap-6">
-          <SectionTitle eyebrow="Match profile" title="Trade Fit" />
-          <span className="hidden font-mono text-[10px] font-medium uppercase tracking-[0.28em] text-muted sm:inline">
-            For your client briefs
-          </span>
-        </div>
-        <div className="mt-10 grid gap-5 sm:grid-cols-2">
-          {blocks.map((b) => (
-            <div key={b.label} className="fair-box p-5 sm:p-6">
-              <p className="font-mono text-[10px] font-medium uppercase tracking-[0.28em] text-muted">
-                {b.label}
-              </p>
-              <ul className="mt-4 flex flex-wrap gap-1.5">
-                {b.tags.map((t) => (
-                  <li
-                    key={t}
-                    className="px-2.5 py-1 text-[12px] tracking-tight text-foreground"
-                    style={{ border: "1px solid var(--line)" }}
-                  >
-                    {t}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
-        </div>
-        {m.customFitNotes && (
-          <div className="fair-box mt-5 p-5 sm:p-6">
-            <p className="font-mono text-[10px] font-medium uppercase tracking-[0.28em] text-muted">
-              Custom Fit Notes
-            </p>
-            <p className="font-serif mt-3 text-[16px] leading-relaxed tracking-tight text-foreground/85 sm:text-[18px]">
-              {m.customFitNotes}
-            </p>
-          </div>
-        )}
-      </Section>
-    </Reveal>
-  );
-}
-
-/* --------------------------------------------------------------- */
-/*  10. Trade Materials                                              */
+/*  12. Trade Materials                                              */
 /* --------------------------------------------------------------- */
 
 function TradeMaterials({ fair }: { fair: FairMode }) {
@@ -927,29 +995,28 @@ function TradeMaterials({ fair }: { fair: FairMode }) {
   if (items.length === 0) return null;
   return (
     <Reveal>
-      <Section className="pt-14 sm:pt-20" id="materials">
+      <Section className="pt-10 sm:pt-16" id="materials">
         <SectionTitle eyebrow="Resources" title="Trade Materials" />
-        <p className="mt-5 max-w-xl text-base leading-relaxed text-foreground/75">
-          Everything an operator needs to sell the camp confidently —
-          rate sheets, image library, sample itineraries.
+        <p className="mt-4 max-w-xl text-[14px] leading-relaxed text-foreground/75 sm:text-base">
+          Rate sheets, image library, and sample itineraries for your team.
         </p>
-        <ul className="fair-rows mt-8 fair-box">
+        <ul className="fair-rows fair-box mt-6">
           {items.map((d) => (
             <li
               key={d.title}
-              className="flex items-center gap-4 px-5 py-4 sm:px-6 sm:py-5"
+              className="flex items-center gap-3 px-4 py-3.5 sm:gap-4 sm:px-6 sm:py-5"
             >
               <span
                 aria-hidden
-                className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-[#2f4a32]/10 text-[#2f4a32]"
+                className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-[#2f4a32]/10 text-[#2f4a32] sm:h-10 sm:w-10"
               >
-                {renderIcon(d.iconKey, "h-4 w-4")}
+                {renderIcon(d.iconKey, "h-3.5 w-3.5 sm:h-4 sm:w-4")}
               </span>
               <div className="min-w-0 flex-1">
-                <p className="font-serif text-[16px] font-medium leading-tight tracking-tight text-foreground sm:text-[17px]">
+                <p className="font-serif text-[15px] font-medium leading-tight tracking-tight text-foreground sm:text-[17px]">
                   {d.title}
                 </p>
-                <p className="mt-1 font-mono text-[10px] uppercase tracking-[0.24em] text-muted">
+                <p className="mt-1 font-mono text-[10px] uppercase tracking-[0.22em] text-muted">
                   {d.fileType}
                 </p>
               </div>
@@ -957,12 +1024,13 @@ function TradeMaterials({ fair }: { fair: FairMode }) {
                 href={d.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex h-10 shrink-0 items-center justify-center gap-2 rounded-full px-4 text-[12px] font-semibold tracking-tight text-foreground transition-colors hover:bg-soft/60 sm:px-5 sm:text-[13px]"
+                aria-label={`Download ${d.title}`}
+                className="inline-flex h-11 shrink-0 items-center justify-center gap-2 rounded-full px-4 text-[12px] font-semibold tracking-tight text-foreground transition-colors hover:bg-soft/60 sm:h-10 sm:px-5 sm:text-[13px]"
                 style={{ border: "1px solid var(--line)" }}
               >
                 <DownloadIcon className="h-3.5 w-3.5" />
                 <span className="hidden sm:inline">Download</span>
-                <span className="sm:hidden">Get</span>
+                <span className="sm:hidden sr-only">Download</span>
               </a>
             </li>
           ))}
@@ -973,7 +1041,7 @@ function TradeMaterials({ fair }: { fair: FairMode }) {
 }
 
 /* --------------------------------------------------------------- */
-/*  11. Social proof — Social / TripAdvisor / Quote                  */
+/*  13. Social proof                                                 */
 /* --------------------------------------------------------------- */
 
 function SocialProof({ fair }: { fair: FairMode }) {
@@ -981,9 +1049,9 @@ function SocialProof({ fair }: { fair: FairMode }) {
   if (!socialLinks?.length && !tripadvisor && !testimonial) return null;
   return (
     <Reveal>
-      <Section className="pt-14 sm:pt-20">
+      <Section className="pt-10 sm:pt-16">
         <SectionTitle eyebrow="Trust" title="Voices & Reviews" />
-        <div className="mt-8 grid gap-5 lg:grid-cols-[1fr_1fr_1.5fr]">
+        <div className="mt-6 grid gap-3 lg:grid-cols-[1fr_1fr_1.5fr] lg:gap-5">
           {socialLinks && socialLinks.length > 0 && (
             <div className="fair-box p-5 sm:p-6">
               <p className="font-mono text-[10px] font-medium uppercase tracking-[0.28em] text-muted">
@@ -1004,7 +1072,7 @@ function SocialProof({ fair }: { fair: FairMode }) {
                       {s.label}
                     </a>
                     {s.handle && (
-                      <span className="text-muted">{s.handle}</span>
+                      <span className="text-muted text-right text-[13px]">{s.handle}</span>
                     )}
                   </li>
                 ))}
@@ -1016,7 +1084,7 @@ function SocialProof({ fair }: { fair: FairMode }) {
               <p className="font-mono text-[10px] font-medium uppercase tracking-[0.28em] text-muted">
                 TripAdvisor
               </p>
-              <p className="font-serif mt-4 text-[44px] font-medium leading-none tracking-tight text-foreground sm:text-[52px]">
+              <p className="font-serif mt-4 text-[40px] font-medium leading-none tracking-tight text-foreground sm:text-[52px]">
                 {tripadvisor.rating.toFixed(1)}
               </p>
               <div className="mt-3 flex items-center gap-1 text-[#c46a2b]">
@@ -1053,12 +1121,12 @@ function SocialProof({ fair }: { fair: FairMode }) {
               <p className="font-mono text-[10px] font-medium uppercase tracking-[0.28em] text-muted">
                 Operator Quote
               </p>
-              <blockquote className="font-serif mt-4 flex-1 text-[18px] leading-relaxed tracking-tight text-foreground/90 sm:text-[22px]">
+              <blockquote className="font-serif mt-4 flex-1 text-[16px] leading-relaxed tracking-tight text-foreground/90 sm:text-[20px]">
                 <span aria-hidden className="mr-1 text-primary">“</span>
                 {testimonial.quote}
                 <span aria-hidden className="ml-1 text-primary">”</span>
               </blockquote>
-              <figcaption className="mt-5 text-[13px] text-muted">
+              <figcaption className="mt-4 text-[13px] text-muted">
                 <span className="font-medium text-foreground">
                   {testimonial.author}
                 </span>
@@ -1073,7 +1141,7 @@ function SocialProof({ fair }: { fair: FairMode }) {
 }
 
 /* --------------------------------------------------------------- */
-/*  12. Lead Capture                                                 */
+/*  14. Lead Capture                                                 */
 /* --------------------------------------------------------------- */
 
 function LeadCapture({
@@ -1129,9 +1197,9 @@ function LeadCapture({
   return (
     <section
       id="inquiry"
-      className="fair-section-frame mt-14 scroll-mt-12 bg-[#f4e8d2] sm:mt-20"
+      className="fair-section-frame mt-10 scroll-mt-12 bg-[#f4e8d2] sm:mt-16"
     >
-      <div className="mx-auto max-w-5xl px-5 py-14 sm:px-8 sm:py-20 lg:px-16 lg:py-24">
+      <div className="mx-auto max-w-5xl px-4 py-12 sm:px-8 sm:py-20 lg:px-16 lg:py-24">
         <Reveal>
           <AnimatePresence mode="wait" initial={false}>
             {submitted ? (
@@ -1145,7 +1213,7 @@ function LeadCapture({
                 <span className="grid h-12 w-12 place-items-center rounded-full bg-[#2f4a32]/10 text-[#2f4a32]">
                   <CheckIcon className="h-5 w-5" />
                 </span>
-                <h2 className="font-serif mt-5 text-[36px] font-medium leading-[1] tracking-tight text-foreground sm:text-[44px]">
+                <h2 className="font-serif mt-5 text-[32px] font-medium leading-[1] tracking-tight text-foreground sm:text-[44px]">
                   Request sent.
                 </h2>
                 <p className="mt-4 max-w-md text-base leading-[1.7] text-foreground/75 sm:text-lg">
@@ -1157,7 +1225,7 @@ function LeadCapture({
                     href={wa}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex h-[52px] items-center justify-center gap-2 rounded-full bg-primary px-7 text-[15px] font-semibold tracking-tight text-primary-foreground transition-colors hover:bg-primary-hover"
+                    className="inline-flex h-12 items-center justify-center gap-2 rounded-full bg-primary px-7 text-[15px] font-semibold tracking-tight text-primary-foreground transition-colors hover:bg-primary-hover"
                   >
                     <MessageIcon className="h-4 w-4" />
                     Chat with Camp
@@ -1175,7 +1243,7 @@ function LeadCapture({
                         message: "",
                       });
                     }}
-                    className="inline-flex h-[52px] items-center justify-center gap-1.5 px-2 text-sm font-semibold tracking-tight text-foreground/70 hover:text-foreground"
+                    className="inline-flex h-12 items-center justify-center gap-1.5 px-2 text-sm font-semibold tracking-tight text-foreground/70 hover:text-foreground"
                   >
                     Send another request
                   </button>
@@ -1188,19 +1256,19 @@ function LeadCapture({
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.3, ease: easeOut }}
-                className="grid gap-10 lg:grid-cols-[1fr_1.1fr] lg:gap-16"
+                className="grid gap-8 lg:grid-cols-[1fr_1.1fr] lg:gap-16"
               >
                 <div>
                   <SectionTitle eyebrow="Trade enquiry" title={headline} />
-                  <p className="mt-5 max-w-md text-base leading-[1.7] text-foreground/75 sm:text-lg">
+                  <p className="mt-4 max-w-md text-[15.5px] leading-[1.7] text-foreground/75 sm:text-base">
                     {subcopy}
                   </p>
                   {lc?.bullets && lc.bullets.length > 0 && (
-                    <ul className="fair-rows mt-8 fair-box bg-background">
+                    <ul className="fair-rows fair-box mt-6 bg-background">
                       {lc.bullets.map((b) => (
                         <li
                           key={b}
-                          className="flex items-start gap-3 px-4 py-3.5 text-[14px] leading-relaxed text-foreground/85"
+                          className="flex items-start gap-3 px-4 py-3 text-[13.5px] leading-relaxed text-foreground/85 sm:text-[14px]"
                         >
                           <span
                             aria-hidden
@@ -1214,7 +1282,7 @@ function LeadCapture({
                     </ul>
                   )}
                 </div>
-                <form onSubmit={onSubmit} className="grid gap-7">
+                <form onSubmit={onSubmit} className="grid gap-6">
                   <Field
                     label="Full name"
                     value={form.name}
@@ -1253,7 +1321,7 @@ function LeadCapture({
                       <select
                         value={form.interest}
                         onChange={onChange("interest")}
-                        className="mt-2 h-11 w-full bg-transparent px-0 text-base text-foreground focus:outline-none"
+                        className="mt-2 h-12 w-full bg-transparent px-0 text-base text-foreground focus:outline-none"
                       >
                         {lc.interestOptions.map((opt) => (
                           <option key={opt} value={opt}>
@@ -1281,7 +1349,8 @@ function LeadCapture({
                   <motion.button
                     type="submit"
                     whileTap={{ scale: 0.98 }}
-                    className="mt-2 inline-flex h-[52px] items-center justify-center gap-2 rounded-full bg-primary px-9 text-[15px] font-semibold tracking-tight text-primary-foreground shadow-[0_22px_44px_-20px_rgba(196,106,43,0.55)] transition-colors hover:bg-primary-hover sm:self-start"
+                    className="mt-1 inline-flex h-13 min-h-12 items-center justify-center gap-2 rounded-full bg-primary px-9 text-[15px] font-semibold tracking-tight text-primary-foreground shadow-[0_22px_44px_-20px_rgba(196,106,43,0.55)] transition-colors hover:bg-primary-hover sm:self-start"
+                    style={{ height: "52px" }}
                   >
                     {lc?.ctaLabel ?? "Send Inquiry"}
                     <ArrowRightIcon className="h-4 w-4" />
@@ -1321,7 +1390,7 @@ function Field({
   return (
     <label className="fair-field block">
       <span className="flex items-baseline justify-between">
-        <span className="text-sm font-medium text-foreground">
+        <span className="text-[15px] font-medium text-foreground">
           {label}
           {required && <span className="ml-1 text-primary">*</span>}
         </span>
@@ -1335,14 +1404,14 @@ function Field({
         onChange={onChange}
         placeholder={placeholder}
         required={required}
-        className="mt-2 h-11 w-full bg-transparent px-0 text-base text-foreground placeholder:text-muted/70 focus:outline-none"
+        className="mt-2 h-12 w-full bg-transparent px-0 text-base text-foreground placeholder:text-muted/70 focus:outline-none"
       />
     </label>
   );
 }
 
 /* --------------------------------------------------------------- */
-/*  13. Bottom CTA strip — desktop                                   */
+/*  15. Bottom CTA strip — desktop                                   */
 /* --------------------------------------------------------------- */
 
 function BottomCTA({
@@ -1356,31 +1425,31 @@ function BottomCTA({
   const wa = whatsappLink(phone, property.name);
   return (
     <Reveal>
-      <section className="bg-[#2f4a32] px-5 py-16 text-[#faf7f0] sm:px-10 sm:py-20 lg:px-16 lg:py-24">
+      <section className="bg-[#2f4a32] px-4 py-14 text-[#faf7f0] sm:px-10 sm:py-20 lg:px-16 lg:py-24">
         <div className="mx-auto max-w-3xl text-center">
           <p className="font-mono text-[11px] font-medium uppercase tracking-[0.32em] text-[#faf7f0]/65">
             {property.name}
           </p>
-          <h2 className="font-serif mt-5 text-3xl font-medium leading-[1.05] tracking-tight sm:text-4xl lg:text-[48px]">
+          <h2 className="font-serif mt-5 text-[28px] font-medium leading-[1.05] tracking-tight sm:text-4xl lg:text-[48px]">
             Talk to the camp directly.
           </h2>
-          <p className="mt-5 max-w-md mx-auto text-base leading-[1.7] text-[#faf7f0]/75 sm:text-lg">
+          <p className="mt-5 max-w-md mx-auto text-[15px] leading-[1.7] text-[#faf7f0]/75 sm:text-lg">
             No middle desks. Your message goes directly to the camp manager.
-            Most responses happen within 24 hours on WhatsApp.
+            Most responses within 24 hours on WhatsApp.
           </p>
-          <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row sm:flex-wrap sm:gap-4">
+          <div className="mt-7 flex flex-col items-center justify-center gap-3 sm:flex-row sm:flex-wrap sm:gap-4">
             <a
               href={wa}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex h-[52px] items-center justify-center gap-2 rounded-full bg-[#c46a2b] px-9 text-[15px] font-semibold tracking-tight text-[#faf7f0] shadow-[0_22px_44px_-20px_rgba(196,106,43,0.6)] transition-transform duration-200 hover:scale-[1.02] hover:bg-[#a94f1f] active:scale-[0.98]"
+              className="inline-flex h-12 items-center justify-center gap-2 rounded-full bg-[#c46a2b] px-9 text-[15px] font-semibold tracking-tight text-[#faf7f0] shadow-[0_22px_44px_-20px_rgba(196,106,43,0.6)] transition-transform duration-200 hover:scale-[1.02] hover:bg-[#a94f1f] active:scale-[0.98] sm:h-[52px]"
             >
               <MessageIcon className="h-4 w-4" />
               Chat with Camp
             </a>
             <a
               href="#inquiry"
-              className="inline-flex h-[52px] items-center justify-center gap-2 px-2 text-sm font-semibold tracking-tight text-[#f4e8d2] hover:text-[#faf7f0]"
+              className="inline-flex h-12 items-center justify-center gap-2 px-2 text-sm font-semibold tracking-tight text-[#f4e8d2] hover:text-[#faf7f0] sm:h-[52px]"
             >
               Request Trade Pack
               <ArrowRightIcon className="h-4 w-4" />
@@ -1393,7 +1462,7 @@ function BottomCTA({
 }
 
 /* --------------------------------------------------------------- */
-/*  14. Sticky bottom action bar — mobile                            */
+/*  16. Sticky bottom action bar — mobile                            */
 /* --------------------------------------------------------------- */
 
 function StickyBar({
@@ -1403,16 +1472,37 @@ function StickyBar({
   property: Property;
   fair: FairMode;
 }) {
-  const [visible, setVisible] = useState(false);
+  const [heroPassed, setHeroPassed] = useState(false);
+  const [formInView, setFormInView] = useState(false);
+
   useEffect(() => {
-    const onScroll = () => {
-      setVisible(window.scrollY > window.innerHeight * 0.5);
-    };
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    const hero = document.getElementById("trade-hero");
+    const inquiry = document.getElementById("inquiry");
+
+    const observers: IntersectionObserver[] = [];
+
+    if (hero) {
+      const o = new IntersectionObserver(
+        ([entry]) => setHeroPassed(!entry.isIntersecting),
+        { threshold: 0, rootMargin: "0px 0px -40px 0px" },
+      );
+      o.observe(hero);
+      observers.push(o);
+    }
+
+    if (inquiry) {
+      const o = new IntersectionObserver(
+        ([entry]) => setFormInView(entry.isIntersecting),
+        { threshold: 0.15 },
+      );
+      o.observe(inquiry);
+      observers.push(o);
+    }
+
+    return () => observers.forEach((o) => o.disconnect());
   }, []);
 
+  const visible = heroPassed && !formInView;
   const phone = fair.whatsappPhone ?? property.emergencyContact.phone;
   const wa = whatsappLink(phone, property.name);
 
@@ -1471,8 +1561,8 @@ function Section({
   framePadded?: boolean;
 }) {
   const padding = framePadded
-    ? "px-5 py-16 sm:px-8 sm:py-20 lg:px-16 lg:py-24"
-    : "px-5 sm:px-8 lg:px-16";
+    ? "px-4 py-12 sm:px-8 sm:py-16 lg:px-16 lg:py-24"
+    : "px-4 sm:px-8 lg:px-16";
   return (
     <section id={id} className={`${padding} ${className}`}>
       <div className="mx-auto max-w-5xl">{children}</div>
@@ -1489,10 +1579,10 @@ function SectionTitle({
 }) {
   return (
     <header>
-      <p className="font-mono text-[11px] font-medium uppercase tracking-[0.32em] text-muted">
+      <p className="font-mono text-[11px] font-medium uppercase tracking-[0.3em] text-muted">
         {eyebrow}
       </p>
-      <h2 className="font-serif mt-3 text-[30px] font-medium leading-[1.05] tracking-tight text-foreground sm:text-[40px] lg:text-[48px]">
+      <h2 className="font-serif mt-3 text-[26px] font-medium leading-[1.05] tracking-tight text-foreground sm:text-[36px] lg:text-[44px]">
         {title}
       </h2>
     </header>
@@ -1503,7 +1593,7 @@ function SnapshotEyebrow({ text }: { text: string }) {
   return (
     <div className="flex items-center gap-3">
       <span aria-hidden className="h-px w-8 bg-foreground/30" />
-      <p className="font-mono text-[10px] font-medium uppercase tracking-[0.32em] text-muted">
+      <p className="font-mono text-[10px] font-medium uppercase tracking-[0.3em] text-muted">
         {text}
       </p>
     </div>
