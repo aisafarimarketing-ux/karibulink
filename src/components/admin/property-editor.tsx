@@ -20,10 +20,16 @@ import {
   UserIcon,
 } from "@/components/icons";
 import { ICON_KEYS } from "@/lib/icon-map";
+import {
+  PROPERTY_TYPE_LABELS,
+  presetFor,
+} from "@/data/presets";
 import type {
   IconItem,
   IconKey,
   Property,
+  PropertySection,
+  PropertyType,
   Sighting,
   Staff,
 } from "@/data/types";
@@ -104,6 +110,43 @@ export function PropertyEditor({
         [key]: p[key].filter((_, i) => i !== idx),
       }));
     };
+
+  const setType = (type: PropertyType) => {
+    setProperty((p) => ({ ...p, type }));
+  };
+  const loadPreset = () => {
+    const t = (property.type ?? "camp") as PropertyType;
+    setProperty((p) => ({ ...p, type: t, sections: presetFor(t) }));
+  };
+  const updateSection = (idx: number, patch: Partial<PropertySection>) => {
+    setProperty((p) => ({
+      ...p,
+      sections: (p.sections ?? []).map((s, i) =>
+        i === idx ? { ...s, ...patch } : s,
+      ),
+    }));
+  };
+  const addSection = () => {
+    setProperty((p) => ({
+      ...p,
+      sections: [
+        ...(p.sections ?? []),
+        {
+          id: `custom-${Date.now()}`,
+          type: "custom",
+          title: "New section",
+          content: "Describe this section.",
+          enabled: true,
+        },
+      ],
+    }));
+  };
+  const removeSection = (idx: number) => {
+    setProperty((p) => ({
+      ...p,
+      sections: (p.sections ?? []).filter((_, i) => i !== idx),
+    }));
+  };
 
   return (
     <div className="min-h-screen bg-background lg:grid lg:grid-cols-[240px_minmax(0,1fr)]">
@@ -339,6 +382,52 @@ export function PropertyEditor({
                           />
                         </div>
                       </SubGroup>
+                    </div>
+                  </CollapsibleSection>
+
+                  <CollapsibleSection
+                    icon={InfoIcon}
+                    title="Property type & sections"
+                    description="Pick a preset for camps, hotels, boutique stays, or BnBs. Sections are the foundation for any property type."
+                  >
+                    <div className="grid gap-4">
+                      <div className="grid gap-3 sm:grid-cols-[1fr_auto] sm:items-end">
+                        <SelectField
+                          label="Property type"
+                          value={property.type ?? "camp"}
+                          options={(
+                            Object.keys(PROPERTY_TYPE_LABELS) as PropertyType[]
+                          ).map((v) => ({
+                            value: v,
+                            label: PROPERTY_TYPE_LABELS[v],
+                          }))}
+                          onChange={(v) => setType(v as PropertyType)}
+                        />
+                        <button
+                          type="button"
+                          onClick={loadPreset}
+                          className="inline-flex h-11 items-center justify-center gap-2 rounded-2xl bg-primary px-5 text-xs font-semibold text-primary-foreground hover:bg-primary-hover active:scale-[0.98]"
+                        >
+                          Load preset
+                        </button>
+                      </div>
+                      <div className="grid gap-3">
+                        {(property.sections ?? []).length === 0 && (
+                          <p className="rounded-2xl bg-background p-4 text-sm text-muted">
+                            No sections yet — choose a property type and load
+                            its preset to start.
+                          </p>
+                        )}
+                        {(property.sections ?? []).map((section, i) => (
+                          <SectionRow
+                            key={`${section.id}-${i}`}
+                            section={section}
+                            onUpdate={(patch) => updateSection(i, patch)}
+                            onRemove={() => removeSection(i)}
+                          />
+                        ))}
+                        <AddButton label="Add section" onClick={addSection} />
+                      </div>
                     </div>
                   </CollapsibleSection>
 
@@ -936,6 +1025,44 @@ function AddButton({ label, onClick }: { label: string; onClick: () => void }) {
       </span>
       {label}
     </button>
+  );
+}
+
+function SectionRow({
+  section,
+  onUpdate,
+  onRemove,
+}: {
+  section: PropertySection;
+  onUpdate: (patch: Partial<PropertySection>) => void;
+  onRemove: () => void;
+}) {
+  return (
+    <div className="grid gap-3 rounded-2xl bg-background p-4 sm:grid-cols-[1fr_2fr_auto_auto]">
+      <Field
+        label="Title"
+        value={section.title}
+        onChange={(v) => onUpdate({ title: v })}
+        compact
+      />
+      <TextAreaField
+        label="Content"
+        value={section.content}
+        onChange={(v) => onUpdate({ content: v })}
+        rows={2}
+        compact
+      />
+      <label className="flex items-center justify-center gap-2 self-end rounded-xl bg-surface px-3 py-2 text-[11px] font-medium text-muted">
+        <input
+          type="checkbox"
+          checked={section.enabled}
+          onChange={(e) => onUpdate({ enabled: e.target.checked })}
+          className="h-3.5 w-3.5 accent-primary"
+        />
+        Enabled
+      </label>
+      <RemoveButton onClick={onRemove} />
+    </div>
   );
 }
 

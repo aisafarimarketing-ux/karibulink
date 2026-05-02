@@ -1,3 +1,4 @@
+import { presetFor } from "./presets";
 import type {
   Operator,
   Organization,
@@ -241,6 +242,8 @@ export const PROPERTIES: Property[] = [
       whatsappPhone: "+255700000000",
       email: "operators@serengetiview.example",
     },
+    type: "camp",
+    sections: presetFor("camp"),
   },
   {
     id: "prop-mara-north",

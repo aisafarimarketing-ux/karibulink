@@ -37,7 +37,7 @@ export default function LandingPage() {
         <Hero />
         <ProblemSection />
         <ImageBreak />
-        <TwoModesSection />
+        <WhoItsForSection />
         <HowItWorksSection />
         <FinalCTA />
       </main>
@@ -110,7 +110,7 @@ function ProblemSection() {
         </Reveal>
         <Reveal
           delay={0.1}
-          className="mt-20 grid gap-14 sm:mt-24 sm:grid-cols-3 sm:gap-10 lg:mt-32 lg:gap-16"
+          className="mt-20 grid gap-12 sm:mt-24 sm:grid-cols-2 sm:gap-10 lg:mt-32 lg:grid-cols-4 lg:gap-12"
         >
           <CompareRow
             mark="missed"
@@ -121,6 +121,11 @@ function ProblemSection() {
             mark="missed"
             title="Business cards"
             body="Easily misplaced."
+          />
+          <CompareRow
+            mark="missed"
+            title="WhatsApp"
+            body="Unstructured."
           />
           <CompareRow
             mark="kept"
@@ -178,41 +183,50 @@ function CompareRow({
 
 /* --------------------------------------------------------------- */
 
-function TwoModesSection() {
+function WhoItsForSection() {
   return (
     <section
-      id="modes"
+      id="who-its-for"
       className="bg-[var(--soft)] px-6 py-24 sm:px-10 sm:py-32 lg:px-16 lg:py-40 xl:px-24"
     >
       <div className="mx-auto max-w-6xl">
         <Reveal>
           <p className="text-[11px] font-semibold uppercase tracking-[0.32em] text-muted">
-            One Platform. Two Modes.
+            Who It's For
           </p>
           <h2 className="font-serif mt-5 max-w-3xl text-4xl font-medium leading-[1.05] tracking-tight text-foreground sm:text-5xl lg:text-[56px]">
-            Built for hospitality.
+            One system.
             <br />
             <em className="font-normal italic text-foreground/70">
-              Designed for action.
+              Three touchpoints.
             </em>
           </h2>
         </Reveal>
 
         <Reveal
           delay={0.1}
-          className="mt-20 grid gap-16 sm:mt-24 lg:mt-32 lg:grid-cols-2 lg:gap-24"
+          className="mt-20 grid gap-14 sm:mt-24 lg:mt-32 lg:grid-cols-3 lg:gap-14"
         >
           <ModeBlock
-            title="For Camps"
+            title="For Hospitality Brands"
+            sub="Camps, lodges, hotels, and BnBs."
             body="Capture guest data, manage waivers, and build lasting relationships."
             href="/demo-camp"
-            cta="Learn more"
+            cta="See the camp experience"
           />
           <ModeBlock
             title="For Tour Operators"
+            sub="At fairs and on the road."
             body="Scan, connect, and capture leads at fairs — instantly."
             href="/camp/serengeti-view-camp?mode=fair"
-            cta="Learn more"
+            cta="See Fair Mode"
+          />
+          <ModeBlock
+            title="For Guests"
+            sub="No app. No login."
+            body="A calm, mobile-first welcome they reach in a single tap."
+            href="/demo-camp"
+            cta="Open the demo"
           />
         </Reveal>
       </div>
@@ -222,21 +236,28 @@ function TwoModesSection() {
 
 function ModeBlock({
   title,
+  sub,
   body,
   href,
   cta,
 }: {
   title: string;
+  sub?: string;
   body: string;
   href: string;
   cta: string;
 }) {
   return (
     <div>
-      <h3 className="font-serif text-[34px] font-medium leading-[1.05] tracking-tight text-foreground sm:text-[40px] lg:text-[48px]">
+      <h3 className="font-serif text-[30px] font-medium leading-[1.05] tracking-tight text-foreground sm:text-[34px] lg:text-[36px]">
         {title}
       </h3>
-      <p className="mt-6 max-w-md text-[15px] leading-[1.7] text-muted sm:text-base">
+      {sub && (
+        <p className="mt-3 text-[11px] uppercase tracking-[0.28em] text-muted">
+          {sub}
+        </p>
+      )}
+      <p className="mt-5 max-w-md text-[15px] leading-[1.7] text-muted sm:text-base">
         {body}
       </p>
       <Link

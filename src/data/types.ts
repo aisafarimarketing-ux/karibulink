@@ -19,6 +19,36 @@ export type IconKey =
 
 export type OrganizationType = "camp" | "lodge" | "bnb" | "tour_operator";
 
+/* --------------------------------------------------------------- */
+/*  Property type + preset section system                            */
+/* --------------------------------------------------------------- */
+
+export type PropertyType = "camp" | "hotel" | "boutique" | "airbnb";
+
+export type SectionType =
+  | "welcome"
+  | "info"
+  | "amenities"
+  | "activities"
+  | "services"
+  | "safety"
+  | "sightings"
+  | "policies"
+  | "experiences"
+  | "rules"
+  | "check-in"
+  | "team"
+  | "local-tips"
+  | "custom";
+
+export interface PropertySection {
+  id: string;
+  type: SectionType;
+  title: string;
+  content: string;
+  enabled: boolean;
+}
+
 export interface Organization {
   id: string;
   name: string;
@@ -105,6 +135,9 @@ export interface Property {
   helpIntro?: string;
   waiverText?: string;
   fairMode?: FairMode;
+  /** Optional preset-driven structure that supports non-camp property types. */
+  type?: PropertyType;
+  sections?: PropertySection[];
 }
 
 export interface RouteStop {

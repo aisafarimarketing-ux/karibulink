@@ -141,6 +141,14 @@ function MobileHero() {
             <ArrowRightIcon className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5" />
           </Link>
         </motion.div>
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.7, ease: easeOut, delay: 1.7 }}
+          className="mt-10 text-[11px] uppercase tracking-[0.28em] text-white/65"
+        >
+          Built for hospitality brands and tour operators
+        </motion.p>
       </div>
     </section>
   );
@@ -231,20 +239,14 @@ function LeftContent() {
         </motion.div>
       </div>
 
-      <motion.div
+      <motion.p
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ duration: 1, ease: easeOut, delay: 1.4 }}
-        className="flex items-center justify-between gap-6"
+        transition={{ duration: 0.9, ease: easeOut, delay: 1.5 }}
+        className="text-[11px] uppercase tracking-[0.28em] text-muted"
       >
-        <span className="text-[10px] uppercase tracking-[0.32em] text-muted">
-          Digital solutions for hospitality
-        </span>
-        <span className="h-px flex-1 bg-foreground/15" />
-        <span className="font-serif text-[10px] uppercase tracking-[0.32em] text-muted">
-          Est. East Africa
-        </span>
-      </motion.div>
+        Built for hospitality brands and tour operators
+      </motion.p>
     </div>
   );
 }
