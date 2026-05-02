@@ -45,21 +45,23 @@
  * unaffected.
  */
 .fair-theme {
-  --background: #e7dfcd;
-  --surface: #f6f1e6;
-  --soft: #f2ebdd;
-  --foreground: #163a2e;
-  --muted: #5a6b63;
-  --border: rgba(22, 58, 46, 0.09);
+  /* Same brand palette as the landing — olive anchor, deep-orange CTA. */
+  --background: #faf7f0;
+  --surface: #f4e8d2;
+  --soft: #f4e8d2;
+  --foreground: #1f1f1b;
+  --muted: #5b5750;
+  --border: rgba(31, 31, 27, 0.08);
 
-  --primary: #b76b3e;
-  --primary-hover: #9c5731;
-  --primary-foreground: #f6f1e6;
+  --primary: #c46a2b;
+  --primary-hover: #a94f1f;
+  --primary-foreground: #faf7f0;
 
-  --accent: #c8a24b;
-  --accent-foreground: #163a2e;
+  --accent: #2f4a32;
+  --accent-foreground: #faf7f0;
   --danger: #8a3a2a;
 
+  /* Cormorant for headings — keeps the lodge / safari feel. */
   --font-serif: var(--font-cormorant), ui-serif, Georgia, serif;
 }
 
