@@ -33,10 +33,10 @@ function Reveal({
 export default function LandingPage() {
   return (
     <div className="landing-theme flex min-h-screen flex-col bg-background text-foreground">
+      <TopNav />
       <main className="flex-1">
         <Hero />
         <ProblemSection />
-        <ImageBreak />
         <WhoItsForSection />
         <HowItWorksSection />
         <FinalCTA />
@@ -46,47 +46,37 @@ export default function LandingPage() {
   );
 }
 
-const MID_IMAGE_SRC =
-  "https://images.unsplash.com/photo-1547471080-7cc2caa01a7e?auto=format&fit=crop&w=2000&q=80";
-
-function ImageBreak() {
+function TopNav() {
   return (
-    <section className="relative h-[60vh] w-full overflow-hidden bg-[#0a1a13]">
-      <motion.img
-        src={MID_IMAGE_SRC}
-        alt=""
-        loading="lazy"
-        initial={{ scale: 1 }}
-        animate={{ scale: 1.04 }}
-        transition={{
-          duration: 10,
-          ease: "easeInOut",
-          repeat: Infinity,
-          repeatType: "reverse",
-        }}
-        className="absolute inset-0 h-full w-full object-cover"
-      />
-      {/* Subtle warm overlay matching the hero treatment. */}
-      <div
-        className="pointer-events-none absolute inset-0"
-        style={{
-          background:
-            "linear-gradient(rgba(0,0,0,0.10), rgba(168,92,46,0.18))",
-        }}
-      />
-      {/* Bottom darken so the line of copy reads cleanly. */}
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-black/65 via-black/20 to-transparent" />
-
-      <div className="relative flex h-full items-end px-6 pb-12 sm:px-10 sm:pb-16 lg:px-16 lg:pb-20 xl:px-24">
-        <Reveal>
-          <p className="font-serif max-w-3xl text-[34px] font-medium leading-[1.05] tracking-tight text-white sm:text-[44px] lg:text-[56px]">
-            Every interaction
-            <br />
-            <em className="font-normal italic">becomes data.</em>
-          </p>
-        </Reveal>
+    <header className="border-b border-border/40">
+      <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-5 sm:px-10 lg:px-10 xl:px-12">
+        <Link href="/" className="flex items-center gap-2">
+          <span className="font-serif text-[15px] font-semibold uppercase tracking-[0.28em] text-foreground">
+            KaribuLink
+          </span>
+        </Link>
+        <nav className="flex items-center gap-2 sm:gap-6">
+          <Link
+            href="#who-its-for"
+            className="hidden text-sm font-medium text-muted hover:text-foreground sm:inline-block"
+          >
+            Who it&apos;s for
+          </Link>
+          <Link
+            href="#how-it-works"
+            className="hidden text-sm font-medium text-muted hover:text-foreground sm:inline-block"
+          >
+            How it works
+          </Link>
+          <Link
+            href="/demo-camp"
+            className="inline-flex h-10 items-center justify-center rounded-full bg-primary px-5 text-xs font-semibold tracking-tight text-primary-foreground transition-colors hover:bg-primary-hover"
+          >
+            View Demo
+          </Link>
+        </nav>
       </div>
-    </section>
+    </header>
   );
 }
 
@@ -97,10 +87,10 @@ function ProblemSection() {
     <section className="px-6 py-24 sm:px-10 sm:py-32 lg:px-16 lg:py-40 xl:px-24">
       <div className="mx-auto max-w-6xl">
         <Reveal className="max-w-2xl">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.32em] text-muted">
+          <p className="font-mono text-[11px] font-medium uppercase tracking-[0.32em] text-muted">
             The Old Way
           </p>
-          <h2 className="font-serif mt-5 text-4xl font-medium leading-[1.05] tracking-tight text-foreground sm:text-5xl lg:text-[56px]">
+          <h2 className="font-serif mt-5 text-4xl font-semibold leading-[1.05] tracking-tight text-foreground sm:text-5xl lg:text-[56px]">
             Paper is lost.
             <br />
             <em className="font-normal italic text-foreground/70">
@@ -191,10 +181,10 @@ function WhoItsForSection() {
     >
       <div className="mx-auto max-w-6xl">
         <Reveal>
-          <p className="text-[11px] font-semibold uppercase tracking-[0.32em] text-muted">
+          <p className="font-mono text-[11px] font-medium uppercase tracking-[0.32em] text-muted">
             Who It's For
           </p>
-          <h2 className="font-serif mt-5 max-w-3xl text-4xl font-medium leading-[1.05] tracking-tight text-foreground sm:text-5xl lg:text-[56px]">
+          <h2 className="font-serif mt-5 max-w-3xl text-4xl font-semibold leading-[1.05] tracking-tight text-foreground sm:text-5xl lg:text-[56px]">
             One system.
             <br />
             <em className="font-normal italic text-foreground/70">
@@ -249,15 +239,21 @@ function ModeBlock({
 }) {
   return (
     <div>
-      <h3 className="font-serif text-[30px] font-medium leading-[1.05] tracking-tight text-foreground sm:text-[34px] lg:text-[36px]">
+      <h3 className="font-serif text-[30px] font-semibold leading-[1.05] tracking-tight text-foreground sm:text-[34px] lg:text-[36px]">
         {title}
       </h3>
       {sub && (
-        <p className="mt-3 text-[11px] uppercase tracking-[0.28em] text-muted">
+        <p className="font-mono mt-3 text-[11px] uppercase tracking-[0.28em] text-muted">
           {sub}
         </p>
       )}
-      <p className="mt-5 max-w-md text-[15px] leading-[1.7] text-muted sm:text-base">
+      <p
+        className="mt-5 max-w-md text-[15px] leading-[1.7] text-muted sm:text-base"
+        style={{
+          fontFamily:
+            "var(--font-open-sans), ui-sans-serif, system-ui, sans-serif",
+        }}
+      >
         {body}
       </p>
       <Link
@@ -302,7 +298,7 @@ function HowItWorksSection() {
           <p className="text-[11px] font-semibold uppercase tracking-[0.32em] text-[#c8a24b]">
             How It Works
           </p>
-          <h2 className="font-serif mt-5 max-w-2xl text-4xl font-medium leading-[1.05] tracking-tight text-[#f6f1e6] sm:text-5xl lg:text-[60px]">
+          <h2 className="font-serif mt-5 max-w-2xl text-4xl font-semibold leading-[1.05] tracking-tight text-[#f6f1e6] sm:text-5xl lg:text-[60px]">
             Simple. Fast.{" "}
             <em className="font-normal italic text-[#f6f1e6]/65">
               Effective.
@@ -314,13 +310,19 @@ function HowItWorksSection() {
           {steps.map((step, i) => (
             <Reveal key={step.number} delay={0.1 + i * 0.1}>
               <li>
-                <p className="font-serif text-[14px] font-medium tracking-[0.32em] text-[#c8a24b]">
+                <p className="font-mono text-[12px] font-medium tracking-[0.32em] text-[#c8a24b]">
                   {step.number}
                 </p>
-                <h3 className="font-serif mt-5 text-[28px] font-medium leading-tight tracking-tight text-[#f6f1e6] sm:text-[32px]">
+                <h3 className="font-serif mt-5 text-[28px] font-semibold leading-tight tracking-tight text-[#f6f1e6] sm:text-[32px]">
                   {step.title}
                 </h3>
-                <p className="mt-4 text-[15px] leading-[1.75] text-[#f6f1e6]/70">
+                <p
+                  className="mt-4 text-[15px] leading-[1.75] text-[#f6f1e6]/70"
+                  style={{
+                    fontFamily:
+                      "var(--font-open-sans), ui-sans-serif, system-ui, sans-serif",
+                  }}
+                >
                   {step.body}
                 </p>
               </li>
@@ -343,15 +345,21 @@ function FinalCTA() {
       }}
     >
       <Reveal className="mx-auto max-w-3xl text-center">
-        <p className="text-[11px] font-medium uppercase tracking-[0.32em] text-muted">
+        <p className="font-mono text-[11px] font-medium uppercase tracking-[0.32em] text-muted">
           Used by camps preparing for Karibu Kili Fair
         </p>
-        <h2 className="font-serif mt-7 text-4xl font-medium leading-[1.05] tracking-tight text-foreground sm:text-5xl lg:text-[60px]">
+        <h2 className="font-serif mt-7 text-4xl font-semibold leading-[1.05] tracking-tight text-foreground sm:text-5xl lg:text-[60px]">
           Start capturing
           <br />
-          <em className="font-normal italic text-primary">what matters.</em>
+          <em className="font-semibold italic text-primary">what matters.</em>
         </h2>
-        <p className="mx-auto mt-7 max-w-md text-[15px] leading-[1.7] text-muted sm:text-base">
+        <p
+          className="mx-auto mt-7 max-w-md text-[15px] leading-[1.7] text-muted sm:text-base"
+          style={{
+            fontFamily:
+              "var(--font-open-sans), ui-sans-serif, system-ui, sans-serif",
+          }}
+        >
           Use KaribuLink at fairs, camps, and guest check-ins.
         </p>
         <div className="mt-12 flex flex-col items-center justify-center gap-3 sm:flex-row sm:flex-wrap sm:gap-4">

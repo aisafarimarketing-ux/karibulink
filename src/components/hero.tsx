@@ -8,7 +8,7 @@ import { ArrowRightIcon } from "./icons";
 const easeOut = [0.2, 0.65, 0.3, 0.95] as const;
 
 const lineVariants = {
-  hidden: { opacity: 0, y: 24 },
+  hidden: { opacity: 0, y: 22 },
   visible: {
     opacity: 1,
     y: 0,
@@ -16,234 +16,95 @@ const lineVariants = {
   },
 };
 
-// Hero photo. Replace this URL with your own asset (e.g. /hero-savanna.jpg)
-// or a different Unsplash photo. The CSS scene below renders as a fallback
-// if the image fails to load.
-const HERO_IMAGE_SRC =
-  "https://images.unsplash.com/photo-1535941339077-2dd1c7963098?auto=format&fit=crop&w=2000&q=80";
+const OPEN_SANS: React.CSSProperties = {
+  fontFamily: "var(--font-open-sans), ui-sans-serif, system-ui, sans-serif",
+};
 
 export function Hero() {
   return (
-    <>
-      <MobileHero />
-      <DesktopHero />
-    </>
-  );
-}
-
-/* --------------------------------------------------------------- */
-/*  Mobile: full-bleed image with overlay text                      */
-/* --------------------------------------------------------------- */
-
-function MobileHero() {
-  return (
-    <section className="relative min-h-[100svh] overflow-hidden bg-[#0a1a13] lg:hidden">
-      {/* CSS scene fallback (visible if photo fails). */}
-      <div className="absolute inset-0">
-        <SafariScene />
-      </div>
-
-      {/* Real safari photo with subtle slow zoom. */}
-      <motion.img
-        src={HERO_IMAGE_SRC}
-        alt=""
-        loading="eager"
-        initial={{ scale: 1 }}
-        animate={{ scale: 1.04 }}
-        transition={{
-          duration: 8,
-          ease: "easeInOut",
-          repeat: Infinity,
-          repeatType: "reverse",
-        }}
-        className="absolute inset-0 h-full w-full object-cover"
-      />
-
-      {/* Subtle warm tint over the photo. */}
-      <div
-        className="pointer-events-none absolute inset-0"
-        style={{
-          background:
-            "linear-gradient(rgba(0,0,0,0.10), rgba(168,92,46,0.20))",
-        }}
-      />
-      {/* Legibility gradients: dark top + dark bottom, image breathes through middle. */}
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-2/5 bg-gradient-to-b from-black/55 via-black/15 to-transparent" />
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-3/5 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
-
-      {/* Brand wordmark at top */}
-      <motion.div
-        initial={{ opacity: 0, y: 8 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.7, ease: easeOut, delay: 0.2 }}
-        className="relative px-6 pt-12 sm:px-10 sm:pt-16"
-      >
-        <p className="font-serif text-[15px] font-semibold uppercase tracking-[0.3em] text-white">
-          Karibulink
-        </p>
-        <p className="mt-1 text-[11px] uppercase tracking-[0.32em] text-white/65">
-          Connect. Capture. Grow.
-        </p>
-      </motion.div>
-
-      {/* Bottom content */}
-      <div className="relative mt-auto flex min-h-[100svh] flex-col justify-end px-6 pb-16 sm:px-10 sm:pb-20">
-        <motion.h1
-          initial="hidden"
-          animate="visible"
-          variants={{
-            hidden: {},
-            visible: {
-              transition: { staggerChildren: 0.18, delayChildren: 0.4 },
-            },
-          }}
-          className="font-serif text-[44px] font-medium leading-[1.02] tracking-tight text-white sm:text-[56px]"
-        >
-          <Line>Capture every</Line>
-          <Line>guest and operator —</Line>
-          <Line>
-            <em className="relative inline-block font-normal italic text-white">
-              instantly.
-              <span
-                aria-hidden
-                className="absolute -bottom-1 left-0 right-1 h-[2px] bg-accent"
-              />
-            </em>
-          </Line>
-        </motion.h1>
-        <motion.p
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: easeOut, delay: 1.25 }}
-          className="mt-9 max-w-md text-base leading-[1.7] text-white/80"
-        >
-          From fairs to camp check-ins, KaribuLink turns every interaction
-          into structured data you can use.
-        </motion.p>
-        <motion.div
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, ease: easeOut, delay: 1.45 }}
-          className="mt-12 flex flex-col gap-3"
-        >
-          <Link
-            href="/demo-camp"
-            className="group inline-flex h-[52px] items-center justify-center gap-2 rounded-full bg-primary px-9 text-[15px] font-semibold tracking-tight text-primary-foreground shadow-[0_22px_44px_-20px_rgba(183,107,62,0.65)] transition-transform duration-200 hover:scale-[1.02] hover:bg-primary-hover active:scale-[0.98]"
-          >
-            View Demo
-            <ArrowRightIcon className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5" />
-          </Link>
-          <Link
-            href="#how-it-works"
-            className="group inline-flex h-[52px] items-center justify-center gap-1.5 px-2 text-sm font-semibold tracking-tight text-white/85 hover:text-white"
-          >
-            See how it works
-            <ArrowRightIcon className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5" />
-          </Link>
-        </motion.div>
-        <motion.p
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.7, ease: easeOut, delay: 1.7 }}
-          className="mt-10 text-[11px] uppercase tracking-[0.28em] text-white/65"
-        >
-          Built for hospitality brands and tour operators
-        </motion.p>
+    <section className="px-6 pt-12 pb-20 sm:px-10 sm:pt-16 sm:pb-28 lg:px-10 lg:pt-24 lg:pb-32 xl:px-12">
+      <div className="mx-auto grid max-w-6xl gap-12 lg:grid-cols-[1.05fr_1fr] lg:items-center lg:gap-16 xl:gap-24">
+        <Copy />
+        <PhoneMockup />
       </div>
     </section>
   );
 }
 
-/* --------------------------------------------------------------- */
-/*  Desktop: split-screen editorial                                  */
-/* --------------------------------------------------------------- */
-
-function DesktopHero() {
+function Copy() {
   return (
-    <section className="relative hidden bg-background lg:grid lg:min-h-[100svh] lg:grid-cols-[1.02fr_1fr]">
-      <LeftContent />
-      <RightImage />
-    </section>
-  );
-}
-
-function LeftContent() {
-  return (
-    <div className="relative flex flex-col bg-background px-16 pt-20 pb-20 xl:px-24">
-      <motion.div
+    <div>
+      <motion.p
         initial={{ opacity: 0, y: 8 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.7, ease: easeOut }}
+        className="font-mono text-[11px] uppercase tracking-[0.32em] text-muted"
       >
-        <p className="font-serif text-[15px] font-semibold uppercase tracking-[0.3em] text-foreground/90">
-          Karibulink
-        </p>
-        <p className="mt-1 text-[11px] uppercase tracking-[0.32em] text-muted">
-          Connect. Capture. Grow.
-        </p>
-      </motion.div>
+        For hospitality brands &amp; tour operators
+      </motion.p>
 
-      <div className="my-0 flex flex-1 flex-col justify-center">
-        <motion.h1
-          initial="hidden"
-          animate="visible"
-          variants={{
-            hidden: {},
-            visible: {
-              transition: { staggerChildren: 0.18, delayChildren: 0.25 },
-            },
-          }}
-          className="font-serif text-[64px] font-medium leading-[1.02] tracking-tight text-foreground xl:text-[72px]"
+      <motion.h1
+        initial="hidden"
+        animate="visible"
+        variants={{
+          hidden: {},
+          visible: {
+            transition: { staggerChildren: 0.16, delayChildren: 0.2 },
+          },
+        }}
+        className="font-serif mt-6 text-[44px] font-semibold leading-[1.04] tracking-tight text-foreground sm:text-[56px] lg:text-[60px] xl:text-[68px]"
+      >
+        <Line>Capture every</Line>
+        <Line>guest and operator —</Line>
+        <Line>
+          <em className="relative inline-block font-semibold italic text-primary">
+            instantly.
+            <span
+              aria-hidden
+              className="absolute -bottom-1 left-0 right-1 h-[3px] bg-accent"
+            />
+          </em>
+        </Line>
+      </motion.h1>
+
+      <motion.p
+        initial={{ opacity: 0, y: 16 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, ease: easeOut, delay: 0.95 }}
+        className="mt-7 max-w-md text-base leading-[1.7] text-muted sm:text-[17px]"
+        style={OPEN_SANS}
+      >
+        From fairs to camp check-ins, KaribuLink turns every interaction into
+        structured data you can use.
+      </motion.p>
+
+      <motion.div
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.7, ease: easeOut, delay: 1.15 }}
+        className="mt-10 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:gap-4"
+      >
+        <Link
+          href="/demo-camp"
+          className="group inline-flex h-[52px] items-center justify-center gap-2 rounded-full bg-primary px-9 text-[15px] font-semibold tracking-tight text-primary-foreground shadow-[0_22px_44px_-20px_rgba(168,92,46,0.65)] transition-transform duration-200 hover:scale-[1.02] hover:bg-primary-hover active:scale-[0.98]"
         >
-          <Line>Capture every</Line>
-          <Line>guest and operator —</Line>
-          <Line>
-            <em className="relative inline-block font-normal italic text-primary">
-              instantly.
-              <span
-                aria-hidden
-                className="absolute -bottom-1 left-0 right-1 h-[3px] bg-accent"
-              />
-            </em>
-          </Line>
-        </motion.h1>
-        <motion.p
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: easeOut, delay: 1.05 }}
-          className="mt-10 max-w-md text-[17px] leading-[1.7] text-muted"
+          View Demo
+          <ArrowRightIcon className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5" />
+        </Link>
+        <Link
+          href="#how-it-works"
+          className="group inline-flex h-[52px] items-center justify-center gap-1.5 px-2 text-sm font-semibold tracking-tight text-foreground hover:text-primary"
         >
-          From fairs to camp check-ins, KaribuLink turns every interaction
-          into structured data you can use.
-        </motion.p>
-        <motion.div
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, ease: easeOut, delay: 1.25 }}
-          className="mt-14 flex flex-row flex-wrap items-center gap-4"
-        >
-          <Link
-            href="/demo-camp"
-            className="group inline-flex h-[52px] items-center justify-center gap-2 rounded-full bg-primary px-9 text-[15px] font-semibold tracking-tight text-primary-foreground shadow-[0_22px_44px_-20px_rgba(183,107,62,0.65)] transition-transform duration-200 hover:scale-[1.02] hover:bg-primary-hover active:scale-[0.98]"
-          >
-            View Demo
-            <ArrowRightIcon className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5" />
-          </Link>
-          <Link
-            href="#how-it-works"
-            className="group inline-flex h-[52px] items-center justify-center gap-1.5 px-2 text-sm font-semibold tracking-tight text-foreground hover:text-primary"
-          >
-            See how it works
-            <ArrowRightIcon className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5" />
-          </Link>
-        </motion.div>
-      </div>
+          See how it works
+          <ArrowRightIcon className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5" />
+        </Link>
+      </motion.div>
 
       <motion.p
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ duration: 0.9, ease: easeOut, delay: 1.5 }}
-        className="text-[11px] uppercase tracking-[0.28em] text-muted"
+        transition={{ duration: 0.9, ease: easeOut, delay: 1.4 }}
+        className="font-mono mt-10 text-[11px] uppercase tracking-[0.28em] text-muted"
       >
         Built for hospitality brands and tour operators
       </motion.p>
@@ -259,88 +120,120 @@ function Line({ children }: { children: ReactNode }) {
   );
 }
 
-function RightImage() {
+/* --------------------------------------------------------------- */
+/*  Phone mockup — stylized app preview, no real photos              */
+/* --------------------------------------------------------------- */
+
+function PhoneMockup() {
   return (
     <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 1.2, ease: easeOut, delay: 0.1 }}
-      className="relative h-full overflow-hidden"
+      initial={{ opacity: 0, y: 18, scale: 0.98 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      transition={{ duration: 1, ease: easeOut, delay: 0.4 }}
+      className="relative mx-auto w-[280px] sm:w-[300px] lg:w-[320px]"
+      aria-hidden
     >
-      <div className="absolute inset-0">
-        <SafariScene />
-      </div>
-      <motion.img
-        src={HERO_IMAGE_SRC}
-        alt=""
-        loading="eager"
-        initial={{ scale: 1 }}
-        animate={{ scale: 1.03 }}
-        transition={{
-          duration: 8,
-          ease: "easeInOut",
-          repeat: Infinity,
-          repeatType: "reverse",
-        }}
-        className="absolute inset-0 h-full w-full object-cover"
-      />
-      {/* Subtle warm tint over the photo. */}
       <div
-        className="pointer-events-none absolute inset-0"
+        className="relative aspect-[9/19.5] rounded-[2.6rem] bg-foreground p-3"
         style={{
-          background:
-            "linear-gradient(rgba(0,0,0,0.10), rgba(168,92,46,0.20))",
+          boxShadow:
+            "0 30px 80px -32px rgba(22, 58, 46, 0.45), 0 1px 0 0 rgba(255,255,255,0.06) inset",
         }}
-      />
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black/30 via-black/5 to-transparent" />
-      <div className="pointer-events-none absolute inset-y-0 left-0 w-16 bg-gradient-to-r from-background/70 to-transparent" />
-    </motion.div>
-  );
-}
-
-/* --------------------------------------------------------------- */
-/*  CSS fallback scene (used behind the image on both layouts)      */
-/* --------------------------------------------------------------- */
-
-function SafariScene() {
-  return (
-    <>
-      <div
-        className="absolute inset-0"
-        style={{
-          background:
-            "linear-gradient(180deg, #0a1a13 0%, #14302a 18%, #2c5749 36%, #d8a560 56%, #b75f30 70%, #4a2510 84%, #18090a 100%)",
-        }}
-      />
-      <div
-        className="pointer-events-none absolute inset-x-0 top-0 h-1/3 opacity-50"
-        style={{
-          backgroundImage:
-            "radial-gradient(1px 1px at 14% 18%, #fff 99%, transparent 100%)," +
-            "radial-gradient(1px 1px at 32% 28%, #fff 99%, transparent 100%)," +
-            "radial-gradient(1px 1px at 48% 12%, #fff 99%, transparent 100%)," +
-            "radial-gradient(1px 1px at 62% 24%, #fff 99%, transparent 100%)," +
-            "radial-gradient(1px 1px at 76% 16%, #fff 99%, transparent 100%)," +
-            "radial-gradient(1px 1px at 88% 32%, #fff 99%, transparent 100%)," +
-            "radial-gradient(1px 1px at 22% 36%, #fff 99%, transparent 100%)",
-          backgroundSize: "260px 200px",
-          backgroundRepeat: "repeat",
-        }}
-      />
-      <div className="pointer-events-none absolute right-[28%] top-[55%] h-44 w-44 -translate-y-1/2 rounded-full bg-[#f5b86e] opacity-50 blur-3xl" />
-      <div className="pointer-events-none absolute right-[30%] top-[58%] h-16 w-16 -translate-y-1/2 rounded-full bg-[#fce0a0] opacity-90 blur-md" />
-      <svg
-        className="absolute inset-x-0 bottom-[28%] w-full"
-        viewBox="0 0 800 120"
-        preserveAspectRatio="none"
-        aria-hidden
       >
-        <path
-          d="M0 120 L0 60 Q120 40 220 70 T440 60 Q560 30 680 55 T800 50 L800 120 Z"
-          fill="#1c2a22"
-          opacity="0.55"
-        />
-      </svg>
-    </>
+        <div className="relative h-full overflow-hidden rounded-[2rem] bg-background">
+          {/* Dynamic island / camera */}
+          <div className="absolute left-1/2 top-2.5 z-10 h-[18px] w-[80px] -translate-x-1/2 rounded-full bg-foreground" />
+
+          <div className="relative flex h-full flex-col px-3 pb-4 pt-9">
+            {/* Hero card preview — deep-green block with text only, no images */}
+            <div className="overflow-hidden rounded-2xl bg-foreground p-4">
+              <p
+                className="font-mono text-[8px] uppercase tracking-[0.22em] text-background/65"
+              >
+                Karibu — welcome
+              </p>
+              <p className="font-serif mt-1.5 text-[22px] font-semibold leading-[1.05] text-background">
+                Welcome.
+              </p>
+              <p className="font-mono mt-1.5 text-[8px] uppercase tracking-[0.18em] text-background/55">
+                Serengeti View Camp
+              </p>
+            </div>
+
+            {/* Quick actions preview */}
+            <div className="mt-3">
+              <div className="grid grid-cols-3 gap-1.5">
+                {[
+                  "Check In",
+                  "Stay",
+                  "Experience",
+                  "Help",
+                  "Safety",
+                  "Contact",
+                ].map((label, i) => (
+                  <div
+                    key={`${label}-${i}`}
+                    className="flex aspect-square flex-col items-center justify-center gap-1 rounded-xl bg-soft"
+                  >
+                    <div
+                      className={`h-2 w-2 rounded-full ${
+                        i === 0 ? "bg-primary" : "bg-foreground/30"
+                      }`}
+                    />
+                    <span
+                      className="font-mono text-[7px] uppercase tracking-[0.12em] text-foreground/70"
+                    >
+                      {label}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Section rows preview */}
+            <div className="mt-3 space-y-1.5">
+              {["Check In", "Your Stay", "Experiences", "Help"].map(
+                (label, i) => (
+                  <div
+                    key={label}
+                    className="flex items-center gap-2 rounded-xl bg-soft px-3 py-2"
+                  >
+                    <span className="grid h-5 w-5 place-items-center rounded-md bg-primary/15">
+                      <span className="block h-1 w-1 rounded-full bg-primary" />
+                    </span>
+                    <div className="flex-1">
+                      <div className="font-serif text-[10px] font-semibold leading-tight text-foreground">
+                        {label}
+                      </div>
+                      <div className="mt-0.5 h-[3px] w-[60%] rounded-full bg-foreground/15" />
+                    </div>
+                    <span
+                      className={`text-[8px] text-foreground/40 ${i === 0 ? "rotate-180" : ""}`}
+                    >
+                      ▾
+                    </span>
+                  </div>
+                ),
+              )}
+            </div>
+
+            {/* Bottom action bar */}
+            <div className="mt-auto rounded-2xl bg-soft p-2">
+              <div className="grid grid-cols-3 gap-1.5">
+                <div className="flex h-7 items-center justify-center rounded-lg bg-primary text-[8px] font-semibold tracking-tight text-primary-foreground">
+                  Call
+                </div>
+                <div className="flex h-7 items-center justify-center rounded-lg bg-[#25d366] text-[8px] font-semibold tracking-tight text-white">
+                  WhatsApp
+                </div>
+                <div className="flex h-7 items-center justify-center rounded-lg bg-background text-[8px] font-semibold tracking-tight text-foreground">
+                  Map
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </motion.div>
   );
 }
