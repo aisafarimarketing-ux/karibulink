@@ -59,7 +59,15 @@ function MobileHero() {
         className="absolute inset-0 h-full w-full object-cover"
       />
 
-      {/* Cinematic gradient: dark top + dark bottom for legibility, image breathes through middle. */}
+      {/* Subtle warm tint over the photo. */}
+      <div
+        className="pointer-events-none absolute inset-0"
+        style={{
+          background:
+            "linear-gradient(rgba(0,0,0,0.10), rgba(168,92,46,0.20))",
+        }}
+      />
+      {/* Legibility gradients: dark top + dark bottom, image breathes through middle. */}
       <div className="pointer-events-none absolute inset-x-0 top-0 h-2/5 bg-gradient-to-b from-black/55 via-black/15 to-transparent" />
       <div className="pointer-events-none absolute inset-x-0 bottom-0 h-3/5 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
 
@@ -94,7 +102,13 @@ function MobileHero() {
           <Line>Capture every</Line>
           <Line>guest and operator —</Line>
           <Line>
-            <em className="font-normal italic text-accent">instantly.</em>
+            <em className="relative inline-block font-normal italic text-white">
+              instantly.
+              <span
+                aria-hidden
+                className="absolute -bottom-1 left-0 right-1 h-[2px] bg-accent"
+              />
+            </em>
           </Line>
         </motion.h1>
         <motion.p
@@ -176,7 +190,13 @@ function LeftContent() {
           <Line>Capture every</Line>
           <Line>guest and operator —</Line>
           <Line>
-            <em className="font-normal italic text-primary">instantly.</em>
+            <em className="relative inline-block font-normal italic text-primary">
+              instantly.
+              <span
+                aria-hidden
+                className="absolute -bottom-1 left-0 right-1 h-[3px] bg-accent"
+              />
+            </em>
           </Line>
         </motion.h1>
         <motion.p
@@ -261,6 +281,14 @@ function RightImage() {
           repeatType: "reverse",
         }}
         className="absolute inset-0 h-full w-full object-cover"
+      />
+      {/* Subtle warm tint over the photo. */}
+      <div
+        className="pointer-events-none absolute inset-0"
+        style={{
+          background:
+            "linear-gradient(rgba(0,0,0,0.10), rgba(168,92,46,0.20))",
+        }}
       />
       <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black/30 via-black/5 to-transparent" />
       <div className="pointer-events-none absolute inset-y-0 left-0 w-16 bg-gradient-to-r from-background/70 to-transparent" />

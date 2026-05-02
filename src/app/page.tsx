@@ -36,12 +36,57 @@ export default function LandingPage() {
       <main className="flex-1">
         <Hero />
         <ProblemSection />
+        <ImageBreak />
         <TwoModesSection />
         <HowItWorksSection />
         <FinalCTA />
       </main>
       <LandingFooter />
     </div>
+  );
+}
+
+const MID_IMAGE_SRC =
+  "https://images.unsplash.com/photo-1547471080-7cc2caa01a7e?auto=format&fit=crop&w=2000&q=80";
+
+function ImageBreak() {
+  return (
+    <section className="relative h-[60vh] w-full overflow-hidden bg-[#0a1a13]">
+      <motion.img
+        src={MID_IMAGE_SRC}
+        alt=""
+        loading="lazy"
+        initial={{ scale: 1 }}
+        animate={{ scale: 1.04 }}
+        transition={{
+          duration: 10,
+          ease: "easeInOut",
+          repeat: Infinity,
+          repeatType: "reverse",
+        }}
+        className="absolute inset-0 h-full w-full object-cover"
+      />
+      {/* Subtle warm overlay matching the hero treatment. */}
+      <div
+        className="pointer-events-none absolute inset-0"
+        style={{
+          background:
+            "linear-gradient(rgba(0,0,0,0.10), rgba(168,92,46,0.18))",
+        }}
+      />
+      {/* Bottom darken so the line of copy reads cleanly. */}
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-black/65 via-black/20 to-transparent" />
+
+      <div className="relative flex h-full items-end px-6 pb-12 sm:px-10 sm:pb-16 lg:px-16 lg:pb-20 xl:px-24">
+        <Reveal>
+          <p className="font-serif max-w-3xl text-[34px] font-medium leading-[1.05] tracking-tight text-white sm:text-[44px] lg:text-[56px]">
+            Every interaction
+            <br />
+            <em className="font-normal italic">becomes data.</em>
+          </p>
+        </Reveal>
+      </div>
+    </section>
   );
 }
 
@@ -229,32 +274,32 @@ function HowItWorksSection() {
   return (
     <section
       id="how-it-works"
-      className="px-6 py-24 sm:px-10 sm:py-32 lg:px-16 lg:py-40 xl:px-24"
+      className="bg-[#163a2e] px-6 py-24 text-[#f6f1e6] sm:px-10 sm:py-32 lg:px-16 lg:py-40 xl:px-24"
     >
-      <div className="mx-auto max-w-6xl">
+      <div className="mx-auto max-w-5xl">
         <Reveal>
-          <p className="text-[11px] font-semibold uppercase tracking-[0.32em] text-muted">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.32em] text-[#c8a24b]">
             How It Works
           </p>
-          <h2 className="font-serif mt-5 max-w-2xl text-4xl font-medium leading-[1.05] tracking-tight text-foreground sm:text-5xl lg:text-[56px]">
+          <h2 className="font-serif mt-5 max-w-2xl text-4xl font-medium leading-[1.05] tracking-tight text-[#f6f1e6] sm:text-5xl lg:text-[60px]">
             Simple. Fast.{" "}
-            <em className="font-normal italic text-foreground/70">
+            <em className="font-normal italic text-[#f6f1e6]/65">
               Effective.
             </em>
           </h2>
         </Reveal>
 
-        <ol className="mt-16 grid gap-14 sm:mt-20 sm:grid-cols-3 sm:gap-10 lg:mt-24">
+        <ol className="mt-16 grid gap-12 sm:mt-20 sm:grid-cols-3 sm:gap-8 lg:mt-24 lg:gap-10">
           {steps.map((step, i) => (
             <Reveal key={step.number} delay={0.1 + i * 0.1}>
               <li>
-                <p className="font-serif text-[14px] font-medium tracking-[0.32em] text-primary">
+                <p className="font-serif text-[14px] font-medium tracking-[0.32em] text-[#c8a24b]">
                   {step.number}
                 </p>
-                <h3 className="font-serif mt-4 text-2xl font-medium leading-tight tracking-tight text-foreground sm:text-[28px]">
+                <h3 className="font-serif mt-5 text-[28px] font-medium leading-tight tracking-tight text-[#f6f1e6] sm:text-[32px]">
                   {step.title}
                 </h3>
-                <p className="mt-3 text-[15px] leading-[1.7] text-muted">
+                <p className="mt-4 text-[15px] leading-[1.75] text-[#f6f1e6]/70">
                   {step.body}
                 </p>
               </li>
@@ -270,7 +315,12 @@ function HowItWorksSection() {
 
 function FinalCTA() {
   return (
-    <section className="px-6 pt-16 pb-32 sm:px-10 sm:pt-20 sm:pb-40 lg:px-16 lg:pt-24 lg:pb-48 xl:px-24">
+    <section
+      className="px-6 pt-24 pb-40 sm:px-10 sm:pt-32 sm:pb-48 lg:px-16 lg:pt-40 lg:pb-56 xl:px-24"
+      style={{
+        background: "linear-gradient(180deg, #e7dfcd 0%, #d8cba8 100%)",
+      }}
+    >
       <Reveal className="mx-auto max-w-3xl text-center">
         <p className="text-[11px] font-medium uppercase tracking-[0.32em] text-muted">
           Used by camps preparing for Karibu Kili Fair
@@ -308,7 +358,10 @@ function FinalCTA() {
 
 function LandingFooter() {
   return (
-    <footer className="border-t border-border/40 px-6 py-10 sm:px-10 lg:px-16 xl:px-24">
+    <footer
+      className="border-t border-border/40 px-6 py-10 sm:px-10 lg:px-16 xl:px-24"
+      style={{ backgroundColor: "#d8cba8" }}
+    >
       <div className="mx-auto flex w-full max-w-6xl flex-col items-start justify-between gap-3 sm:flex-row sm:items-center">
         <div>
           <p className="font-serif text-sm font-semibold uppercase tracking-[0.3em] text-foreground">

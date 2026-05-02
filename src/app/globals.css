@@ -77,8 +77,9 @@
   --muted: #5a6b63;
   --border: rgba(22, 58, 46, 0.09);
 
-  --primary: #b76b3e;
-  --primary-hover: #9c5731;
+  /* Stronger terracotta — used only for the primary CTA so it stands. */
+  --primary: #a85c2e;
+  --primary-hover: #8e4b22;
   --primary-foreground: #f6f1e6;
 
   --accent: #c8a24b;
