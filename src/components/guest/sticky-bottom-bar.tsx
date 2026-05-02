@@ -31,29 +31,29 @@ export function StickyBottomBar({
 
   return (
     <div
-      className="sticky inset-x-0 bottom-0 z-30 mt-3"
-      style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
+      className="sticky inset-x-0 bottom-0 z-30 mt-4 px-3 sm:px-4"
+      style={{ paddingBottom: "calc(env(safe-area-inset-bottom) + 0.75rem)" }}
     >
-      <div className="border-t border-border/60 bg-surface/95 backdrop-blur sm:m-3 sm:rounded-2xl sm:border sm:shadow-[0_18px_40px_-18px_rgba(31,58,46,0.35)]">
-        <div className="grid grid-cols-3 gap-2 px-3 py-2 sm:gap-2.5 sm:px-3 sm:py-2.5">
+      <div className="rounded-full bg-background/95 p-1.5 shadow-[0_18px_40px_-18px_rgba(31,51,35,0.45)] backdrop-blur ring-1 ring-border/40">
+        <div className="grid grid-cols-3 items-center gap-1">
           <BarAction
             href={`tel:${cleanPhone(phone)}`}
             icon={PhoneIcon}
             label={t("callLabel")}
-            variant="primary"
+            variant="ghost"
           />
           <BarAction
             href={`https://wa.me/${wa}`}
             icon={MessageIcon}
             label={t("whatsappLabel")}
-            variant="whatsapp"
+            variant="primary"
             external
           />
           <BarAction
             href={directions}
             icon={CompassIcon}
             label={t("directionsLabel")}
-            variant="secondary"
+            variant="ghost"
             external
           />
         </div>
@@ -72,15 +72,13 @@ function BarAction({
   href: string;
   icon: typeof PhoneIcon;
   label: string;
-  variant: "primary" | "secondary" | "whatsapp";
+  variant: "primary" | "ghost";
   external?: boolean;
 }) {
-  const styles =
-    variant === "primary"
-      ? "bg-primary text-primary-foreground hover:bg-primary-hover"
-      : variant === "whatsapp"
-        ? "bg-[#25d366] text-white hover:bg-[#1ebe5a]"
-        : "border border-border bg-background text-foreground hover:border-primary/40";
+  const isPrimary = variant === "primary";
+  const styles = isPrimary
+    ? "bg-[#25d366] text-white shadow-[0_8px_20px_-8px_rgba(37,211,102,0.55)] hover:bg-[#1ebe5a]"
+    : "text-foreground/75 hover:bg-soft hover:text-foreground";
 
   const linkProps = external
     ? { target: "_blank", rel: "noopener noreferrer" }
@@ -89,11 +87,12 @@ function BarAction({
   return (
     <a
       href={href}
+      aria-label={label}
       {...linkProps}
-      className={`inline-flex h-12 items-center justify-center gap-2 rounded-2xl text-sm font-medium tracking-tight transition-all duration-150 active:scale-[0.97] ${styles}`}
+      className={`inline-flex h-11 w-full items-center justify-center gap-1.5 rounded-full text-[13px] font-semibold tracking-tight transition-all duration-150 active:scale-[0.97] ${styles}`}
     >
-      <Icon className="h-4 w-4" />
-      {label}
+      <Icon className="h-4 w-4 shrink-0" />
+      <span className="truncate">{label}</span>
     </a>
   );
 }

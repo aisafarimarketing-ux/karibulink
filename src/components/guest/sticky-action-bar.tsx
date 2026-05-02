@@ -73,9 +73,9 @@ export function StickyActionBar({ actions }: { actions: ActionItem[] }) {
   };
 
   return (
-    <div className="sticky top-0 z-40 bg-[rgba(224,216,195,0.92)] backdrop-blur-md dark:bg-[rgba(8,24,18,0.92)]">
+    <div className="sticky top-0 z-40 bg-background/85 px-3 pt-3 pb-1 backdrop-blur-md sm:px-4 sm:pt-4 dark:bg-[rgba(8,24,18,0.85)]">
       <nav aria-label="Section navigation">
-        <ul className="flex items-stretch gap-1.5 px-2 py-2">
+        <ul className="flex items-stretch gap-0.5 rounded-full bg-soft/85 p-1 dark:bg-white/[0.06]">
           {actions.map((a) => {
             const Icon = iconFor(a.iconKey);
             const isActive = active === a.id;
@@ -88,20 +88,19 @@ export function StickyActionBar({ actions }: { actions: ActionItem[] }) {
                   aria-label={label}
                   aria-current={isActive ? "true" : undefined}
                   className={[
-                    "flex h-12 w-full flex-col items-center justify-center gap-0.5 rounded-2xl px-1 text-center",
-                    "transition-all duration-150 active:scale-[0.97]",
-                    "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a84c] focus-visible:ring-offset-1 focus-visible:ring-offset-background",
+                    "flex h-10 w-full items-center justify-center gap-1.5 rounded-full px-2 text-center",
+                    "transition-all duration-200 active:scale-[0.97]",
+                    "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40",
                     isActive
-                      ? "bg-[#b06a3b] text-white shadow-[0_2px_10px_-2px_rgba(176,106,59,0.45)] dark:bg-[#c9a84c] dark:text-[#1f3d2b]"
-                      : "bg-[#f5f1e6] text-[#1f3d2b] dark:bg-white/[0.08] dark:text-foreground",
+                      ? "bg-[#2f4a32] text-[#faf7f0] shadow-[0_4px_12px_-6px_rgba(31,51,35,0.5)]"
+                      : "text-foreground/65 hover:text-foreground",
                   ].join(" ")}
                 >
-                  <Icon
-                    className={`h-3.5 w-3.5 shrink-0 ${
-                      isActive ? "" : "text-[#b06a3b] dark:text-[#c9a84c]"
-                    }`}
-                  />
-                  <span className="block w-full truncate text-[10px] font-semibold leading-tight tracking-tight">
+                  <Icon className="h-3.5 w-3.5 shrink-0" />
+                  <span className="hidden truncate text-[11px] font-semibold leading-none tracking-tight sm:block">
+                    {label}
+                  </span>
+                  <span className="truncate text-[10px] font-semibold leading-none tracking-tight sm:hidden">
                     {label}
                   </span>
                 </a>

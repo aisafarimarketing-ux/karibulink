@@ -42,9 +42,10 @@ export function CampHub({
       <main className="flex-1">
         <MobileFrame inPreview={inPreview}>
           <CampHero property={property} />
+          <QuickFacts property={property} />
           <StickyActionBar actions={ACTIONS} />
 
-          <section className="px-3 pt-4 sm:px-4">
+          <section className="px-3 pt-3 sm:px-4">
             <div className="grid gap-2">
               <CheckIn property={property} />
               <YourStay property={property} />
@@ -75,9 +76,44 @@ function CampHero({ property }: { property: Property }) {
     <HeroCard
       label={property.name}
       message={message}
+      location={property.location}
       imageUrl={property.heroImageUrl}
       toolbar={<LanguageSelector />}
     />
+  );
+}
+
+function QuickFacts({ property }: { property: Property }) {
+  const fair = property.fairMode;
+  const facts: { label: string; value: string }[] = [];
+  if (fair?.accommodation?.rooms !== undefined) {
+    facts.push({ label: "Tents", value: String(fair.accommodation.rooms) });
+  }
+  if (fair?.airstripDistance) {
+    facts.push({ label: "Airstrip", value: fair.airstripDistance });
+  }
+  if (fair?.season) {
+    facts.push({ label: "Season", value: fair.season });
+  }
+  if (facts.length === 0) return null;
+  return (
+    <section className="px-4 pt-4 sm:px-5 sm:pt-5">
+      <ul
+        className="grid grid-cols-3 gap-x-3 gap-y-1 rounded-2xl bg-soft/60 px-4 py-4 dark:bg-white/[0.04]"
+        role="list"
+      >
+        {facts.map((fact) => (
+          <li key={fact.label} className="min-w-0">
+            <p className="font-mono truncate text-[9px] font-medium uppercase tracking-[0.24em] text-muted">
+              {fact.label}
+            </p>
+            <p className="font-serif mt-1 truncate text-[15px] font-medium leading-tight tracking-tight text-foreground">
+              {fact.value}
+            </p>
+          </li>
+        ))}
+      </ul>
+    </section>
   );
 }
 
@@ -105,7 +141,7 @@ function CheckIn({ property }: { property: Property }) {
 function Waiver({ text }: { text?: string }) {
   const t = useT();
   return (
-    <div className="rounded-xl border border-border bg-background p-3">
+    <div className="rounded-xl bg-background p-3">
       <p className="text-sm font-medium text-foreground">{t("waiverTitle")}</p>
       <p className="mt-1.5 text-xs leading-snug text-foreground/80">
         {text?.trim() ? text : t("waiverHelp")}
@@ -124,7 +160,7 @@ function Waiver({ text }: { text?: string }) {
 function Registration() {
   const t = useT();
   return (
-    <div className="rounded-xl border border-border bg-background p-3">
+    <div className="rounded-xl bg-background p-3">
       <p className="text-xs leading-snug text-muted">{t("registerHelp")}</p>
       <form className="mt-3 grid gap-2">
         <SlimField label={t("fullName")} />
@@ -211,7 +247,7 @@ function YourStay({ property }: { property: Property }) {
             {property.rules.map((rule) => (
               <li
                 key={rule}
-                className="flex gap-2 rounded-xl border border-border bg-background p-3"
+                className="flex gap-2 rounded-xl bg-background p-3"
               >
                 <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-primary" />
                 <span className="text-sm leading-snug text-foreground/90">
@@ -228,7 +264,7 @@ function YourStay({ property }: { property: Property }) {
             {property.staff.map((m) => (
               <div
                 key={m.name}
-                className="rounded-xl border border-border bg-background p-3"
+                className="rounded-xl bg-background p-3"
               >
                 <div className="grid h-9 w-9 place-items-center rounded-full bg-primary/10 text-primary font-serif text-xs font-semibold">
                   {m.name
@@ -290,7 +326,7 @@ function Experiences({ property }: { property: Property }) {
             {property.sightings.map((s) => (
               <li
                 key={`${s.day}-${s.animal}`}
-                className="flex items-center gap-3 rounded-xl border border-border bg-background p-2.5"
+                className="flex items-center gap-3 rounded-xl bg-background p-2.5"
               >
                 <span className="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-primary/10 text-primary">
                   <BinocularsIcon className="h-4 w-4" />
@@ -376,7 +412,7 @@ function Help({ property }: { property: Property }) {
         <div className="grid gap-2">
           <a
             href={`tel:${property.emergencyContact.phone.replace(/\s+/g, "")}`}
-            className="inline-flex h-11 items-center justify-between gap-3 rounded-xl border border-border bg-background px-3 transition-colors hover:border-primary/40"
+            className="inline-flex h-11 items-center justify-between gap-3 rounded-xl bg-background px-3 transition-colors hover:border-primary/40"
           >
             <span className="flex items-center gap-2">
               <PhoneIcon className="h-4 w-4 text-primary" />
@@ -390,7 +426,7 @@ function Help({ property }: { property: Property }) {
           </a>
           <Link
             href="/"
-            className="inline-flex h-11 items-center justify-between gap-3 rounded-xl border border-border bg-background px-3 transition-colors hover:border-primary/40"
+            className="inline-flex h-11 items-center justify-between gap-3 rounded-xl bg-background px-3 transition-colors hover:border-primary/40"
           >
             <span className="text-sm font-medium">{t("backToKaribuLink")}</span>
             <span className="text-xs text-muted">karibulink.com</span>
@@ -436,7 +472,7 @@ function ItemList({
         return (
           <li
             key={`${item.label}-${i}`}
-            className="flex gap-3 rounded-xl border border-border bg-background p-3"
+            className="flex gap-3 rounded-xl bg-background p-3"
           >
             <span
               className={`grid h-8 w-8 shrink-0 place-items-center rounded-lg ${
@@ -473,7 +509,7 @@ function ServiceList({
         return (
           <li
             key={`${item.label}-${i}`}
-            className="flex items-center gap-3 rounded-xl border border-border bg-background p-3"
+            className="flex items-center gap-3 rounded-xl bg-background p-3"
           >
             <span className="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-accent/20 text-primary">
               <Icon className="h-4 w-4" />

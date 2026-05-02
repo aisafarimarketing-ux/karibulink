@@ -59,16 +59,16 @@ function Copy() {
         variants={{
           hidden: {},
           visible: {
-            transition: { staggerChildren: 0.16, delayChildren: 0.2 },
+            transition: { staggerChildren: 0.14, delayChildren: 0.2 },
           },
         }}
-        className="font-serif mt-6 text-[40px] font-semibold leading-[1.05] tracking-tight text-[#faf7f0] sm:text-[52px] lg:text-[58px] xl:text-[66px]"
+        className="font-serif mt-6 text-[38px] font-semibold leading-[1.05] tracking-tight text-[#faf7f0] sm:text-[50px] lg:text-[56px] xl:text-[62px]"
       >
-        <Line>Turn every camp</Line>
-        <Line>interaction into a</Line>
-        <Line>
+        <Line>Turn every guest and</Line>
+        <Line>operator interaction</Line>
+        <Line>into a{" "}
           <em className="relative inline-block font-semibold italic text-[#f4e8d2]">
-            captured lead.
+            captured relationship.
             <span
               aria-hidden
               className="absolute -bottom-1 left-0 right-1 h-[3px] bg-[#c46a2b]"
@@ -84,8 +84,9 @@ function Copy() {
         className="mt-7 max-w-md text-[15px] leading-[1.7] text-[#faf7f0]/80 sm:text-[17px]"
         style={OPEN_SANS}
       >
-        KaribuLink helps safari camps replace paper forms, business cards,
-        and missed follow-ups with one simple mobile experience.
+        KaribuLink helps safari camps and boutique lodges replace paper
+        forms, business cards, and missed follow-ups with one simple mobile
+        experience.
       </motion.p>
 
       <motion.div
@@ -116,7 +117,7 @@ function Copy() {
         transition={{ duration: 0.9, ease: easeOut, delay: 1.4 }}
         className="font-mono mt-10 text-[11px] uppercase tracking-[0.28em] text-[#faf7f0]/55"
       >
-        Built for safari camps and tour operators
+        Built for safari camps and boutique hospitality teams in Africa
       </motion.p>
     </div>
   );

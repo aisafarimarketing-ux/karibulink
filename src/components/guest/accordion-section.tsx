@@ -23,14 +23,14 @@ export function AccordionSection({
       id={id}
       name={group}
       open={defaultOpen || undefined}
-      className="group scroll-mt-20 rounded-2xl border border-border bg-surface transition-colors open:border-primary/40 open:shadow-[0_4px_24px_-12px_rgba(31,58,46,0.18)]"
+      className="group scroll-mt-20 rounded-2xl bg-soft/70 transition-colors open:bg-soft open:shadow-[0_4px_24px_-16px_rgba(31,51,35,0.22)] dark:bg-white/[0.04] dark:open:bg-white/[0.06]"
     >
-      <summary className="flex cursor-pointer items-center gap-3 rounded-2xl px-3.5 py-3 outline-none transition-transform duration-150 active:scale-[0.99] [&::-webkit-details-marker]:hidden focus-visible:ring-2 focus-visible:ring-primary/40 sm:px-4">
-        <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-primary/10 text-primary transition-colors group-open:bg-primary group-open:text-primary-foreground">
+      <summary className="flex cursor-pointer items-center gap-3 rounded-2xl px-4 py-3.5 outline-none transition-transform duration-150 active:scale-[0.99] [&::-webkit-details-marker]:hidden focus-visible:ring-2 focus-visible:ring-primary/40">
+        <span className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-[#2f4a32]/10 text-[#2f4a32] transition-colors group-open:bg-[#2f4a32] group-open:text-[#faf7f0]">
           <Icon className="h-4 w-4" />
         </span>
         <span className="min-w-0 flex-1 text-left">
-          <span className="font-serif block truncate text-base font-medium leading-tight tracking-tight text-foreground">
+          <span className="font-serif block truncate text-[15px] font-medium leading-tight tracking-tight text-foreground">
             {title}
           </span>
           {subtitle && (
@@ -41,8 +41,8 @@ export function AccordionSection({
         </span>
         <ChevronDownIcon className="h-4 w-4 shrink-0 text-muted transition-transform duration-200 group-open:rotate-180" />
       </summary>
-      <div className="border-t border-border/60 px-3.5 py-3.5 sm:px-4 sm:py-4">
-        {children}
+      <div className="px-4 pb-4 pt-1">
+        <div className="border-t border-border/40 pt-4">{children}</div>
       </div>
     </details>
   );

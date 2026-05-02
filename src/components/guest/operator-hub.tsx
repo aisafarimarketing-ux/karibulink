@@ -61,10 +61,12 @@ export function OperatorHub({ operator }: { operator: Operator }) {
 
 function OpHero({ operator }: { operator: Operator }) {
   const t = useT();
+  const todayRoute = operator.routes[0];
   return (
     <HeroCard
       label={operator.name}
       message={t("welcome")}
+      location={todayRoute?.fromTo}
       toolbar={<LanguageSelector />}
     />
   );
@@ -90,7 +92,7 @@ function RouteSummary({ route }: { route: SafariRoute }) {
           {route.stops.map((r, i) => (
             <li
               key={`${r.time}-${r.title}`}
-              className="flex items-start gap-3 rounded-xl border border-border bg-background p-2.5"
+              className="flex items-start gap-3 rounded-xl bg-background p-2.5"
             >
               <span className="font-mono w-12 shrink-0 pt-0.5 text-[11px] font-medium tracking-wider text-primary">
                 {r.time}
@@ -140,7 +142,7 @@ function Sections({ operator }: { operator: Operator }) {
                 return (
                   <li
                     key={item.label}
-                    className="flex gap-3 rounded-xl border border-border bg-background p-3"
+                    className="flex gap-3 rounded-xl bg-background p-3"
                   >
                     <span className="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-primary/10 text-primary">
                       <Icon className="h-4 w-4" />
@@ -172,7 +174,7 @@ function Sections({ operator }: { operator: Operator }) {
           }
         >
           {lead && (
-            <div className="mb-3 flex items-center justify-between gap-3 rounded-xl border border-border bg-background p-3">
+            <div className="mb-3 flex items-center justify-between gap-3 rounded-xl bg-background p-3">
               <div className="flex items-center gap-3">
                 <div className="grid h-9 w-9 place-items-center rounded-full bg-primary text-primary-foreground font-serif text-xs font-semibold">
                   {lead.initials}
@@ -198,7 +200,7 @@ function Sections({ operator }: { operator: Operator }) {
               {prompts.map((p) => (
                 <li
                   key={p}
-                  className="flex items-center gap-3 rounded-xl border border-border bg-background p-3"
+                  className="flex items-center gap-3 rounded-xl bg-background p-3"
                 >
                   <span className="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-accent/20 text-primary">
                     <MessageIcon className="h-4 w-4" />
@@ -240,7 +242,7 @@ function Sections({ operator }: { operator: Operator }) {
             ].map(({ icon: Icon, title, detail }) => (
               <li
                 key={title}
-                className="flex items-start gap-3 rounded-xl border border-border bg-background p-3"
+                className="flex items-start gap-3 rounded-xl bg-background p-3"
               >
                 <span className="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-accent/20 text-primary">
                   <Icon className="h-4 w-4" />

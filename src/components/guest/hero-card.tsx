@@ -39,12 +39,14 @@ export function HeroCard({
   imageUrl,
   homeHref = "/",
   toolbar,
+  location,
 }: {
   label: string;
   message: string;
   imageUrl?: string | null;
   homeHref?: string;
   toolbar?: ReactNode;
+  location?: string;
 }) {
   const showImage = Boolean(imageUrl);
   return (
@@ -105,6 +107,14 @@ export function HeroCard({
             <h1 className="font-serif mt-2 text-3xl font-medium leading-[1.05] tracking-tight sm:text-[34px]">
               {message}
             </h1>
+            {location && (
+              <p className="mt-3 text-[11px] uppercase tracking-[0.22em] text-white/80">
+                <span aria-hidden className="mr-1.5">
+                  📍
+                </span>
+                {location}
+              </p>
+            )}
           </div>
         </div>
       </div>
