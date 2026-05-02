@@ -1,6 +1,34 @@
+"use client";
+
 import Link from "next/link";
+import { motion } from "framer-motion";
+import type { ReactNode } from "react";
 import { Hero } from "@/components/hero";
 import { ArrowRightIcon, CheckIcon } from "@/components/icons";
+
+const easeOut = [0.2, 0.65, 0.3, 0.95] as const;
+
+function Reveal({
+  children,
+  delay = 0,
+  className = "",
+}: {
+  children: ReactNode;
+  delay?: number;
+  className?: string;
+}) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 28 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-80px" }}
+      transition={{ duration: 0.75, ease: easeOut, delay }}
+      className={className}
+    >
+      {children}
+    </motion.div>
+  );
+}
 
 export default function LandingPage() {
   return (
@@ -23,7 +51,7 @@ function ProblemSection() {
   return (
     <section className="px-6 py-24 sm:px-10 sm:py-32 lg:px-16 lg:py-40 xl:px-24">
       <div className="mx-auto max-w-6xl">
-        <div className="max-w-2xl">
+        <Reveal className="max-w-2xl">
           <p className="text-[11px] font-semibold uppercase tracking-[0.32em] text-muted">
             The Old Way
           </p>
@@ -34,8 +62,11 @@ function ProblemSection() {
               Opportunities are too.
             </em>
           </h2>
-        </div>
-        <div className="mt-20 grid gap-14 sm:mt-24 sm:grid-cols-3 sm:gap-10 lg:mt-32 lg:gap-16">
+        </Reveal>
+        <Reveal
+          delay={0.1}
+          className="mt-20 grid gap-14 sm:mt-24 sm:grid-cols-3 sm:gap-10 lg:mt-32 lg:gap-16"
+        >
           <CompareRow
             mark="missed"
             title="Paper waivers"
@@ -52,7 +83,7 @@ function ProblemSection() {
             body="Captured, organized, actionable."
             highlight
           />
-        </div>
+        </Reveal>
       </div>
     </section>
   );
@@ -109,18 +140,23 @@ function TwoModesSection() {
       className="bg-[var(--soft)] px-6 py-24 sm:px-10 sm:py-32 lg:px-16 lg:py-40 xl:px-24"
     >
       <div className="mx-auto max-w-6xl">
-        <p className="text-[11px] font-semibold uppercase tracking-[0.32em] text-muted">
-          One Platform. Two Modes.
-        </p>
-        <h2 className="font-serif mt-5 max-w-3xl text-4xl font-medium leading-[1.05] tracking-tight text-foreground sm:text-5xl lg:text-[56px]">
-          Built for hospitality.
-          <br />
-          <em className="font-normal italic text-foreground/70">
-            Designed for action.
-          </em>
-        </h2>
+        <Reveal>
+          <p className="text-[11px] font-semibold uppercase tracking-[0.32em] text-muted">
+            One Platform. Two Modes.
+          </p>
+          <h2 className="font-serif mt-5 max-w-3xl text-4xl font-medium leading-[1.05] tracking-tight text-foreground sm:text-5xl lg:text-[56px]">
+            Built for hospitality.
+            <br />
+            <em className="font-normal italic text-foreground/70">
+              Designed for action.
+            </em>
+          </h2>
+        </Reveal>
 
-        <div className="mt-20 grid gap-16 sm:mt-24 lg:mt-32 lg:grid-cols-2 lg:gap-24">
+        <Reveal
+          delay={0.1}
+          className="mt-20 grid gap-16 sm:mt-24 lg:mt-32 lg:grid-cols-2 lg:gap-24"
+        >
           <ModeBlock
             title="For Camps"
             body="Capture guest data, manage waivers, and build lasting relationships."
@@ -133,7 +169,7 @@ function TwoModesSection() {
             href="/camp/serengeti-view-camp?mode=fair"
             cta="Learn more"
           />
-        </div>
+        </Reveal>
       </div>
     </section>
   );
@@ -196,27 +232,33 @@ function HowItWorksSection() {
       className="px-6 py-24 sm:px-10 sm:py-32 lg:px-16 lg:py-40 xl:px-24"
     >
       <div className="mx-auto max-w-6xl">
-        <p className="text-[11px] font-semibold uppercase tracking-[0.32em] text-muted">
-          How It Works
-        </p>
-        <h2 className="font-serif mt-5 max-w-2xl text-4xl font-medium leading-[1.05] tracking-tight text-foreground sm:text-5xl lg:text-[56px]">
-          Simple. Fast.{" "}
-          <em className="font-normal italic text-foreground/70">Effective.</em>
-        </h2>
+        <Reveal>
+          <p className="text-[11px] font-semibold uppercase tracking-[0.32em] text-muted">
+            How It Works
+          </p>
+          <h2 className="font-serif mt-5 max-w-2xl text-4xl font-medium leading-[1.05] tracking-tight text-foreground sm:text-5xl lg:text-[56px]">
+            Simple. Fast.{" "}
+            <em className="font-normal italic text-foreground/70">
+              Effective.
+            </em>
+          </h2>
+        </Reveal>
 
         <ol className="mt-16 grid gap-14 sm:mt-20 sm:grid-cols-3 sm:gap-10 lg:mt-24">
-          {steps.map((step) => (
-            <li key={step.number}>
-              <p className="font-serif text-[14px] font-medium tracking-[0.32em] text-primary">
-                {step.number}
-              </p>
-              <h3 className="font-serif mt-4 text-2xl font-medium leading-tight tracking-tight text-foreground sm:text-[28px]">
-                {step.title}
-              </h3>
-              <p className="mt-3 text-[15px] leading-relaxed text-muted">
-                {step.body}
-              </p>
-            </li>
+          {steps.map((step, i) => (
+            <Reveal key={step.number} delay={0.1 + i * 0.1}>
+              <li>
+                <p className="font-serif text-[14px] font-medium tracking-[0.32em] text-primary">
+                  {step.number}
+                </p>
+                <h3 className="font-serif mt-4 text-2xl font-medium leading-tight tracking-tight text-foreground sm:text-[28px]">
+                  {step.title}
+                </h3>
+                <p className="mt-3 text-[15px] leading-[1.7] text-muted">
+                  {step.body}
+                </p>
+              </li>
+            </Reveal>
           ))}
         </ol>
       </div>
@@ -229,7 +271,7 @@ function HowItWorksSection() {
 function FinalCTA() {
   return (
     <section className="px-6 pt-16 pb-32 sm:px-10 sm:pt-20 sm:pb-40 lg:px-16 lg:pt-24 lg:pb-48 xl:px-24">
-      <div className="mx-auto max-w-3xl text-center">
+      <Reveal className="mx-auto max-w-3xl text-center">
         <p className="text-[11px] font-medium uppercase tracking-[0.32em] text-muted">
           Used by camps preparing for Karibu Kili Fair
         </p>
@@ -257,7 +299,7 @@ function FinalCTA() {
             <ArrowRightIcon className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5" />
           </Link>
         </div>
-      </div>
+      </Reveal>
     </section>
   );
 }
